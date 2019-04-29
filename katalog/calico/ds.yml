@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: calico-node
+  labels:
+    k8s-app: calico-node
+spec:
+  selector:
+    matchLabels:
+      k8s-app: calico-node
+  template:
+    metadata:
+      labels:
+        k8s-app: calico-node
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      hostNetwork: true
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      serviceAccountName: calico-node
+      terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: install-cni
+          image: calico/cni:v3.6.1
+          command: ["/install-cni.sh"]
+          env:
+          - name: CNI_CONF_NAME
+            value: "10-calico.conflist"
+          - name: CNI_NETWORK_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: cni_network_config
+          - name: KUBERNETES_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: CNI_MTU
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: veth_mtu
+          - name: SLEEP
+            value: "false"
+          volumeMounts:
+          - mountPath: /host/opt/cni/bin
+            name: cni-bin-dir
+          - mountPath: /host/etc/cni/net.d
+            name: cni-net-dir
+      containers:
+        - name: calico-node
+          image: calico/node:v3.6.1
+          env:
+          - name: DATASTORE_TYPE
+            value: "kubernetes"
+          - name: WAIT_FOR_DATASTORE
+            value: "true"
+          - name: NODENAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: CALICO_NETWORKING_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: calico_backend
+          - name: CLUSTER_TYPE
+            value: "k8s,bgp"
+          - name: IP
+            value: "autodetect"
+          - name: CALICO_IPV4POOL_IPIP
+            value: "Always"
+          - name: FELIX_IPINIPMTU
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: veth_mtu
+          - name: CALICO_IPV4POOL_CIDR
+            value: "172.16.0.0/16"
+          - name: CALICO_DISABLE_FILE_LOGGING
+            value: "true"
+          - name: FELIX_DEFAULTENDPOINTTOHOSTACTION
+            value: "ACCEPT"
+          - name: FELIX_IPV6SUPPORT
+            value: "false"
+          - name: FELIX_LOGSEVERITYSCREEN
+            value: "info"
+          - name: FELIX_HEALTHENABLED
+            value: "true"
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 250m
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 9099
+              host: localhost
+            periodSeconds: 10
+            initialDelaySeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+              - /bin/calico-node
+              - -bird-ready
+              - -felix-ready
+            periodSeconds: 10
+          volumeMounts:
+          - mountPath: /lib/modules
+            name: lib-modules
+            readOnly: true
+          - mountPath: /run/xtables.lock
+            name: xtables-lock
+            readOnly: false
+          - mountPath: /var/run/calico
+            name: var-run-calico
+            readOnly: false
+          - mountPath: /var/lib/calico
+            name: var-lib-calico
+            readOnly: false
+      volumes:
+      - name: lib-modules
+        hostPath:
+          path: /lib/modules
+      - name: var-run-calico
+        hostPath:
+          path: /var/run/calico
+      - name: var-lib-calico
+        hostPath:
+          path: /var/lib/calico
+      - name: xtables-lock
+        hostPath:
+          path: /run/xtables.lock
+          type: FileOrCreate
+      - name: cni-bin-dir
+        hostPath:
+          path: /opt/cni/bin
+      - name: cni-net-dir
+        hostPath:
+          path: /etc/cni/net.d

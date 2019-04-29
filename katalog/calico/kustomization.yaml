@@ -1,0 +1,8 @@
+namespace: kube-system
+
+resources:
+- config.yml
+- crd.yml
+- deploy.yml
+- ds.yml
+- rbac.yml
