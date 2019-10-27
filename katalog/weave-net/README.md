@@ -12,8 +12,8 @@ extra code to run.
 
 ## Image repository and tag
 
-* Weave Net image: `weaveworks/weave-kube:2.4.1`
-* Weave Net NPC image: `weaveworks/weave-npc:2.4.1`
+* Weave Net image: `weaveworks/weave-kube:2.5.2`
+* Weave Net NPC image: `weaveworks/weave-npc:2.5.2`
 * Weave Net repo: https://github.com/weaveworks/weave
 * Weave Net documentation : https://www.weave.works/docs/net/latest/overview/
 
