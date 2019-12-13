@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: weave
-        image: 'docker.io/weaveworks/weave-kube:2.5.2'
+        image: docker.io/weaveworks/weave-kube
+        imagePullPolicy: Always
         command:
         - /home/weave/launch.sh
         env:
@@ -32,7 +33,6 @@ spec:
             host: 127.0.0.1
             path: /status
             port: 6784
-          initialDelaySeconds: 30
         resources:
           requests:
             cpu: 10m
@@ -54,7 +54,8 @@ spec:
         - name: xtables-lock
           mountPath: /run/xtables.lock
       - name: weave-npc
-        image: 'docker.io/weaveworks/weave-npc:2.5.2'
+        image: docker.io/weaveworks/weave-npc
+        imagePullPolicy: Always
         env:
         - name: HOSTNAME
           valueFrom:
@@ -100,8 +101,6 @@ spec:
         hostPath:
           path: /run/xtables.lock
           type: FileOrCreate
-  updateStrategy:
-    type: RollingUpdate
 ---
 apiVersion: v1
 kind: Service

@@ -13,7 +13,7 @@ metadata:
     name: weave-net
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
   - pods
   - namespaces
@@ -31,7 +31,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - nodes/status
   verbs:
@@ -60,7 +60,7 @@ metadata:
     name: weave-net
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
   - configmaps
   resourceNames:
@@ -69,7 +69,7 @@ rules:
   - get
   - update
 - apiGroups:
-  - ''
+  - ""
   resources:
   - configmaps
   verbs:

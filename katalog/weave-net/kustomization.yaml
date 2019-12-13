@@ -5,3 +5,9 @@ resources:
 - rbac.yml
 - rules.yml
 - sm.yml
+
+imageTags:
+- name: docker.io/weaveworks/weave-kube
+  newTag: 2.6.0
+- name: docker.io/weaveworks/weave-npc
+  newTag: 2.6.0
