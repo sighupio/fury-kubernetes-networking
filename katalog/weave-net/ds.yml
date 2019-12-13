@@ -76,8 +76,7 @@ spec:
         seLinuxOptions: {}
       serviceAccountName: weave-net
       tolerations:
-      - effect: NoSchedule
-        operator: Exists
+      - operator: Exists
       volumes:
       - name: weavedb
         hostPath:
