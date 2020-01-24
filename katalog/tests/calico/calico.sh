@@ -2,6 +2,15 @@
 
 load ./../helper
 
+@test "Nodes in not ready State" {
+    info
+    test() {
+        kubectl get nodes --no-headers | awk  '{print $2}' | uniq | grep -q NotReady
+    }
+    run test
+    [ "$status" -eq 0 ]
+}
+
 @test "Install Calico" {
     info
     install() {
@@ -28,5 +37,14 @@ load ./../helper
     }
     loop_it test 30 2
     status=${loop_it_result}
+    [ "$status" -eq 0 ]
+}
+
+@test "Nodes in ready State" {
+    info
+    test() {
+        kubectl get nodes --no-headers | awk  '{print $2}' | uniq | grep -q Ready
+    }
+    run test
     [ "$status" -eq 0 ]
 }
