@@ -43,11 +43,8 @@ steps:
       path: /shared
     depends_on: [ init ]
     commands:
-      - export CLUSTER_NAME=116
-      - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-116
-      - kubectl get nodes -o wide
-      - kubectl get pods -A -o wide
+      - bats -t katalog/tests/calico/calico.sh
     when:
       ref:
         include:

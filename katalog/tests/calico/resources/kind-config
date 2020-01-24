@@ -10,6 +10,10 @@ kubeadmConfigPatches:
   kind: ClusterConfiguration
   metadata:
     name: config
+  etcd:
+    local:
+      extraArgs:
+        "listen-metrics-urls": "http://0.0.0.0:2378"
   apiServer:
     extraArgs:
       "enable-admission-plugins": "NamespaceLifecycle,LimitRanger,PodNodeSelector,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
@@ -28,7 +32,6 @@ nodes:
 
 - role: worker
   extraPortMappings:
-    # Nginx Ingress
   - containerPort: 31080
     hostPort: 31080
     # Istio HTTP2
