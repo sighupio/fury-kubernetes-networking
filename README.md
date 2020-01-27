@@ -13,3 +13,23 @@ Docker clusters and portable apps in a fraction of the time required
 by other solutions. Version: **2.4.1**
 
 You can click on each package to see its documentation.
+
+## Compatibility
+
+| Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             |
+|-------------------------------------|:------------------:|:------------------:|:------------------:|
+| v1.0.0                              |      :warning:     |      :warning:     |      :warning:     |
+| v1.0.1                              |      :warning:     |      :warning:     |      :warning:     |
+
+- :white_check_mark: Compatible
+- :warning: Has issues
+- :x: Incompatible
+
+### Warning
+
+- [weave-net](katalog/weave-net) is not stable enough for production. We see degradation problems after a couple of
+weeks so we opt to mark it as warning, and we will deprecate it in upcoming releases.
+
+## License
+
+For license details please see [LICENSE](https://sighup.io/fury/license)
