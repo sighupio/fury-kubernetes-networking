@@ -20,15 +20,12 @@ You can click on each package to see its documentation.
 |-------------------------------------|:------------------:|:------------------:|:------------------:|
 | v1.0.0                              |      :warning:     |      :warning:     |      :warning:     |
 | v1.0.1                              |      :warning:     |      :warning:     |      :warning:     |
+| v1.1.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
 - :x: Incompatible
 
-### Warning
-
-- [weave-net](katalog/weave-net) is not stable enough for production. We see degradation problems after a couple of
-weeks so we opt to mark it as warning, and we will deprecate it in upcoming releases.
 
 ## License
 
