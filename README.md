@@ -18,12 +18,17 @@ You can click on each package to see its documentation.
 
 | Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             |
 |-------------------------------------|:------------------:|:------------------:|:------------------:|
-| v1.0.0                              |                    |                    |                    |
-| v1.0.1                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| v1.0.0                              |      :warning:     |      :warning:     |      :warning:     |
+| v1.0.1                              |      :warning:     |      :warning:     |      :warning:     |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
 - :x: Incompatible
+
+### Warning
+
+- [weave-net](katalog/weave-net) is not stable enough for production. We see degradation problems after a couple of
+weeks so we opt to mark it as warning, and we will deprecate it in upcoming releases.
 
 ## License
 
