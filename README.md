@@ -26,4 +26,4 @@ You can click on each package to see its documentation.
 
 ## License
 
-For license details please see [LICENSE](https://sighup.io/fury/license)
+For license details please see [LICENSE](LICENSE)
