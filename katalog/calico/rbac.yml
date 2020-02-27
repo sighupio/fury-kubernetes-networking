@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: calico-kube-controllers
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: calico-kube-controllers
@@ -44,7 +44,7 @@ rules:
   - create
   - update
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: calico-kube-controllers
@@ -55,14 +55,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: calico-kube-controllers
-  namespace: kube-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: calico-node
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: calico-node
@@ -119,8 +118,10 @@ rules:
   - globalnetworkpolicies
   - globalnetworksets
   - networkpolicies
+  - networksets
   - clusterinformations
   - hostendpoints
+  - blockaffinities
   verbs:
   - get
   - list
@@ -140,8 +141,6 @@ rules:
   - get
   - list
   - watch
-# These permissions are only requried for upgrade from v2.6, and can
-# be removed after upgrade or on fresh installations.
 - apiGroups: ["crd.projectcalico.org"]
   resources:
   - bgpconfigurations
@@ -170,15 +169,13 @@ rules:
   - blockaffinities
   verbs:
   - watch
-# The Calico IPAM migration needs to get daemonsets. These permissions can be
-# removed if not upgrading from an installation using host-local IPAM.
 - apiGroups: ["apps"]
   resources:
   - daemonsets
   verbs:
   - get
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: calico-node
@@ -189,4 +186,3 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: calico-node
-  namespace: kube-system

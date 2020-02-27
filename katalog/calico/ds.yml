@@ -8,6 +8,10 @@ spec:
   selector:
     matchLabels:
       k8s-app: calico-node
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -16,7 +20,7 @@ spec:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux
       hostNetwork: true
       tolerations:
       - effect: NoSchedule
@@ -27,11 +31,32 @@ spec:
         operator: Exists
       serviceAccountName: calico-node
       terminationGracePeriodSeconds: 0
+      priorityClassName: system-node-critical
       initContainers:
-        - name: install-cni
-          image: calico/cni:v3.6.1
-          command: ["/install-cni.sh"]
-          env:
+      - name: upgrade-ipam
+        image: calico/cni:v3.12.0
+        command: ["/opt/cni/bin/calico-ipam", "-upgrade"]
+        env:
+          - name: KUBERNETES_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: CALICO_NETWORKING_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: calico_backend
+        volumeMounts:
+          - mountPath: /var/lib/cni/networks
+            name: host-local-net-dir
+          - mountPath: /host/opt/cni/bin
+            name: cni-bin-dir
+        securityContext:
+          privileged: true
+      - name: install-cni
+        image: calico/cni:v3.12.0
+        command: ["/install-cni.sh"]
+        env:
           - name: CNI_CONF_NAME
             value: "10-calico.conflist"
           - name: CNI_NETWORK_CONFIG
@@ -50,14 +75,23 @@ spec:
                 key: veth_mtu
           - name: SLEEP
             value: "false"
-          volumeMounts:
+        volumeMounts:
           - mountPath: /host/opt/cni/bin
             name: cni-bin-dir
           - mountPath: /host/etc/cni/net.d
             name: cni-net-dir
+        securityContext:
+          privileged: true
+      - name: flexvol-driver
+        image: calico/pod2daemon-flexvol:v3.12.0
+        volumeMounts:
+        - name: flexvol-driver-host
+          mountPath: /host/driver
+        securityContext:
+          privileged: true
       containers:
         - name: calico-node
-          image: calico/node:v3.6.1
+          image: calico/node:v3.12.0
           env:
           - name: DATASTORE_TYPE
             value: "kubernetes"
@@ -101,10 +135,11 @@ spec:
             requests:
               cpu: 250m
           livenessProbe:
-            httpGet:
-              path: /liveness
-              port: 9099
-              host: localhost
+            exec:
+              command:
+              - /bin/calico-node
+              - -felix-live
+              - -bird-live
             periodSeconds: 10
             initialDelaySeconds: 10
             failureThreshold: 6
@@ -128,6 +163,8 @@ spec:
           - mountPath: /var/lib/calico
             name: var-lib-calico
             readOnly: false
+          - name: policysync
+            mountPath: /var/run/nodeagent
       volumes:
       - name: lib-modules
         hostPath:
@@ -148,3 +185,14 @@ spec:
       - name: cni-net-dir
         hostPath:
           path: /etc/cni/net.d
+      - name: host-local-net-dir
+        hostPath:
+          path: /var/lib/cni/networks
+      - name: policysync
+        hostPath:
+          type: DirectoryOrCreate
+          path: /var/run/nodeagent
+      - name: flexvol-driver-host
+        hostPath:
+          type: DirectoryOrCreate
+          path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds
