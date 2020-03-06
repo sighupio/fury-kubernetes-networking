@@ -1,0 +1,6 @@
+bases:
+  - vendor/katalog/networking/calico
+
+patchesStrategicMerge:
+  - patch.yaml
+  
