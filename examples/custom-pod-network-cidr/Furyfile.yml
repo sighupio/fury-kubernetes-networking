@@ -1,0 +1,3 @@
+bases:
+  - name: networking/calico
+    version: v1.2.0
