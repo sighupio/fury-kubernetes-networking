@@ -152,7 +152,7 @@ volumes:
 
 ---
 kind: pipeline
-name: e2e-kubernetes-1.14
+name: e2e-kubernetes-1.18
 
 platform:
   os: linux
@@ -167,10 +167,10 @@ steps:
       path: /shared
     depends_on: [ clone ]
     settings:
-      action: custom-cluster-114
-      pipeline_id: cluster-114
+      action: custom-cluster-118
+      pipeline_id: cluster-118
       local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: '1.14.10'
+      cluster_version: '1.18.0'
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -187,14 +187,14 @@ steps:
           - refs/tags/**
 
   - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.1.3_2.16.1_1.4.0_1.14.9_3.2.2_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.18.0_3.2.2_2.4.1
     pull: always
     volumes:
     - name: shared
       path: /shared
     depends_on: [ init ]
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-114
+      - export KUBECONFIG=/shared/kube/kubeconfig-118
       - bats -t katalog/tests/calico/calico.sh
     when:
       ref:
@@ -208,7 +208,7 @@ steps:
     depends_on: [ test ]
     settings:
       action: destroy
-      pipeline_id: cluster-114
+      pipeline_id: cluster-118
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
