@@ -6,3 +6,4 @@ resources:
 - deploy.yml
 - ds.yml
 - rbac.yml
+- sm.yml
