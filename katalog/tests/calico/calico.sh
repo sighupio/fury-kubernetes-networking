@@ -40,6 +40,16 @@ load ./../helper
     [ "$status" -eq 0 ]
 }
 
+@test "Calico is exposing metrics" {
+    info
+    test() {
+        kubectl run test-metrics --image=curlimages/curl --restart=OnFailure --command -- curl -q http://calico-node.kube-system.svc.cluster.local:9091/metrics
+        kubectl wait --for=condition=complete  job/test-metrics --timeout=60s
+    }
+    run test
+    [ "$status" -eq 0 ]
+}
+
 @test "Nodes in ready State" {
     info
     test() {
