@@ -4,12 +4,11 @@ metadata:
   labels:
     k8s-app: calico-node
   name: calico-node
-  namespace: monitoring
 spec:
   endpoints:
   - interval: 15s
     port: metrics
-  jobLabel: calico-node
+  jobLabel: k8s-app
   namespaceSelector:
     matchNames:
     - kube-system
