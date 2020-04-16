@@ -8,7 +8,7 @@ platform:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     volumes:
     - name: shared
@@ -51,7 +51,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     depends_on: [ test ]
     settings:
@@ -84,7 +84,7 @@ platform:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     volumes:
     - name: shared
@@ -127,7 +127,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     depends_on: [ test ]
     settings:
@@ -160,7 +160,7 @@ platform:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     volumes:
     - name: shared
@@ -203,7 +203,7 @@ steps:
           - refs/tags/**
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.0-rc4
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.2.1
     pull: always
     depends_on: [ test ]
     settings:

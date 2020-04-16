@@ -112,6 +112,8 @@ spec:
             value: "autodetect"
           - name: CALICO_IPV4POOL_IPIP
             value: "Always"
+          - name: FELIX_PROMETHEUSMETRICSENABLED
+            value: "true"
           - name: FELIX_IPINIPMTU
             valueFrom:
               configMapKeyRef:
@@ -129,6 +131,10 @@ spec:
             value: "info"
           - name: FELIX_HEALTHENABLED
             value: "true"
+          ports:
+            - name: metrics
+              protocol: TCP
+              containerPort: 9091
           securityContext:
             privileged: true
           resources:

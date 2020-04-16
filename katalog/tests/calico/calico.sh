@@ -14,6 +14,7 @@ load ./../helper
 @test "Install Calico" {
     info
     install() {
+        kubectl apply -f https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v1.6.0/katalog/prometheus-operator/crd-servicemonitor.yml
         apply katalog/calico
     }
     run install
@@ -37,6 +38,16 @@ load ./../helper
     }
     loop_it test 30 2
     status=${loop_it_result}
+    [ "$status" -eq 0 ]
+}
+
+@test "Calico is exposing metrics" {
+    info
+    test() {
+        kubectl run test-metrics --image=curlimages/curl --restart=OnFailure --command -- curl -q -f -m 10 http://calico-node.kube-system.svc.cluster.local:9091/metrics
+        kubectl wait --for=condition=complete job/test-metrics --timeout=15s
+    }
+    run test
     [ "$status" -eq 0 ]
 }
 

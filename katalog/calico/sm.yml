@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: calico-node
+  name: calico-node
+spec:
+  endpoints:
+  - interval: 15s
+    port: metrics
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      k8s-app: calico-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: calico-node
+  labels:
+    k8s-app: calico-node
+spec:
+  ports:
+  - name: metrics
+    port: 9091
+    protocol: TCP
+  selector:
+    k8s-app: calico-node

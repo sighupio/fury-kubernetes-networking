@@ -23,6 +23,7 @@ OpenStack, and bare metal services.
 
 - Tested with Kubernetes >= `1.14.X`.
 - Tested with Kustomize = `v3.3.X`.
+- Prometheus Operator.
 
 ## Configuration
 
@@ -32,6 +33,7 @@ Fury distribution calico package is deployed with the following configuration:
 - BGP `(bird)` mode configured instead of `vxlan`.
 - [`kubernetes` datastore](https://docs.projectcalico.org/getting-started/kubernetes/hardway/the-calico-datastore#using-kubernetes-as-the-datastore).
 - Enable support for [traffic shaping](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#support-traffic-shaping).
+- ServiceMonitor *(Prometheus Operator)* configured to scrape metrics every 15 seconds.
 
 ## Deployment
 
