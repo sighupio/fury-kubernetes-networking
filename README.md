@@ -19,6 +19,7 @@ You can click on each package to see its documentation.
 | v1.0.1                              |      :warning:     |      :warning:     |      :warning:     |
 | v1.1.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | v1.2.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| v1.2.1                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
