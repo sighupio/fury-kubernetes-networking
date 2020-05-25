@@ -128,7 +128,7 @@ spec:
           - name: FELIX_IPV6SUPPORT
             value: "false"
           - name: FELIX_LOGSEVERITYSCREEN
-            value: "info"
+            value: "error"
           - name: FELIX_HEALTHENABLED
             value: "true"
           ports:
