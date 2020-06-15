@@ -28,6 +28,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -67,6 +73,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
       - success
@@ -106,6 +118,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -145,6 +163,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
       - success
@@ -184,6 +208,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       ref:
         include:
@@ -223,6 +253,12 @@ steps:
         from_secret: aws_secret_access_key
       terraform_tf_states_bucket_name:
         from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
     when:
       status:
       - success
