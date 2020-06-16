@@ -188,7 +188,7 @@ volumes:
 
 # steps:
 #   - name: init
-#     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2-rc9
+#     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2-rc10
 #     pull: always
 #     volumes:
 #     - name: shared
@@ -239,7 +239,7 @@ volumes:
 #           - refs/tags/**
 
 #   - name: destroy
-#     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2-rc9
+#     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2-rc10
 #     pull: always
 #     depends_on: [ test ]
 #     settings:
