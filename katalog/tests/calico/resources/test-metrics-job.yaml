@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: test-metrics
+  name: test-metrics
+spec:
+  template:
+    metadata:
+      labels:
+        run: test-metrics
+    spec:
+      containers:
+      - command:
+        - curl
+        - -q
+        - -f
+        - -m
+        - "10"
+        - http://calico-node.kube-system.svc.cluster.local:9091/metrics
+        image: curlimages/curl
+        name: test-metrics
+        resources: {}
+      restartPolicy: OnFailure

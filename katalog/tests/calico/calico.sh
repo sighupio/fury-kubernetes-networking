@@ -44,7 +44,7 @@ load ./../helper
 @test "Calico is exposing metrics" {
     info
     test() {
-        kubectl run test-metrics --image=curlimages/curl --restart=OnFailure --command -- curl -q -f -m 10 http://calico-node.kube-system.svc.cluster.local:9091/metrics
+        kubectl apply -f katalog/tests/calico/resources/test-metrics-job.yaml
         kubectl wait --for=condition=complete job/test-metrics --timeout=15s
     }
     run test
