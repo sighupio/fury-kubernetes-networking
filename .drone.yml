@@ -37,8 +37,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: test
@@ -54,8 +52,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: destroy
@@ -127,8 +123,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: test
@@ -144,8 +138,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: destroy
@@ -217,8 +209,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: test
@@ -234,8 +224,6 @@ steps:
     when:
       ref:
         include:
-          - refs/heads/hotfix-*
-          - refs/heads/feature/rc-v2
           - refs/tags/**
 
   - name: destroy
