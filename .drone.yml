@@ -6,6 +6,11 @@ platform:
   os: linux
   arch: amd64
 
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
 steps:
   - name: init
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
@@ -34,10 +39,6 @@ steps:
         from_secret: vsphere_password
       vsphere_user:
         from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: test
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.16.4_3.2.2_2.4.1
@@ -49,10 +50,6 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - bats -t katalog/tests/calico/calico.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
@@ -92,6 +89,11 @@ platform:
   os: linux
   arch: amd64
 
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
 steps:
   - name: init
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
@@ -120,10 +122,6 @@ steps:
         from_secret: vsphere_password
       vsphere_user:
         from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: test
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.17.2_3.2.2_2.4.1
@@ -135,10 +133,6 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-117
       - bats -t katalog/tests/calico/calico.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
@@ -178,6 +172,11 @@ platform:
   os: linux
   arch: amd64
 
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
 steps:
   - name: init
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
@@ -206,10 +205,6 @@ steps:
         from_secret: vsphere_password
       vsphere_user:
         from_secret: vsphere_user
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: test
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.18.0_3.2.2_2.4.1
@@ -221,10 +216,6 @@ steps:
     commands:
       - export KUBECONFIG=/shared/kube/kubeconfig-118
       - bats -t katalog/tests/calico/calico.sh
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.4.2
