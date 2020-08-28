@@ -6,12 +6,9 @@ spec:
   order: 500
   selector: projectcalico.org/namespace not in {'default', 'ingress-nginx', 'istio-system', 'kube-system', 'logging', 'monitoring', 'registry','gatekeeper-system','cert-manager'}
   egress:
-    - action: Allow # Subnet traffic
+    - action: Allow
       destination:
         nets:
-          - 10.92.16.0/24 # eks subnet 1, change accordingly
-          - 10.92.17.0/24 # eks subnet 2, change accordingly
-          - 10.92.18.0/24 # eks subnet 3, change accordingly
-
+          - 172.16.0.3/32 # you apiserver ips list
   types:
     - Egress

@@ -1,6 +1,6 @@
 resources:
   - 1.whitelist-system-namespace.yml
   - 401.allow-custom-cidr-from-namespace.yml
-  #- 500.eks-control-plane-traffic.yml # use this only for EKS
+  #- 500.control-plane-traffic.yml
   - 1000.namespace-label-intra-allow.yml
   - 2000.deny-all.yml

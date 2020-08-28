@@ -14,6 +14,7 @@ The policies in this folder are **ORDERED**. This means that the policy with the
     - [401. Allow custom cidr from namespaces](#401-allow-custom-cidr-from-namespaces)
     - [1000. Allow intra namespaces communication](#1000-allow-intra-namespaces-communication)
 - [Caveats - No, really, you MUST read this](#caveats-no-really-you-must-read-this)
+    - [500. Control plane traffic](#500-control-plane-traffic)
 
 
 
@@ -125,3 +126,30 @@ spec:
 This policy enables traffic between all the namespaces with the label `tenant=sighup`. So if we have more than one namespaces that need to talk
 is sufficient to set the correct label, and the traffic will be allowed.
 
+## Caveats - No, really, you MUST read this
+
+In this section, you'll find all the relevant informations to enable additional behavior using network policies.
+
+### 500. Control plane traffic
+
+```yaml
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: whitelist-control-plane
+spec:
+  order: 500
+  selector: projectcalico.org/namespace not in {'default', 'ingress-nginx', 'istio-system', 'kube-system', 'logging', 'monitoring', 'registry','gatekeeper-system','cert-manager'}
+  egress:
+    - action: Allow
+      destination:
+        nets:
+          - 172.16.0.3/32 # you apiserver ips list
+  types:
+    - Egress
+```
+
+If you need to grant access to `kubernetes.default` (the apiserver) you need to add another rule to open egress traffic to apiserver ips.
+
+This is needed if your workloads needs to talk with the Apiserver. By default this rule enables traffic for all the non system namespaces, but you can create custom rules
+to allow traffic only from one namespace.
