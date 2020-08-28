@@ -1,0 +1,14 @@
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-custom-cidr-from-sighup
+spec:
+  order: 401
+  selector: projectcalico.org/namespace in {'sighup'}
+  egress:
+    - action: Allow
+      destination:
+        nets:
+          - 1.2.3.4/32
+  types:
+    - Egress

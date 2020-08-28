@@ -1,0 +1,14 @@
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: whitelist-system-ns
+spec:
+  order: 1
+  selector: projectcalico.org/namespace in {'default', 'ingress-nginx', 'istio-system', 'kube-system', 'logging', 'monitoring', 'registry','gatekeeper-system','cert-manager'}
+  types:
+    - Ingress
+    - Egress
+  ingress:
+    - action: Allow
+  egress:
+    - action: Allow

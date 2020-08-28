@@ -1,0 +1,17 @@
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: whitelist-control-plane
+spec:
+  order: 500
+  selector: projectcalico.org/namespace not in {'default', 'ingress-nginx', 'istio-system', 'kube-system', 'logging', 'monitoring', 'registry','gatekeeper-system','cert-manager'}
+  egress:
+    - action: Allow # Subnet traffic
+      destination:
+        nets:
+          - 10.92.16.0/24 # eks subnet 1, change accordingly
+          - 10.92.17.0/24 # eks subnet 2, change accordingly
+          - 10.92.18.0/24 # eks subnet 3, change accordingly
+
+  types:
+    - Egress
