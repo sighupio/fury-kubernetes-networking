@@ -1,12 +1,12 @@
 # Calico
 
-**Calico** is an open-source networking and network security solution for containers, virtual machines, and
+**Calico** is open-source networking and network security solution for containers, virtual machines, and
 native host-based workloads. Calico supports a broad range of platforms including Kubernetes, OpenShift, Docker EE,
 OpenStack, and bare metal services.
 
 *Source:* [docs.projectcalico.org](https://docs.projectcalico.org/introduction/).
 
-### Image repository and tag
+## Image repository and tag
 
 - calico images:
   - `calico/kube-controllers:v3.16.0`.
@@ -37,10 +37,10 @@ Fury distribution calico package is deployed with the following configuration:
 
 ## Deployment
 
-You can deploy calico by running following command in the root of this project:
+You can deploy calico by running the following command in the root of this project:
 
 ```shell
-$ kustomize build | kubectl apply -f -
+kustomize build | kubectl apply -f -
 ```
 
 ## License

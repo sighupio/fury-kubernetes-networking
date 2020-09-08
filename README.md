@@ -1,6 +1,6 @@
 # Fury Kubernetes Networking
 
-##  Networking Packages
+## Networking Packages
 
 The following packages are included in Fury Kubernetes Networking katalog. All
 resources in these repositories are going to be deployed in `kube-system`

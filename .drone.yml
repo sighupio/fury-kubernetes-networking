@@ -1,3 +1,15 @@
+kind: pipeline
+name: policeman
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: lint
+    image: quay.io/sighup/policeman
+    pull: always
+
 ---
 kind: pipeline
 name: e2e-kubernetes-1.16
@@ -10,6 +22,9 @@ trigger:
   ref:
     include:
       - refs/tags/**
+
+depends_on:
+  - policeman
 
 steps:
   - name: init
@@ -94,6 +109,9 @@ trigger:
     include:
       - refs/tags/**
 
+depends_on:
+  - policeman
+
 steps:
   - name: init
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.6.0
@@ -177,6 +195,9 @@ trigger:
     include:
       - refs/tags/**
 
+depends_on:
+  - policeman
+
 steps:
   - name: init
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.6.0
@@ -259,6 +280,9 @@ trigger:
   ref:
     include:
       - refs/tags/**
+
+depends_on:
+  - policeman
 
 steps:
   - name: init
