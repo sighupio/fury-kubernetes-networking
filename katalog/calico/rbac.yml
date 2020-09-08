@@ -38,11 +38,28 @@ rules:
   - delete
 - apiGroups: ["crd.projectcalico.org"]
   resources:
+  - hostendpoints
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - delete
+- apiGroups: ["crd.projectcalico.org"]
+  resources:
   - clusterinformations
   verbs:
   - get
   - create
   - update
+- apiGroups: ["crd.projectcalico.org"]
+  resources:
+  - kubecontrollersconfigurations
+  verbs:
+  - get
+  - create
+  - update
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -80,6 +97,11 @@ rules:
   verbs:
   - watch
   - list
+  - get
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs:
   - get
 - apiGroups: [""]
   resources:

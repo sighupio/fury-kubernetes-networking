@@ -1,5 +1,15 @@
 namespace: kube-system
 
+images:
+  - name: calico/kube-controllers
+    newTag: v3.16.0
+  - name: calico/cni
+    newTag: v3.16.0
+  - name: calico/pod2daemon-flexvol
+    newTag: v3.16.0
+  - name: calico/node
+    newTag: v3.16.0
+
 resources:
 - config.yml
 - crd.yml

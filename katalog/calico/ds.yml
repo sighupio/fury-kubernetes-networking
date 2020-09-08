@@ -34,8 +34,13 @@ spec:
       priorityClassName: system-node-critical
       initContainers:
       - name: upgrade-ipam
-        image: calico/cni:v3.12.0
+        image: calico/cni
         command: ["/opt/cni/bin/calico-ipam", "-upgrade"]
+        envFrom:
+        - configMapRef:
+            # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
+            name: kubernetes-services-endpoint
+            optional: true
         env:
           - name: KUBERNETES_NODE_NAME
             valueFrom:
@@ -54,8 +59,13 @@ spec:
         securityContext:
           privileged: true
       - name: install-cni
-        image: calico/cni:v3.12.0
-        command: ["/install-cni.sh"]
+        image: calico/cni
+        command: ["/opt/cni/bin/install"]
+        envFrom:
+        - configMapRef:
+            # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
+            name: kubernetes-services-endpoint
+            optional: true
         env:
           - name: CNI_CONF_NAME
             value: "10-calico.conflist"
@@ -83,7 +93,7 @@ spec:
         securityContext:
           privileged: true
       - name: flexvol-driver
-        image: calico/pod2daemon-flexvol:v3.12.0
+        image: calico/pod2daemon-flexvol
         volumeMounts:
         - name: flexvol-driver-host
           mountPath: /host/driver
@@ -91,7 +101,12 @@ spec:
           privileged: true
       containers:
         - name: calico-node
-          image: calico/node:v3.12.0
+          image: calico/node
+          envFrom:
+          - configMapRef:
+              # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
+              name: kubernetes-services-endpoint
+              optional: true
           env:
           - name: DATASTORE_TYPE
             value: "kubernetes"
@@ -112,9 +127,21 @@ spec:
             value: "autodetect"
           - name: CALICO_IPV4POOL_IPIP
             value: "Always"
+          - name: CALICO_IPV4POOL_VXLAN
+            value: "Never"
           - name: FELIX_PROMETHEUSMETRICSENABLED
             value: "true"
           - name: FELIX_IPINIPMTU
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: veth_mtu
+          - name: FELIX_VXLANMTU
+            valueFrom:
+              configMapKeyRef:
+                name: calico-config
+                key: veth_mtu
+          - name: FELIX_WIREGUARDMTU
             valueFrom:
               configMapKeyRef:
                 name: calico-config
@@ -171,6 +198,11 @@ spec:
             readOnly: false
           - name: policysync
             mountPath: /var/run/nodeagent
+          - name: sysfs
+            mountPath: /sys/fs/
+            # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
+            # If the host is known to mount that filesystem already then Bidirectional can be omitted.
+            mountPropagation: Bidirectional
       volumes:
       - name: lib-modules
         hostPath:
@@ -185,6 +217,10 @@ spec:
         hostPath:
           path: /run/xtables.lock
           type: FileOrCreate
+      - name: sysfs
+        hostPath:
+          path: /sys/fs/
+          type: DirectoryOrCreate
       - name: cni-bin-dir
         hostPath:
           path: /opt/cni/bin
