@@ -401,6 +401,17 @@ trigger:
       - refs/tags/**
 
 steps:
+  - name: prepare-tar-gz
+    image: alpine:latest
+    pull: always
+    depends_on: [ clone ]
+    commands:
+      - tar -zcvf fury-kubernetes-networking-${DRONE_TAG}.tar.gz katalog/ LICENSE README.md
+    when:
+      ref:
+        include:
+          - refs/tags/**
+
   - name: prepare-release-notes
     image: quay.io/sighup/fury-release-notes-plugin:3.7_2.8.4
     pull: always
@@ -415,14 +426,15 @@ steps:
   - name: publish-prerelease
     image: plugins/github-release
     pull: always
-    depends_on: [ prepare-release-notes ]
+    depends_on:
+      - prepare-tar-gz
+      - prepare-release-notes
     settings:
       api_key:
         from_secret: github_token
       file_exists: overwrite
       files:
-        - LICENSE
-        - README.md
+        - fury-kubernetes-networking-${DRONE_TAG}.tar.gz
       prerelease: true
       overwrite: true
       title: "Preview ${DRONE_TAG}"
@@ -438,14 +450,15 @@ steps:
   - name: publish-stable
     image: plugins/github-release
     pull: always
-    depends_on: [ prepare-release-notes ]
+    depends_on:
+      - prepare-tar-gz
+      - prepare-release-notes
     settings:
       api_key:
         from_secret: github_token
       file_exists: overwrite
       files:
-        - LICENSE
-        - README.md
+        - fury-kubernetes-networking-${DRONE_TAG}.tar.gz
       prerelease: false
       overwrite: true
       title: "Release ${DRONE_TAG}"
