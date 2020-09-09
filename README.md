@@ -7,7 +7,7 @@ resources in these repositories are going to be deployed in `kube-system`
 namespace in your Kubernetes cluster.
 
 - [calico](katalog/calico): Calico for Kubernetes. Calico enables networking and
-network policy in Kubernetes clusters across the cloud. Version: **3.16.0**
+network policy in Kubernetes clusters across the cloud. Version: **3.16.1**
 
 You can click on each package to see its documentation.
 
