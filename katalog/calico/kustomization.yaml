@@ -4,6 +4,9 @@
 
 namespace: kube-system
 
+bases:
+  - dashboards
+
 images:
   - name: calico/kube-controllers
     newTag: v3.16.1
