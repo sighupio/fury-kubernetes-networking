@@ -8,6 +8,8 @@ namespace in your Kubernetes cluster.
 
 - [calico](katalog/calico): Calico for Kubernetes. Calico enables networking and
 network policy in Kubernetes clusters across the cloud. Version: **3.16.1**
+- [ip-masq](katalog/ip-masq): The `ip-masq-agent` configures iptables rules to MASQUERADE traffic outside link-local
+*(optional, enabled by default)* and additional arbitrary IP ranges. Version: **2.5.0**
 
 You can click on each package to see its documentation.
 
