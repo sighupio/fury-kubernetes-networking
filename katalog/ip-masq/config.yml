@@ -1,0 +1,4 @@
+nonMasqueradeCIDRs: []
+resyncInterval: 60s
+masqLinkLocal: false
+masqLinkLocalIPv6: false
