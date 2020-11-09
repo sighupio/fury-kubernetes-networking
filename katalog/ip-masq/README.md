@@ -1,8 +1,8 @@
 # IP Masq
 
-IP masquerading is a form of network address translation (NAT) used to perform many-to-one IP address translations, 
-which allows multiple clients to access a destination using a single IP address. A cluster uses IP masquerading so 
-that destinations outside of the cluster only receive packets from node IP addresses instead of Pod IP addresses. 
+IP masquerading is a form of network address translation (NAT) used to perform many-to-one IP address translations,
+which allows multiple clients to access a destination using a single IP address. A cluster uses IP masquerading so
+that destinations outside of the cluster only receive packets from node IP addresses instead of Pod IP addresses.
 This is useful in environments that expect to only receive packets from node IP addresses.
 
 *Source: [https://cloud.google.com/kubernetes-engine/docs](https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent#create_manual)*
@@ -36,6 +36,12 @@ the `--nomasq-all-reserved-ranges` flag used to non-masquerade reserved IP range
 
 *Available flags listed here:*
 [https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags](https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags)
+
+### Important note
+
+You should not attempt to run this agent in a cluster where the Kubelet is also configuring a non-masquerade CIDR.
+You can pass --non-masquerade-cidr=0.0.0.0/0 to the Kubelet to nullify its rule, which will prevent the Kubelet from
+interfering with this agent.
 
 ## Deployment
 
