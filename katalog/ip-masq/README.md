@@ -23,10 +23,10 @@ This is useful in environments that expect to only receive packets from node IP 
 ## Configuration
 
 Fury distribution ip-masq package is deployed with the following configuration:
-  - `nonMasqueradeCIDRs`: as an empty list.
-  - `resyncInterval`: set to 60 seconds.
-  - `masqLinkLocal`: set to false.
-  - `masqLinkLocalIPv6`: set to false.
+- `nonMasqueradeCIDRs`: as an empty list.
+- `resyncInterval`: set to 60 seconds.
+- `masqLinkLocal`: set to false.
+- `masqLinkLocalIPv6`: set to false.
 
 *Available configuration parameters listed here:*
 [https://github.com/kubernetes-sigs/ip-masq-agent#configuring-the-agent](https://github.com/kubernetes-sigs/ip-masq-agent#configuring-the-agent)
