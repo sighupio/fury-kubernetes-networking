@@ -39,7 +39,7 @@ steps:
       - kustomize build katalog/calico > calico.yml
 
   - name: deprek8ion
-    image: eu.gcr.io/swade1987/deprek8ion:1.1.31
+    image: eu.gcr.io/swade1987/deprek8ion:1.1.32
     pull: always
     depends_on:
       - render
@@ -63,7 +63,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     volumes:
     - name: shared
@@ -102,7 +102,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -149,7 +149,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     volumes:
     - name: shared
@@ -188,7 +188,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -235,7 +235,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     volumes:
     - name: shared
@@ -263,7 +263,7 @@ steps:
         from_secret: vsphere_user
 
   - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.19.0_3.3.0_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.19.4_3.3.0_2.4.1
     pull: always
     volumes:
     - name: shared
@@ -274,7 +274,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -321,7 +321,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     volumes:
     - name: shared
@@ -349,7 +349,7 @@ steps:
         from_secret: vsphere_user
 
   - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.19.0_3.3.0_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.4.0_1.20.0_3.3.0_2.4.1
     pull: always
     volumes:
     - name: shared
@@ -360,7 +360,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.8.0
     pull: always
     depends_on: [ test ]
     settings:
