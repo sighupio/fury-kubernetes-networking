@@ -19,7 +19,7 @@ load ./../helper
 @test "Install Calico" {
     info
     install() {
-        kubectl apply -f https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v1.6.0/katalog/prometheus-operator/crd-servicemonitor.yml
+        kubectl apply -f https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v1.10.3/katalog/prometheus-operator/crd-servicemonitor.yml
         apply katalog/calico
     }
     run install
