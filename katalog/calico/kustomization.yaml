@@ -9,13 +9,13 @@ bases:
 
 images:
   - name: calico/kube-controllers
-    newTag: v3.16.1
+    newTag: v3.17.1
   - name: calico/cni
-    newTag: v3.16.1
+    newTag: v3.17.1
   - name: calico/pod2daemon-flexvol
-    newTag: v3.16.1
+    newTag: v3.17.1
   - name: calico/node
-    newTag: v3.16.1
+    newTag: v3.17.1
 
 resources:
 - config.yml
@@ -24,3 +24,4 @@ resources:
 - ds.yml
 - rbac.yml
 - sm.yml
+- pdb.yml
