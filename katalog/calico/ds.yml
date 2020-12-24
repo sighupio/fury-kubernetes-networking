@@ -20,8 +20,6 @@ spec:
     metadata:
       labels:
         k8s-app: calico-node
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -207,6 +205,9 @@ spec:
             # Bidirectional means that, if we mount the BPF filesystem at /sys/fs/bpf it will propagate to the host.
             # If the host is known to mount that filesystem already then Bidirectional can be omitted.
             mountPropagation: Bidirectional
+          - name: cni-log-dir
+            mountPath: /var/log/calico/cni
+            readOnly: true
       volumes:
       - name: lib-modules
         hostPath:
@@ -231,6 +232,9 @@ spec:
       - name: cni-net-dir
         hostPath:
           path: /etc/cni/net.d
+      - name: cni-log-dir
+        hostPath:
+          path: /var/log/calico/cni
       - name: host-local-net-dir
         hostPath:
           path: /var/lib/cni/networks
