@@ -63,7 +63,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     volumes:
     - name: shared
@@ -106,7 +106,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -157,7 +157,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     volumes:
     - name: shared
@@ -200,7 +200,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -251,7 +251,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     volumes:
     - name: shared
@@ -294,7 +294,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     depends_on: [ test ]
     settings:
@@ -345,7 +345,7 @@ depends_on:
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     volumes:
     - name: shared
@@ -388,7 +388,7 @@ steps:
       - bats -t katalog/tests/calico/calico.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0-rc1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.9.0
     pull: always
     depends_on: [ test ]
     settings:
