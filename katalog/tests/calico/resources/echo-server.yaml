@@ -18,7 +18,7 @@ spec:
         app: echoserver
     spec:
       containers:
-      - image: gcr.io/google_containers/echoserver:1.0
+      - image: reg.sighup.io/sighupio/fury/google_containers/echoserver:1.0
         imagePullPolicy: Always
         name: echoserver
         ports:
