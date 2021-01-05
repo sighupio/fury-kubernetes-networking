@@ -9,12 +9,16 @@ bases:
 
 images:
   - name: calico/kube-controllers
+    newName: reg.sighup.io/sighupio/fury/calico/kube-controllers
     newTag: v3.17.1
   - name: calico/cni
+    newName: reg.sighup.io/sighupio/fury/calico/cni
     newTag: v3.17.1
   - name: calico/pod2daemon-flexvol
+    newName: reg.sighup.io/sighupio/fury/calico/pod2daemon-flexvol
     newTag: v3.17.1
   - name: calico/node
+    newName: reg.sighup.io/sighupio/fury/calico/node
     newTag: v3.17.1
 
 resources:
