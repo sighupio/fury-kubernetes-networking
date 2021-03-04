@@ -23,7 +23,7 @@ spec:
         - -m
         - "10"
         - http://calico-node.kube-system.svc.cluster.local:9091/metrics
-        image: reg.sighup.io/sighupio/fury/curlimages/curl:latest
+        image: registry.sighup.io/fury/curlimages/curl:latest
         name: test-metrics
         resources: {}
       restartPolicy: OnFailure
