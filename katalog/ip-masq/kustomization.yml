@@ -15,7 +15,7 @@ patchesStrategicMerge:
 
 images:
   - name: gcr.io/google-containers/ip-masq-agent-amd64
-    newName: reg.sighup.io/sighupio/fury/google-containers/ip-masq-agent-amd64
+    newName: registry.sighup.io/fury/google-containers/ip-masq-agent-amd64
     newTag: v2.5.0
 
 configMapGenerator:
