@@ -25,6 +25,7 @@ You can click on each package to see its documentation.
 | v1.3.0                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |
 | v1.4.0                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |      :warning:     |                    |
 | v1.5.0                              |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |      :warning:     |
+| v1.6.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
