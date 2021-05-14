@@ -9,10 +9,10 @@ OpenStack, and bare metal services.
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.17.1`.
-  - `calico/cni:v3.17.1`.
-  - `calico/pod2daemon-flexvol:v3.17.1`.
-  - `calico/node:v3.17.1`.
+  - `calico/kube-controllers:v3.19.0`.
+  - `calico/cni:v3.19.0`.
+  - `calico/pod2daemon-flexvol:v3.19.0`.
+  - `calico/node:v3.19.0`.
 - calico repositories:
   - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
   - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).

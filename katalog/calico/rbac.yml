@@ -41,6 +41,7 @@ rules:
   - create
   - update
   - delete
+  - watch
 - apiGroups: ["crd.projectcalico.org"]
   resources:
   - hostendpoints
