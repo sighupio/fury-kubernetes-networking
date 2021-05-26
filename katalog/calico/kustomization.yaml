@@ -11,16 +11,16 @@ namespace: kube-system
 images:
   - name: calico/kube-controllers
     newName: registry.sighup.io/fury/calico/kube-controllers
-    newTag: v3.19.0
+    newTag: v3.19.1
   - name: calico/cni
     newName: registry.sighup.io/fury/calico/cni
-    newTag: v3.19.0
+    newTag: v3.19.1
   - name: calico/pod2daemon-flexvol
     newName: registry.sighup.io/fury/calico/pod2daemon-flexvol
-    newTag: v3.19.0
+    newTag: v3.19.1
   - name: calico/node
     newName: registry.sighup.io/fury/calico/node
-    newTag: v3.19.0
+    newTag: v3.19.1
 
 resources:
   - dashboards
