@@ -21,7 +21,7 @@ OpenStack, and bare metal services.
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.14.X`.
+- Tested with Kubernetes >= `1.18.X`.
 - Tested with Kustomize = `v3.3.X`.
 - Prometheus Operator.
 
