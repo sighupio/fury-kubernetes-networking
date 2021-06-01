@@ -17,7 +17,7 @@ This is useful in environments that expect to only receive packets from node IP 
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.16.X`.
+- Tested with Kubernetes >= `1.18.X`.
 - Tested with Kustomize = `v3.3.X`.
 
 ## Configuration
