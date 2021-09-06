@@ -64,7 +64,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/heads/e2e-0.12
       - refs/tags/**
 
 depends_on:
@@ -160,7 +159,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/heads/e2e-0.12
       - refs/tags/**
 
 depends_on:
@@ -256,7 +254,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/heads/e2e-0.12
       - refs/tags/**
 
 depends_on:
@@ -352,7 +349,6 @@ trigger:
   ref:
     include:
       - refs/heads/master
-      - refs/heads/e2e-0.12
       - refs/tags/**
 
 depends_on:
