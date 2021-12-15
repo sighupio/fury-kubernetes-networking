@@ -42,6 +42,11 @@ because it is not officially supported by [SIGHUP](https://sighup.io).
 - :warning: : module version: `v1.7.0` and Kubernetes Version: `1.22.x`. It works as expected. Marked as warning
 because it is not officially supported by [SIGHUP](https://sighup.io).
 
+## Development
+
+To read about testing, tagging, linting, etc. of `fury-kubernetes-networking` module,
+refer the [contribution guidelines](docs/CONTRIBUTING.md).
+
 ## License
 
 For license details please see [LICENSE](LICENSE)
