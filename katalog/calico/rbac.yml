@@ -28,6 +28,7 @@ rules:
 - apiGroups: ["crd.projectcalico.org"]
   resources:
   - ippools
+  - ipreservations
   verbs:
   - list
 - apiGroups: ["crd.projectcalico.org"]
@@ -142,6 +143,7 @@ rules:
   - globalbgpconfigs
   - bgpconfigurations
   - ippools
+  - ipreservations
   - ipamblocks
   - globalnetworkpolicies
   - globalnetworksets
@@ -150,6 +152,7 @@ rules:
   - clusterinformations
   - hostendpoints
   - blockaffinities
+  - caliconodestatuses
   verbs:
   - get
   - list
@@ -162,6 +165,11 @@ rules:
   verbs:
   - create
   - update
+- apiGroups: [ "crd.projectcalico.org" ]
+  resources:
+    - caliconodestatuses
+  verbs:
+    - update
 - apiGroups: [""]
   resources:
   - nodes
