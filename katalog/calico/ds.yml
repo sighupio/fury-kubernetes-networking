@@ -91,8 +91,10 @@ spec:
         volumeMounts:
           - mountPath: /host/opt/cni/bin
             name: cni-bin-dir
+          # For maintaining CNI plugin API credentials.
           - mountPath: /host/etc/cni/net.d
             name: cni-net-dir
+            readOnly: false
         securityContext:
           privileged: true
       - name: flexvol-driver
@@ -170,6 +172,12 @@ spec:
           resources:
             requests:
               cpu: 250m
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/calico-node
+                - -shutdown
           livenessProbe:
             exec:
               command:
