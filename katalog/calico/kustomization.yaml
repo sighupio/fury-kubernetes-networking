@@ -8,6 +8,12 @@ kind: Kustomization
 
 namespace: kube-system
 
+commonLabels:
+  module.kfd.sighup.io/name: "networking"
+  module.kfd.sighup.io/version: "v1.7.0"
+  module.kfd.sighup.io/component: "calico"
+  kfd.sighup.io/source: "kustomize"
+
 images:
   - name: calico/kube-controllers
     newName: registry.sighup.io/fury/calico/kube-controllers
