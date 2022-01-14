@@ -76,6 +76,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/upgrade_calico
       - refs/tags/**
 
 depends_on:
@@ -174,6 +175,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/upgrade_calico
       - refs/tags/**
 
 depends_on:
@@ -272,6 +274,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/upgrade_calico
       - refs/tags/**
 
 depends_on:
@@ -369,6 +372,7 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/upgrade_calico
       - refs/tags/**
 
 depends_on:
