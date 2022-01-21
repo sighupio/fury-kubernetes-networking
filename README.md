@@ -1,6 +1,6 @@
  <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="125" style="margin-right: 15px"/> 
 
-# Fury Kubernetes Networking
+# Kubernetes Fury Networking
 
 ![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Module%20Release)
 ![Release](https://img.shields.io/github/v/release/sighupio/fury-distribution?label=KFD%20Release)
@@ -9,13 +9,21 @@
 
 <br/>
 
-**Fury Kubernetes Networking** implements in-cluster networking functionality via Container Network Interface (CNI) for the [Kubernetes Fury Distribution (KFD)][kfd-repo].
+**Kubernetes Fury Networking** implements in-cluster networking functionality for the [Kubernetes Fury Distribution (KFD)][kfd-repo] via Container Network Interface (CNI) plugins.
 
 If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
 
+## Overview
+
+Kubernetes has adopted the Container Network Interface (CNI) specification for managing network resources on a cluster.
+
+**Kubernetes Fury Networking**  makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the Kubernetes Fury Distribution.
+
+Calico deployment consists of a daemon set running on every node (including control-plane nodes) and a controller.
+
 ## Packages
 
-Fury Kubernetes Networking provides the following packages:
+Kubernetes Fury Networking provides the following packages:
 
 |          Package           | Version |                                   Description                                    |
 | -------------------------- | ------- | -------------------------------------------------------------------------------- |
