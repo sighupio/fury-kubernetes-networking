@@ -1,6 +1,17 @@
+ <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="125" style="margin-right: 15px"/> 
+
 # Fury Kubernetes Networking
 
-Fury Kubernetes Networking implements in-cluster networking functionality via Container Network Interface (CNI).
+![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Module%20Release)
+![Release](https://img.shields.io/github/v/release/sighupio/fury-distribution?label=KFD%20Release)
+![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
+![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
+
+<br/>
+
+**Fury Kubernetes Networking** implements in-cluster networking functionality via Container Network Interface (CNI) for the [Kubernetes Fury Distribution (KFD)][kfd-repo].
+
+If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
 
 ## Packages
 
@@ -32,7 +43,7 @@ Click on each package to see its full documentation.
 
 Check the [compatibility matrix][compatibility-matrix] for additional informations about previous releases of the modules.
 
-## Issues
+## Reporting Issues
 
 In case you experience any problem with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-networking/issues/new/choose).
 
@@ -47,4 +58,6 @@ This module is open-source software and it's released under the following [LICEN
 <!-- Links -->
 [calico-page]: https://github.com/projectcalico/calico
 [sighup-page]: https://sighup.io
+[kfd-repo]: https://github.com/sighupio/fury-distribution
+[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
 [compatibility-matrix]: docs/COMPATIBILITY_MATRIX.md
