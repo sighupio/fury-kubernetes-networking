@@ -117,7 +117,19 @@ patchesStrategicMerge:
   - patch.yaml
 ```
 
+<!-- Links -->
+[calico-page]: https://github.com/projectcalico/calico
+[sighup-page]: https://sighup.io
+[kfd-repo]: https://github.com/sighupio/fury-distribution
+[furyctl-repo]: https://github.com/sighupio/furyctl
+[kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
+[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
+[compatibility-matrix]: docs/COMPATIBILITY_MATRIX.md
+[pod-network-cidr-reference]: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#initializing-your-control-plane-node
+
 <!-- </KFD-DOCS> -->
+
+<!-- <FOOTER> -->
 
 ## Contributing
 
@@ -131,13 +143,4 @@ In case you experience any problem with the module, please [open a new issue](ht
 
 This module is open-source and it's released under the following [LICENSE](LICENSE)
 
-<!-- Links -->
-[calico-page]: https://github.com/projectcalico/calico
-[sighup-page]: https://sighup.io
-[kfd-repo]: https://github.com/sighupio/fury-distribution
-[furyctl-repo]: https://github.com/sighupio/furyctl
-[kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
-[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
-[compatibility-matrix]: docs/COMPATIBILITY_MATRIX.md
-
-[pod-network-cidr-reference]: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#initializing-your-control-plane-node
+<!-- </FOOTER> -->
