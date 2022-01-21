@@ -1,11 +1,13 @@
 <h1>
-    <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="125" style="margin-right: 15px"/> 
+    <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
     Kubernetes Fury Networking
 </h1>
 
 ![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Latest%20Release)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
+
+<!-- <KFD-DOCS> -->
 
 **Kubernetes Fury Networking** implements in-cluster networking functionality for the [Kubernetes Fury Distribution (KFD)][kfd-repo] via Container Network Interface (CNI) plugins.
 
@@ -114,6 +116,8 @@ resources:
 patchesStrategicMerge:
   - patch.yaml
 ```
+
+<!-- </KFD-DOCS> -->
 
 ## Contributing
 
