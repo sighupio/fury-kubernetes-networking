@@ -13,17 +13,19 @@ Fury Kubernetes Networking contains the following packages:
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
 
+Click on each package to see its full documentation.
+
 ## Compatibility
 
 | Module Version |      `1.20.x`      |      `1.21.x`      |      `1.22.x`      | `1.23.x`  |
 | -------------- | :----------------: | :----------------: | :----------------: | --------- |
 | `v1.8`         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning: |
 
-Legend:
-
-|            <!-- -->            |       <!-- -->        |      <!-- -->       |
-| ------------------------------ | --------------------- | ------------------- |
-| :white_check_mark:  Compatible | :warning:  Has issues | :x:    Incompatible |
+|             Legend             |
+| ------------------------------ |
+| :white_check_mark:  Compatible |
+| :warning:  Has issues          |
+| :x:    Incompatible            |
 
 > :warning: Module version: `v1.8.0` and Kubernetes Version: `1.23.x` should work as expected.
 > It is marked as warning because it is not yet officially supported by [SIGHUP][sighup-page].
