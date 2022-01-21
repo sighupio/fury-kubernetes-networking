@@ -1,12 +1,12 @@
 # IP Masq
 
-IP masquerading is a form of network address translation (NAT) used to perform many-to-one IP address translations,
-which allows multiple clients to access a destination using a single IP address. A cluster uses IP masquerading so
-that destinations outside of the cluster only receive packets from node IP addresses instead of Pod IP addresses.
+<!-- <KFD-DOCS> -->
+
+IP masquerading is a form of network address translation (NAT) used to perform many-to-one IP address translations, which allows multiple clients to access a destination using a single source IP address. A cluster uses IP masquerading so that destinations outside of the cluster only receive packets from node IP addresses instead of Pod IP addresses.
+
 This is useful in environments that expect to only receive packets from node IP addresses.
 
-*Source: [https://cloud.google.com/kubernetes-engine/docs](https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent#create_manual)*
-
+You can read more about this in the following link [https://cloud.google.com/kubernetes-engine/docs][kubeengine-docs]
 
 ## Image repository and tag
 
@@ -22,20 +22,20 @@ This is useful in environments that expect to only receive packets from node IP 
 
 ## Configuration
 
-Fury distribution ip-masq package is deployed with the following configuration:
+Fury distribution `ip-masq` package is deployed with the following default configuration:
+
 - `nonMasqueradeCIDRs`: as an empty list.
 - `resyncInterval`: set to 60 seconds.
 - `masqLinkLocal`: set to false.
 - `masqLinkLocalIPv6`: set to false.
 
-*Available configuration parameters listed here:*
+Available configuration parameters are listed here:
 [https://github.com/kubernetes-sigs/ip-masq-agent#configuring-the-agent](https://github.com/kubernetes-sigs/ip-masq-agent#configuring-the-agent)
 
-Also, the design of this `kustomize` project makes it possible to extend the container arguments adding, as an example
-the `--nomasq-all-reserved-ranges` flag used to non-masquerade reserved IP ranges by default.
-
-*Available flags listed here:*
+Available flags are listed here:
 [https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags](https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags)
+
+The design of the package's `kustomize` project allows to extend the container arguments adding, for example, the `--nomasq-all-reserved-ranges` flag used to no masquerade reserved IP ranges by default.
 
 ### Important note
 
@@ -50,6 +50,11 @@ You can deploy `ip-masq` with the default configuration by running the following
 ```shell
 kustomize build | kubectl apply -f -
 ```
+
+<!-- LINKS -->
+[kubeengine-docs]: https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent#create_manual
+
+<!-- </KFD-DOCS> -->
 
 ## License
 

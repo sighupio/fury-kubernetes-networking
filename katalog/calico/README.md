@@ -1,5 +1,7 @@
 # Calico
 
+<!-- <KFD-DOCS> -->
+
 **Calico** is open-source networking and network security solution for containers, virtual machines, and native host-based workloads.
 Calico supports a broad range of platforms including Kubernetes, OpenShift, Docker EE, OpenStack, and bare metal services.
 
@@ -51,9 +53,11 @@ You can deploy calico by running the following command in the root of this proje
 kustomize build | kubectl apply -f -
 ```
 
+<!-- LINKS -->
+[calico-documentation]: https://projectcalico.docs.tigera.io/about/about-calico
+
+<!-- </KFD-DOCS> -->
+
 ## License
 
 For license details please see [LICENSE](./../../LICENSE)
-
-[calico-documentation]: https://projectcalico.docs.tigera.io/about/about-calico
-
