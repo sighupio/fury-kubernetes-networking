@@ -3,7 +3,7 @@
 **Calico** is open-source networking and network security solution for containers, virtual machines, and native host-based workloads.
 Calico supports a broad range of platforms including Kubernetes, OpenShift, Docker EE, OpenStack, and bare metal services.
 
-> For more information about Calico refer to <docs.projectcalico.org>
+> For more information about Calico refer to [calico documentation][calico-documentation]
 
 The deployment of Calico consists of a daemon set running on every node (including control-plane) and a controller that implements:
 
@@ -54,3 +54,6 @@ kustomize build | kubectl apply -f -
 ## License
 
 For license details please see [LICENSE](./../../LICENSE)
+
+[calico-documentation]: (docs.projectcalico.org)
+
