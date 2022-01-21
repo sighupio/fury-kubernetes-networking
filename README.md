@@ -15,7 +15,7 @@ If you are new to KFD please refer to the [official documentation][kfd-docs] on 
 
 ## Packages
 
-Fury Kubernetes Networking contains the following packages:
+Fury Kubernetes Networking provides the following packages:
 
 |          Package           | Version |                                   Description                                    |
 | -------------------------- | ------- | -------------------------------------------------------------------------------- |
@@ -37,14 +37,16 @@ Click on each package to see its full documentation.
 
 Check the [compatibility matrix][compatibility-matrix] for additional informations about previous releases of the modules.
 
-## Deployment
+## Usage
 
 ### Prerequisites
 
-|            Tool             |  Version   |                                                                          Description                                                                           |
-| --------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [furyctl][furyctl-repo]     | `>= 0.6.0` | The recommended approach to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
-| [kustomize][kustomize-repo] | `>= 3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+|            Tool             |  Version  |                                                                          Description                                                                           |
+| --------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
+| [kustomize][kustomize-repo] | `>=3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+
+### Deployment
 
 1. List the packages you want to deploy and their version in a `Furyfile.yml`
 
@@ -54,11 +56,11 @@ bases:
     version: "v1.8.0"
 ```
 
-See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
+> See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
 
 2. Execute `furyctl vendor -H` to download the packages
 
-3. Find the packages under `./vendor/katalog/networking`.
+3. Inspect the download packages under `./vendor/katalog/networking`.
 
 4. Define a `kustomization.yaml` that includes the `./vendor/katalog/networking` directory as resource.
 
