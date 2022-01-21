@@ -55,5 +55,5 @@ kustomize build | kubectl apply -f -
 
 For license details please see [LICENSE](./../../LICENSE)
 
-[calico-documentation]: docs.projectcalico.org
+[calico-documentation]: https://projectcalico.docs.tigera.io/about/about-calico
 
