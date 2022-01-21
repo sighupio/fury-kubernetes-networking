@@ -1,10 +1,17 @@
 # Calico
 
-**Calico** is open-source networking and network security solution for containers, virtual machines, and
-native host-based workloads. Calico supports a broad range of platforms including Kubernetes, OpenShift, Docker EE,
-OpenStack, and bare metal services.
+**Calico** is open-source networking and network security solution for containers, virtual machines, and native host-based workloads.
+Calico supports a broad range of platforms including Kubernetes, OpenShift, Docker EE, OpenStack, and bare metal services.
 
-*Source:* [docs.projectcalico.org](https://docs.projectcalico.org/introduction/).
+> For more information about Calico refer to <docs.projectcalico.org>
+
+The deployment of Calico consists of a daemon set running on every node (including control-plane) and a controller that implements:
+
+- *policy controller* watches network policies and programs Calico policies.
+- *namespace controller* watches namespaces and programs Calico profiles.
+- *serviceaccount controller* watches service accounts and programs Calico profiles.
+- *workloadendpoint controller* watches for changes to pod labels and updates Calico workload endpoints.
+- *node controller* watches for the removal of Kubernetes nodes and removes corresponding data from Calico.
 
 ## Image repository and tag
 
@@ -28,6 +35,7 @@ OpenStack, and bare metal services.
 ## Configuration
 
 Fury distribution calico package is deployed with the following configuration:
+
 - Default overlay pod CIDR: `172.16.0.0/16`.
 - Default MTU Size: `1440`.
 - BGP `(bird)` mode configured instead of `vxlan`.

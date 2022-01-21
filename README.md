@@ -1,54 +1,146 @@
-# Fury Kubernetes Networking
+<h1>
+    <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
+    Kubernetes Fury Networking
+</h1>
 
-## Networking Packages
+![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Latest%20Release)
+![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
+![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
-The following packages are included in the Fury Kubernetes Networking katalog. All
-resources in these repositories are going to be deployed in `kube-system`
-namespace in your Kubernetes cluster.
+<!-- <KFD-DOCS> -->
 
-- [calico](katalog/calico): Calico for Kubernetes. Calico enables networking and
-network policy in Kubernetes clusters across the cloud. Version: **3.21.3**
-- [ip-masq](katalog/ip-masq): The `ip-masq-agent` configures iptables rules to MASQUERADE traffic outside link-local
-*(optional, enabled by default)* and additional arbitrary IP ranges. Version: **2.5.0**
+**Kubernetes Fury Networking** implements in-cluster networking functionality for the [Kubernetes Fury Distribution (KFD)][kfd-repo] via Container Network Interface (CNI) plugins.
 
-You can click on each package to see its documentation.
+If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
+
+## Overview
+
+Kubernetes has adopted the Container Network Interface (CNI) specification for managing network resources on a cluster.
+
+**Kubernetes Fury Networking**  makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the Kubernetes Fury Distribution.
+
+Calico deployment consists of a daemon set running on every node (including control-plane nodes) and a controller.
+
+## Packages
+
+Kubernetes Fury Networking provides the following packages:
+
+|          Package           | Version  |                                   Description                                    |
+| -------------------------- | -------- | -------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.21.3` | [Calico][calico-page] CNI Plugin                                                 |
+| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
+
+> The resources in these packages are going to be deployed in `kube-system` namespace.
+
+Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             | 1.17.X             | 1.18.X             | 1.19.X             | 1.20.X             | 1.21.X             | 1.22.X             | 1.23.X    |
-|-------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|-----------|
-| v1.0.0                              | :warning:          | :warning:          | :warning:          |                    |                    |                    |                    |                    |                    |           |
-| v1.0.1                              | :warning:          | :warning:          | :warning:          |                    |                    |                    |                    |                    |                    |           |
-| v1.1.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |           |
-| v1.2.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |           |
-| v1.2.1                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |           |
-| v1.3.0                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |           |
-| v1.4.0                              |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |                    |                    |                    |           |
-| v1.5.0                              |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |                    |                    |           |
-| v1.6.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |                    |           |
-| v1.7.0                              |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |           |
-| v1.8.0                              |                    |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning: |
+| Kubernetes Version |   Compatibility    |                        Notes                        |
+| ------------------ | :----------------: | --------------------------------------------------- |
+| `1.20.x`           | :white_check_mark: | No known issues                                     |
+| `1.21.x`           | :white_check_mark: | No known issues                                     |
+| `1.22.x`           | :white_check_mark: | No known issues                                     |
+| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
-- :white_check_mark: Compatible
-- :warning: Has issues
-- :x: Incompatible
+Check the [compatibility matrix][compatibility-matrix] for additional informations about previous releases of the modules.
 
-### Warning
+## Usage
 
-- :warning: : module version: `v1.5.0` and Kubernetes Version: `1.20.x`. It works as expected. Marked as warning
-because it is not officially supported by [SIGHUP](https://sighup.io).
-- :warning: : module version: `v1.6.0` and Kubernetes Version: `1.21.x`. It works as expected. Marked as warning
-because it is not officially supported by [SIGHUP](https://sighup.io).
-- :warning: : module version: `v1.7.0` and Kubernetes Version: `1.22.x`. It works as expected. Marked as warning
-because it is not officially supported by [SIGHUP](https://sighup.io).
-- :warning: : module version: `v1.8.0` and Kubernetes Version: `1.23.x`. It works as expected. Marked as warning
-because it is not officially supported by [SIGHUP](https://sighup.io).
+### Prerequisites
 
-## Development
+|            Tool             |  Version  |                                                                          Description                                                                           |
+| --------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
+| [kustomize][kustomize-repo] | `>=3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
 
-To read about testing, tagging, linting, etc. of `fury-kubernetes-networking` module,
-refer the [contribution guidelines](docs/CONTRIBUTING.md).
+### Deployment
+
+1. List the packages you want to deploy and their version in a `Furyfile.yml`
+
+```yaml
+bases:
+  - name: networking/calico
+    version: "v1.8.0"
+```
+
+> See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
+
+2. Execute `furyctl vendor -H` to download the packages
+
+3. Inspect the download packages under `./vendor/katalog/networking`.
+
+4. Define a `kustomization.yaml` that includes the `./vendor/katalog/networking` directory as resource.
+
+```yaml
+resources:
+- ./vendor/katalog/networking/calico
+```
+
+5. Apply the necessary patches. You can find a list of common customization [here](#common-customizations).
+
+6. To deploy the packages to your cluster, execute:
+
+```bash
+kustomize build . | kubectl apply -f -
+```
+
+### Common Customizations
+
+#### Specify a different Pod Network CIDR
+
+The default [Pod Network CIDR][pod-network-cidr-reference] for Calico is `172.16.0.0/16`.
+To specify a different one, create the following patch:
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: calico-node
+spec:
+  template:
+    spec:
+      containers:
+        - name: calico-node
+          env:
+          - name: CALICO_IPV4POOL_CIDR
+            value: "192.168.0.0/16" # PUT YOUR NETWORK CIDR HERE
+```
+
+The final `kustomization.yaml` should look like this:
+
+```yaml
+resources:
+  - ./vendor/katalog/networking/calico
+
+patchesStrategicMerge:
+  - patch.yaml
+```
+
+<!-- Links -->
+[calico-page]: https://github.com/projectcalico/calico
+[sighup-page]: https://sighup.io
+[kfd-repo]: https://github.com/sighupio/fury-distribution
+[furyctl-repo]: https://github.com/sighupio/furyctl
+[kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
+[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
+[compatibility-matrix]: docs/COMPATIBILITY_MATRIX.md
+[pod-network-cidr-reference]: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#initializing-your-control-plane-node
+
+<!-- </KFD-DOCS> -->
+
+<!-- <FOOTER> -->
+
+## Contributing
+
+Before contributing, please read first the [Contributing Guidelines](docs/CONTRIBUTING.md).
+
+### Reporting Issues
+
+In case you experience any problem with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-networking/issues/new/choose).
 
 ## License
 
-For license details please see [LICENSE](LICENSE)
+This module is open-source and it's released under the following [LICENSE](LICENSE)
+
+<!-- </FOOTER> -->
