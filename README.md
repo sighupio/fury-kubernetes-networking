@@ -2,8 +2,7 @@
 
 # Kubernetes Fury Networking
 
-![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Module%20Release)
-![Release](https://img.shields.io/github/v/release/sighupio/fury-distribution?label=KFD%20Release)
+![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Latest%20Release)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
