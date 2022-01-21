@@ -1,4 +1,4 @@
- <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="125" style="margin-right: 15px"/> 
+<img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="125" style="margin-right: 15px"/> 
 
 # Kubernetes Fury Networking
 
@@ -24,10 +24,10 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-|          Package           | Version |                                   Description                                    |
-| -------------------------- | ------- | -------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.21`  | [Calico][calico-page] CNI Plugin                                                 |
-| [ip-masq](katalog/ip-masq) | `2.5.0` | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
+|          Package           | Version  |                                   Description                                    |
+| -------------------------- | -------- | -------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.21.3` | [Calico][calico-page] CNI Plugin                                                 |
+| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
 
