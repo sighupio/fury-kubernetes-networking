@@ -41,12 +41,10 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ### Prerequisites
 
-|            Tool             |  Version   |                                                                                           Description                                                                                            |
-| --------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [furyctl][furyctl-repo]     | >= `0.6.0` | the recommended approach to download and manage KFD modules and their packages is to use [furyctl][furyctl-repo]. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
-| [kustomize][kustomize-repo] | >= `3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository](https://github.com/kubernetes-sigs/kustomize).     |
-
-### Workflow
+|            Tool             |  Version   |                                                                          Description                                                                           |
+| --------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>= 0.6.0` | The recommended approach to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
+| [kustomize][kustomize-repo] | `>= 3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
 
 1. List the packages you want to deploy and their version in a `Furyfile.yml`
 
@@ -126,6 +124,7 @@ This module is open-source and it's released under the following [LICENSE](LICEN
 [sighup-page]: https://sighup.io
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [furyctl-repo]: https://github.com/sighupio/furyctl
+[kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
 [kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
 [compatibility-matrix]: docs/COMPATIBILITY_MATRIX.md
 
