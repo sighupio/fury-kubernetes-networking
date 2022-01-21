@@ -28,25 +28,23 @@ Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility    |                          Notes                          |
-| ------------------ | :----------------: | ------------------------------------------------------- |
-| `1.20.x`           | :white_check_mark: | []()                                                    |
-| `1.21.x`           | :white_check_mark: | []()                                                    |
-| `1.22.x`           | :white_check_mark: | []()                                                    |
-| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported.     |
+| Kubernetes Version |   Compatibility    |                        Notes                        |
+| ------------------ | :----------------: | --------------------------------------------------- |
+| `1.20.x`           | :white_check_mark: | No known issues                                     |
+| `1.21.x`           | :white_check_mark: | No known issues                                     |
+| `1.22.x`           | :white_check_mark: | No known issues                                     |
+| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
 Check the [compatibility matrix][compatibility-matrix] for additional informations about previous releases of the modules.
 
 ## Deployment
 
-The recommend approach to download and manage KFD modules and their packages is to use [furyctl][furyctl-repo]. To learn more about `furyctl` read the [official documentation][furyctl-repo].
-
-Packages are then customized with `kustomize`. To learn how to create your customization layer with it, please refer to the `kustomize` [repository](https://github.com/kubernetes-sigs/kustomize).
-
 ### Prerequisites
 
-- [furyctl][furyctl-repo] >= `0.6.0`
-- [kustomize][furyctl-repo] >= `3.5.0`
+|            Tool             |  Version   |                                                                                           Description                                                                                            |
+| --------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [furyctl][furyctl-repo]     | >= `0.6.0` | the recommended approach to download and manage KFD modules and their packages is to use [furyctl][furyctl-repo]. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
+| [kustomize][kustomize-repo] | >= `3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository](https://github.com/kubernetes-sigs/kustomize).     |
 
 ### Workflow
 
