@@ -11,7 +11,7 @@ namespace: kube-system
 commonLabels:
   k8s-app: ip-masq-agent
   module.kfd.sighup.io/name: "networking"
-  module.kfd.sighup.io/version: "v1.8.0"
+  module.kfd.sighup.io/version: "v1.8.1"
   module.kfd.sighup.io/component: "ip-masq"
   kfd.sighup.io/source: "kustomize"
 
