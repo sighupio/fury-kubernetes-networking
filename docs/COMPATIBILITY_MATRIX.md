@@ -12,10 +12,17 @@
 | v1.5.0                              |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |                    |                    |           |
 | v1.6.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |                    |           |
 | v1.7.0                              |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning:          |           |
-| v1.8.0                              |                    |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning: |
+| v1.8.0                              |                    |                    |                    |                    |                    |                    |        :x:         |        :x:         |        :x:         |    :x:    |
+| v1.8.1                              |                    |                    |                    |                    |                    |                    |        :x:         |        :x:         |        :x:         |    :x:    |
+| v1.8.2                              |                    |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning: |
 
 :white_check_mark: Compatible
 
 :warning: Has issues
 
 :x: Incompatible
+
+## Warning
+
+- :x: module version `v1.8.0` has a known bug breaking upgrades. Please do not use.
+- :x: module version `v1.8.1` has a known bug breaking upgrades. Please do not use.
