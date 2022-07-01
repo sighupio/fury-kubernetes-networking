@@ -50,5 +50,5 @@ See <https://projectcalico.docs.tigera.io/archive/v3.23/maintenance/monitor/moni
 export CALICO_VERSION=3.23
 # ⚠️ Assuming $PWD==katalog/calico
 # We take the `felix-dashboard.json` from the downloaded yaml, we are not deploying `typha`, so we don't need its dashboard.
-curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | jq > ./monitoring/dashboards/felix-dashboard.json
+curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./monitoring/dashboards/felix-dashboard.json
 ```
