@@ -20,14 +20,12 @@ The deployment of Calico consists of a daemon set running on every node (includi
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.21.3`.
-  - `calico/cni:v3.21.3`.
-  - `calico/pod2daemon-flexvol:v3.21.3`.
-  - `calico/node:v3.21.3`.
+  - `calico/kube-controllers:v3.23.2`.
+  - `calico/cni:v3.23.2`.
+  - `calico/node:v3.23.2`.
 - calico repositories:
   - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
   - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).
-  - [https://github.com/projectcalico/pod2daemon](https://github.com/projectcalico/pod2daemon).
   - [https://github.com/projectcalico/node](https://github.com/projectcalico/node).
 
 ## Requirements
@@ -41,7 +39,6 @@ The deployment of Calico consists of a daemon set running on every node (includi
 The calico package is deployed with the following configuration:
 
 - Default overlay pod CIDR: detected automatically for `kubeadm` based clusters.
-- Default MTU Size: `1440`.
 - BGP `(bird)` mode configured instead of `vxlan`.
 - [`kubernetes` datastore](https://docs.projectcalico.org/getting-started/kubernetes/hardway/the-calico-datastore#using-kubernetes-as-the-datastore).
 - Enable support for [traffic shaping](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#support-traffic-shaping).
