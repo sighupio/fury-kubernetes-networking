@@ -15,7 +15,7 @@
 | v1.8.0                              |                    |                    |                    |                    |                    |                    |        :x:         |    :x:    |    :x:    | :x:       |
 | v1.8.1                              |                    |                    |                    |                    |                    |                    |        :x:         |    :x:    |    :x:    | :x:       |
 | v1.8.2                              |                    |                    |                    |                    |                    |                    |        :x:         |    :x:    |    :x:    | :x:       |
-| v1.9.0                              |                    |                    |                    |                    |                    |                    |     :warning:      | :warning: | :warning: | :warning: |
+| v1.9.0                              |                    |                    |                    |                    |                    |                    |        :x:         | :warning: | :warning: | :warning: |
 
 :white_check_mark: Compatible
 
@@ -29,3 +29,4 @@
 - :x: module version `v1.8.0` has a known bug breaking upgrades and with calico on Kubernetes >= 1.21. Please do not use.
 - :x: module version `v1.8.1` has a known bug breaking upgrades and with calico on Kubernetes >= 1.21. Please do not use.
 - :x: module version `v1.8.2` has a known bug with calico on Kubernetes >= 1.21. Please do not use.
+- :x: module version `v1.9.0`is not compatible with Kubernetes <= 1.20.
