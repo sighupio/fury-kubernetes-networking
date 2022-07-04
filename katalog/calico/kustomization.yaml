@@ -29,18 +29,10 @@ resources:
   - ds.yml
   - rbac.yml
   - pdb.yml
-  # Service Monitor to gather metrics
-  - monitoring/sm.yml
+  # Resources needed for Monitoring
+  - monitoring
 
 # Patch to enable metrics on Felix (calico-node DaemonSet)
+# we need to do this at this level, because the base is out of monitoring/
 patchesStrategicMerge:
   - "monitoring/felix-enable-metrics.yaml"
-
-configMapGenerator:
-  - name: networking-grafana-dashboard
-    files:
-      - monitoring/dashboards/felix-dashboard.json
-    options:
-      labels:
-        grafana-sighup-dashboard: default
-      disableNameSuffixHash: true

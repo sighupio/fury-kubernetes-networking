@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kube-system
+
+resources:
+  - "sm.yml" # ServiceMonitor defintion
+
+generatorOptions:
+  labels:
+    grafana-sighup-dashboard: default
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: networking-grafana-dashboard
+    files:
+      - dashboards/felix-dashboard.json
