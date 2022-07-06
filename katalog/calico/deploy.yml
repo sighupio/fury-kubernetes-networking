@@ -1,8 +1,10 @@
-# Copyright (c) 2022 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
 ---
+# Source: calico/templates/calico-kube-controllers.yaml
+# See https://github.com/projectcalico/kube-controllers
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,12 +12,13 @@ metadata:
   labels:
     k8s-app: calico-kube-controllers
 spec:
+  # The controllers can only have a single active instance.
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       k8s-app: calico-kube-controllers
+  strategy:
+    type: Recreate
   template:
     metadata:
       name: calico-kube-controllers
@@ -25,31 +28,34 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       tolerations:
-      - key: CriticalAddonsOnly
-        operator: Exists
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
+        # Mark the pod as a critical add-on for rescheduling.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
       serviceAccountName: calico-kube-controllers
       priorityClassName: system-cluster-critical
       containers:
-      - name: calico-kube-controllers
-        image: calico/kube-controllers
-        env:
-        - name: ENABLED_CONTROLLERS
-          value: node
-        - name: DATASTORE_TYPE
-          value: kubernetes
-        livenessProbe:
-          exec:
-            command:
-            - /usr/bin/check-status
-            - -l
-          periodSeconds: 10
-          initialDelaySeconds: 10
-          failureThreshold: 6
-        readinessProbe:
-          exec:
-            command:
-            - /usr/bin/check-status
-            - -r
-          periodSeconds: 10
+        - name: calico-kube-controllers
+          image: docker.io/calico/kube-controllers:v3.23.2
+          env:
+            # Choose which controllers to run.
+            - name: ENABLED_CONTROLLERS
+              value: node
+            - name: DATASTORE_TYPE
+              value: kubernetes
+          livenessProbe:
+            exec:
+              command:
+                - /usr/bin/check-status
+                - -l
+            periodSeconds: 10
+            initialDelaySeconds: 10
+            failureThreshold: 6
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /usr/bin/check-status
+                - -r
+            periodSeconds: 10

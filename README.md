@@ -1,7 +1,9 @@
+<!-- markdownlint-disable MD033 -->
 <h1>
     <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
     Kubernetes Fury Networking
 </h1>
+<!-- markdownlint-enable MD033 -->
 
 ![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Latest%20Release)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
@@ -25,9 +27,9 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-|          Package           | Version  |                                   Description                                    |
+| Package                    | Version  | Description                                                                      |
 | -------------------------- | -------- | -------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.21.3` | [Calico][calico-page] CNI Plugin                                                 |
+| [calico](katalog/calico)   | `3.23.2` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                 |
 | [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
@@ -36,32 +38,34 @@ Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility    |                        Notes                        |
+| Kubernetes Version |   Compatibility    | Notes                                               |
 | ------------------ | :----------------: | --------------------------------------------------- |
-| `1.20.x`           | :white_check_mark: | No known issues                                     |
+| `1.20.x`           |        :x:         | Incompatible                                        |
 | `1.21.x`           | :white_check_mark: | No known issues                                     |
 | `1.22.x`           | :white_check_mark: | No known issues                                     |
 | `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
 
-Check the [compatibility matrix][compatibility-matrix] for additional informations about previous releases of the modules.
+Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
 ## Usage
 
 ### Prerequisites
 
-|            Tool             |  Version  |                                                                          Description                                                                           |
-| --------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo]. |
-| [kustomize][kustomize-repo] | `>=3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+| Tool                        | Version   | Description                                                                                                                                                      |
+| --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].       |
+| [kustomize][kustomize-repo] | `>=3.5.0` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to their [repository][kustomize-repo]. |
 
 ### Deployment
+
+> ⚠️ please notice that the Calico packages is for cluster with less the 50 nodes. If your cluster has more than 50 nodes, you'll need to switch to [Calico + Typha](https://projectcalico.docs.tigera.io/archive/v3.23/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico-with-kubernetes-api-datastore-more-than-50-nodes).
 
 1. List the packages you want to deploy and their version in a `Furyfile.yml`
 
 ```yaml
 bases:
   - name: networking/calico
-    version: "v1.8.2"
+    version: "v1.9.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -70,51 +74,17 @@ bases:
 
 3. Inspect the download packages under `./vendor/katalog/networking`.
 
-4. Define a `kustomization.yaml` that includes the `./vendor/katalog/networking` directory as resource.
+4. Define a `kustomization.yaml` that includes the `./vendor/katalog/networking` directory as a resource.
 
 ```yaml
 resources:
 - ./vendor/katalog/networking/calico
 ```
 
-5. Apply the necessary patches. You can find a list of common customization [here](#common-customizations).
-
-6. To deploy the packages to your cluster, execute:
+5. To deploy the packages to your cluster, execute:
 
 ```bash
 kustomize build . | kubectl apply -f -
-```
-
-### Common Customizations
-
-#### Specify a different Pod Network CIDR
-
-The default [Pod Network CIDR][pod-network-cidr-reference] for Calico is `172.16.0.0/16`.
-To specify a different one, create the following patch:
-
-```yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: calico-node
-spec:
-  template:
-    spec:
-      containers:
-        - name: calico-node
-          env:
-          - name: CALICO_IPV4POOL_CIDR
-            value: "192.168.0.0/16" # PUT YOUR NETWORK CIDR HERE
-```
-
-The final `kustomization.yaml` should look like this:
-
-```yaml
-resources:
-  - ./vendor/katalog/networking/calico
-
-patchesStrategicMerge:
-  - patch.yaml
 ```
 
 <!-- Links -->
@@ -125,7 +95,6 @@ patchesStrategicMerge:
 [kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
 [kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
 [compatibility-matrix]: https://github.com/sighupio/fury-kubernetes-networking/blob/master/docs/COMPATIBILITY_MATRIX.md
-[pod-network-cidr-reference]: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#initializing-your-control-plane-node
 
 <!-- </KFD-DOCS> -->
 

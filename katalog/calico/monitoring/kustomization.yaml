@@ -1,4 +1,4 @@
-# Copyright (c) 2022 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -8,6 +8,9 @@ kind: Kustomization
 
 namespace: kube-system
 
+resources:
+  - "sm.yml" # ServiceMonitor defintion
+
 generatorOptions:
   labels:
     grafana-sighup-dashboard: default
@@ -16,4 +19,4 @@ generatorOptions:
 configMapGenerator:
   - name: networking-grafana-dashboard
     files:
-      - calico.json
+      - dashboards/felix-dashboard.json

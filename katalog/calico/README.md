@@ -7,7 +7,7 @@ Calico supports a broad range of platforms including Kubernetes, OpenShift, Dock
 
 > For more information about Calico refer to [calico documentation][calico-documentation]
 
-The deployment of Calico consists of a daemon set running on every node (including control-plane) and a controller that implements:
+The deployment of Calico consists of a daemon set running on every node (including the control-plane) and a controller that implements:
 
 - *policy controller* watches network policies and programs Calico policies.
 - *namespace controller* watches namespaces and programs Calico profiles.
@@ -15,35 +15,34 @@ The deployment of Calico consists of a daemon set running on every node (includi
 - *workloadendpoint controller* watches for changes to pod labels and updates Calico workload endpoints.
 - *node controller* watches for the removal of Kubernetes nodes and removes corresponding data from Calico.
 
+> ⚠️ please notice that the Calico packages is for cluster with less the 50 nodes. If your cluster has more than 50 nodes, you'll need to switch to [Calico + Typha](https://projectcalico.docs.tigera.io/archive/v3.23/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico-with-kubernetes-api-datastore-more-than-50-nodes).
+
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.19.1`.
-  - `calico/cni:v3.19.1`.
-  - `calico/pod2daemon-flexvol:v3.19.1`.
-  - `calico/node:v3.19.1`.
+  - `calico/kube-controllers:v3.23.2`.
+  - `calico/cni:v3.23.2`.
+  - `calico/node:v3.23.2`.
 - calico repositories:
   - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
   - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).
-  - [https://github.com/projectcalico/pod2daemon](https://github.com/projectcalico/pod2daemon).
   - [https://github.com/projectcalico/node](https://github.com/projectcalico/node).
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.18.X`.
-- Tested with Kustomize = `v3.3.X`.
-- Prometheus Operator.
+- Tested with Kubernetes >= `1.21.X`.
+- Tested with Kustomize >= `v3.3.X`.
+- Prometheus Operator, optional if you want to have metrics.
 
 ## Configuration
 
-Fury distribution calico package is deployed with the following configuration:
+The calico package is deployed with the following configuration:
 
-- Default overlay pod CIDR: `172.16.0.0/16`.
-- Default MTU Size: `1440`.
+- Default overlay pod CIDR: detected automatically for `kubeadm` based clusters.
 - BGP `(bird)` mode configured instead of `vxlan`.
 - [`kubernetes` datastore](https://docs.projectcalico.org/getting-started/kubernetes/hardway/the-calico-datastore#using-kubernetes-as-the-datastore).
 - Enable support for [traffic shaping](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#support-traffic-shaping).
-- ServiceMonitor *(Prometheus Operator)* configured to scrape metrics every 15 seconds.
+- ServiceMonitor (Prometheus Operator) configured to scrape metrics every 15 seconds.
 
 ## Deployment
 
