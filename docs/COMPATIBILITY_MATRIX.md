@@ -14,7 +14,7 @@
 | v1.7.0                              |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |           |
 | v1.8.0                              |                    |                    |                    |                    |                    |                    |        :x:         |        :x:         |        :x:         | :x:       |
 | v1.8.1                              |                    |                    |                    |                    |                    |                    |        :x:         |        :x:         |        :x:         | :x:       |
-| v1.8.2                              |                    |                    |                    |                    |                    |                    |        :x:         |        :x:         |        :x:         | :x:       |
+| v1.8.2                              |                    |                    |                    |                    |                    |                    | :white_check_mark: |        :x:         |        :x:         | :x:       |
 | v1.9.0                              |                    |                    |                    |                    |                    |                    |        :x:         | :white_check_mark: | :white_check_mark: | :warning: |
 
 :white_check_mark: Compatible
