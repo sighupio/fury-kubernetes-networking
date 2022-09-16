@@ -4,7 +4,6 @@
 
 ---
 # Source: calico/templates/calico-kube-controllers-rbac.yaml
-
 # Include a clusterrole for the kube-controllers component,
 # and bind it to the calico-kube-controllers serviceaccount.
 kind: ClusterRole
@@ -87,21 +86,6 @@ rules:
       # watch for changes
       - watch
 ---
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: calico-kube-controllers
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: calico-kube-controllers
-subjects:
-  - kind: ServiceAccount
-    name: calico-kube-controllers
-    namespace: kube-system
----
-
----
 # Source: calico/templates/calico-node-rbac.yaml
 # Include a clusterrole for the calico-node DaemonSet,
 # and bind it to the calico-node serviceaccount.
@@ -110,6 +94,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: calico-node
 rules:
+  # Used for creating service account tokens to be used by the CNI plugin
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts/token
+    resourceNames:
+      - calico-node
+    verbs:
+      - create
   # The CNI plugin needs to get pods, nodes, and namespaces.
   - apiGroups: [""]
     resources:
@@ -172,14 +164,6 @@ rules:
       - pods/status
     verbs:
       - patch
-  # Used for creating service account tokens to be used by the CNI plugin
-  - apiGroups: [""]
-    resources:
-      - serviceaccounts/token
-    resourceNames:
-      - calico-node
-    verbs:
-      - create
   # Calico monitors various CRDs for config.
   - apiGroups: ["crd.projectcalico.org"]
     resources:
@@ -247,11 +231,14 @@ rules:
       - create
       - update
       - delete
+  # The CNI plugin and calico/node need to be able to create a default
+  # IPAMConfiguration
   - apiGroups: ["crd.projectcalico.org"]
     resources:
       - ipamconfigs
     verbs:
       - get
+      - create
   # Block affinities must also be watchable by confd for route aggregation.
   - apiGroups: ["crd.projectcalico.org"]
     resources:
@@ -265,8 +252,22 @@ rules:
       - daemonsets
     verbs:
       - get
-
 ---
+# Source: calico/templates/calico-kube-controllers-rbac.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: calico-kube-controllers
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: calico-kube-controllers
+subjects:
+- kind: ServiceAccount
+  name: calico-kube-controllers
+  namespace: kube-system
+---
+# Source: calico/templates/calico-node-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -276,6 +277,6 @@ roleRef:
   kind: ClusterRole
   name: calico-node
 subjects:
-  - kind: ServiceAccount
-    name: calico-node
-    namespace: kube-system
+- kind: ServiceAccount
+  name: calico-node
+  namespace: kube-system

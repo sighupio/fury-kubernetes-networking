@@ -20,9 +20,9 @@ The deployment of Calico consists of a daemon set running on every node (includi
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.23.2`.
-  - `calico/cni:v3.23.2`.
-  - `calico/node:v3.23.2`.
+  - `calico/kube-controllers:v3.24.1`.
+  - `calico/cni:v3.24.1`.
+  - `calico/node:v3.24.1`.
 - calico repositories:
   - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
   - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).
