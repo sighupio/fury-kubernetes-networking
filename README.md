@@ -27,10 +27,11 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-| Package                    | Version  | Description                                                                      |
-| -------------------------- | -------- | -------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                 |
-| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
+| Package                    | Version  | Description                                                                       |
+| -------------------------- | -------- | --------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                  |
+| [tigera](katalog/tigera)   | `3.24.1` | [Tigera Operator][tigera-page] is a Kubernetes operator for Calico.               |
+| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality. |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
 
@@ -88,6 +89,7 @@ kustomize build . | kubectl apply -f -
 
 <!-- Links -->
 [calico-page]: https://github.com/projectcalico/calico
+[tigera-page]: https://github.com/projectcalico/calico
 [sighup-page]: https://sighup.io
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [furyctl-repo]: https://github.com/sighupio/furyctl

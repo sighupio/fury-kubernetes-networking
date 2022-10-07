@@ -34,7 +34,7 @@ curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/cu
 
 ### Customizations
 
-The on-prem resources file has been edited deleting all the custom parameters, leaving all the options to the defaults. THe Operator will detect the CIDR from the cluster's installation and set it accordingly.
+The on-prem resources file from upstream has been edited to use SIGHUP's registry and deleted the rest of the configuration included upstream. The Operator should detect the CIDR from the cluster's installation and set it accordingly.
 
 ## EKS Policy-only mode
 

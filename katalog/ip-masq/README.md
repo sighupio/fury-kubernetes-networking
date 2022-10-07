@@ -6,7 +6,7 @@ IP masquerading is a form of network address translation (NAT) used to perform m
 
 This is useful in environments that expect to only receive packets from node IP addresses.
 
-You can read more about this in the following link [https://cloud.google.com/kubernetes-engine/docs][kubeengine-docs]
+You can read more about this at the following link [https://cloud.google.com/kubernetes-engine/docs][kubeengine-docs]
 
 ## Image repository and tag
 
