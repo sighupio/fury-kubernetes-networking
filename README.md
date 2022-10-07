@@ -29,7 +29,7 @@ Kubernetes Fury Networking provides the following packages:
 
 | Package                    | Version  | Description                                                                      |
 | -------------------------- | -------- | -------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.23.2` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                 |
+| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                 |
 | [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
@@ -40,10 +40,9 @@ Click on each package to see its full documentation.
 
 | Kubernetes Version |   Compatibility    | Notes                                               |
 | ------------------ | :----------------: | --------------------------------------------------- |
-| `1.20.x`           |        :x:         | Incompatible                                        |
-| `1.21.x`           | :white_check_mark: | No known issues                                     |
 | `1.22.x`           | :white_check_mark: | No known issues                                     |
-| `1.23.x`           |     :warning:      | Conformance tests passed. Not officially supported. |
+| `1.23.x`           | :white_check_mark: | No known issues                                     |
+| `1.24.x`           | :white_check_mark: | No known issues                                     |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 

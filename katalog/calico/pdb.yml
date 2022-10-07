@@ -3,6 +3,7 @@
 # license that can be found in the LICENSE file.
 
 ---
+# Source: calico/templates/calico-kube-controllers.yaml
 # This manifest creates a Pod Disruption Budget for Controller to allow K8s Cluster Autoscaler to evict
 
 apiVersion: policy/v1

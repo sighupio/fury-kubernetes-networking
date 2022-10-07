@@ -33,11 +33,14 @@ spec:
           operator: Exists
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
       serviceAccountName: calico-kube-controllers
       priorityClassName: system-cluster-critical
       containers:
         - name: calico-kube-controllers
-          image: docker.io/calico/kube-controllers:v3.23.2
+          image: docker.io/calico/kube-controllers:v3.24.1
+          imagePullPolicy: IfNotPresent
           env:
             # Choose which controllers to run.
             - name: ENABLED_CONTROLLERS
@@ -47,8 +50,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /usr/bin/check-status
-                - -l
+              - /usr/bin/check-status
+              - -l
             periodSeconds: 10
             initialDelaySeconds: 10
             failureThreshold: 6
@@ -56,6 +59,6 @@ spec:
           readinessProbe:
             exec:
               command:
-                - /usr/bin/check-status
-                - -r
+              - /usr/bin/check-status
+              - -r
             periodSeconds: 10
