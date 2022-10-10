@@ -13,7 +13,7 @@ To install the Tigera operator in an empty on-premises cluster run the following
 1. Deploy the `on-prem` package, it will deploy both the Operator and the configuration:
 
 ```bash
-kustomize build katalog/tigera/on-prem | kubectl apply -f -
+kustomize build katalog/tigera/on-prem | kubectl apply -f - --server-side
 ```
 
 If you would like customize the installation, patch the `tigera/on-prem/custom-resources.yaml` your desired configuration. See the [official documentation](https://projectcalico.docs.tigera.io/getting-started/kubernetes/installation/config-options) for details.
@@ -25,7 +25,7 @@ To migrate from a manifests installation to the Tigera operator the high-level s
 1. Install the `on-prem` version:
 
 ```bash
-kustomize build katalog/tigera/on-prem | kubectl apply -f -
+kustomize build katalog/tigera/on-prem | kubectl apply -f - --server-side
 ```
 
 2. The operator will adopt the existing resources and migrate them to the `calico-system` namespace.
@@ -42,7 +42,7 @@ The policy only mode will install the operator and configure it to not enable th
 To install it run the following command:
 
 ```bash
-kustomize build katalog/tigera/policy-only | kubectl apply -f -
+kustomize build katalog/tigera/policy-only | kubectl apply -f - --server-side
 ```
 
 > Note that you can also completely replace the AWS CNI with Calico if you need to:
