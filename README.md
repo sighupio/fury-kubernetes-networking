@@ -19,7 +19,7 @@ If you are new to KFD please refer to the [official documentation][kfd-docs] on 
 
 Kubernetes has adopted the Container Network Interface (CNI) specification for managing network resources on a cluster.
 
-**Kubernetes Fury Networking**  makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the Kubernetes Fury Distribution.
+**Kubernetes Fury Networking** makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the Kubernetes Fury Distribution.
 
 Calico deployment consists of a daemon set running on every node (including control-plane nodes) and a controller.
 
@@ -27,11 +27,11 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-| Package                    | Version  | Description                                                                       |
-| -------------------------- | -------- | --------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                  |
-| [tigera](katalog/tigera)   | `3.24.1` | [Tigera Operator][tigera-page] is a Kubernetes operator for Calico.               |
-| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality. |
+| Package                    | Version  | Description                                                                                                         |
+| -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                    |
+| [tigera](katalog/tigera)   | `1.28.1` | [Tigera Operator][tigera-page] provides pre-configured Tigera Operator for on-prem and for EKS in policy-only mode. |
+| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality.                                   |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
 
@@ -39,11 +39,11 @@ Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility    | Notes                                               |
-| ------------------ | :----------------: | --------------------------------------------------- |
-| `1.22.x`           | :white_check_mark: | No known issues                                     |
-| `1.23.x`           | :white_check_mark: | No known issues                                     |
-| `1.24.x`           | :white_check_mark: | No known issues                                     |
+| Kubernetes Version |   Compatibility    | Notes           |
+| ------------------ | :----------------: | --------------- |
+| `1.22.x`           | :white_check_mark: | No known issues |
+| `1.23.x`           | :white_check_mark: | No known issues |
+| `1.24.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
@@ -78,7 +78,7 @@ bases:
 
 ```yaml
 resources:
-- ./vendor/katalog/networking/calico
+  - ./vendor/katalog/networking/calico
 ```
 
 5. To deploy the packages to your cluster, execute:
@@ -88,9 +88,9 @@ kustomize build . | kubectl apply -f -
 ```
 
 <!-- Links -->
+
 [calico-page]: https://github.com/projectcalico/calico
 [tigera-page]: https://github.com/projectcalico/calico
-[sighup-page]: https://sighup.io
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [furyctl-repo]: https://github.com/sighupio/furyctl
 [kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
