@@ -27,10 +27,10 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-| Package                    | Version  | Description                                                                      |
-| -------------------------- | -------- | -------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                 |
-| [ip-masq](katalog/ip-masq) | `2.5.0`  | The `ip-masq-agent` configures iptables rules to implement ip-masq functionality |
+| Package                    | Version  | Description                                                                              |
+| -------------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                         |
+| [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace.
 
@@ -38,11 +38,11 @@ Click on each package to see its full documentation.
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility    | Notes                                               |
-| ------------------ | :----------------: | --------------------------------------------------- |
-| `1.22.x`           | :white_check_mark: | No known issues                                     |
-| `1.23.x`           | :white_check_mark: | No known issues                                     |
-| `1.24.x`           | :white_check_mark: | No known issues                                     |
+| Kubernetes Version |   Compatibility    | Notes           |
+| ------------------ | :----------------: | --------------- |
+| `1.22.x`           | :white_check_mark: | No known issues |
+| `1.23.x`           | :white_check_mark: | No known issues |
+| `1.24.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
 
