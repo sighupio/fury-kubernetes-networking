@@ -6,23 +6,23 @@ IP masquerading is a form of network address translation (NAT) used to perform m
 
 This is useful in environments that expect to only receive packets from node IP addresses.
 
-You can read more about this in the following link [https://cloud.google.com/kubernetes-engine/docs][kubeengine-docs]
+You can read more about this at the following link [https://cloud.google.com/kubernetes-engine/docs][kubeengine-docs]
 
 ## Image repository and tag
 
-- `ip-masq` image:
-  - `gcr.io/google-containers/ip-masq-agent-amd64:v2.5.0`.
-- `ip-masq` repository:
+- `ip-masq-agent` image:
+  - `k8s.gcr.io/networking/ip-masq-agent:v2.8.0`.
+- `ip-masq-agent` repository:
   - [https://github.com/kubernetes-sigs/ip-masq-agent](https://github.com/kubernetes-sigs/ip-masq-agent).
 
 ## Requirements
 
 - Tested with Kubernetes >= `1.18.X`.
-- Tested with Kustomize = `v3.3.X`.
+- Tested with Kustomize = `v3.5.3`.
 
 ## Configuration
 
-Fury distribution `ip-masq` package is deployed with the following default configuration:
+The `ip-masq` package is deployed with the following [default configuration](config.yml):
 
 - `nonMasqueradeCIDRs`: as an empty list.
 - `resyncInterval`: set to 60 seconds.
@@ -35,20 +35,19 @@ Available configuration parameters are listed here:
 Available flags are listed here:
 [https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags](https://github.com/kubernetes-sigs/ip-masq-agent#agent-flags)
 
-The design of the package's `kustomize` project allows to extend the container arguments adding, for example, the `--nomasq-all-reserved-ranges` flag used to no masquerade reserved IP ranges by default.
+The design of the package's `kustomize` project allows extending the [container arguments](daemonset-args.yml) by adding, for example, the `--nomasq-all-reserved-ranges` flag used to no masquerade reserved IP ranges by default.
 
 ### Important note
 
 You should not attempt to run this agent in a cluster where the Kubelet is also configuring a non-masquerade CIDR.
-You can pass --non-masquerade-cidr=0.0.0.0/0 to the Kubelet to nullify its rule, which will prevent the Kubelet from
-interfering with this agent.
+You can pass `--non-masquerade-cidr=0.0.0.0/0` to the Kubelet to nullify its rule, which will prevent the Kubelet from interfering with this agent.
 
 ## Deployment
 
-You can deploy `ip-masq` with the default configuration by running the following command in the root of this project:
+You can deploy `ip-masq` with the default configuration by running the following command at the root of this project:
 
 ```shell
-kustomize build | kubectl apply -f -
+kustomize build katalog/ip-masq | kubectl apply -f -
 ```
 
 <!-- LINKS -->
