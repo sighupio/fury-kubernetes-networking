@@ -1,4 +1,4 @@
-# Copyright (c) 2022 SIGHUP s.r.l All rights reserved.
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -15,9 +15,8 @@ patchesStrategicMerge:
   - daemonset-args.yml
 
 images:
-  - name: gcr.io/google-containers/ip-masq-agent-amd64
-    newName: registry.sighup.io/fury/google-containers/ip-masq-agent-amd64
-    newTag: v2.5.0
+  - name: k8s.gcr.io/networking/ip-masq-agent
+    newName: registry.sighup.io/fury/networking/ip-masq-agent
 
 configMapGenerator:
   - name: ip-masq-agent
