@@ -1,0 +1,96 @@
+# Copyright (c) 2022 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+# The service used by this ServiceMonitor is created by the operator automatically
+# There's no dashboard using these metrics AFAIK.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: calico-kube-controllers
+  name: calico-kube-controllers
+  namespace: calico-system
+spec:
+  endpoints:
+    - interval: 15s
+      port: metrics-port
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - calico-system
+  selector:
+    matchLabels:
+      k8s-app: calico-kube-controllers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: felix-metrics
+  namespace: calico-system
+  labels:
+    k8s-app: calico-node
+spec:
+  clusterIP: None
+  selector:
+    k8s-app: calico-node
+  ports:
+    - name: metrics
+      port: 9091
+      targetPort: 9091
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: calico-node
+  name: calico-node
+  namespace: calico-system
+spec:
+  endpoints:
+    - interval: 15s
+      port: metrics
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - calico-system
+  selector:
+    matchLabels:
+      k8s-app: calico-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: typha-metrics
+  namespace: calico-system
+  labels:
+    k8s-app: calico-typha
+spec:
+  clusterIP: None
+  selector:
+    k8s-app: calico-typha
+  ports:
+    - name: metrics
+      port: 9093
+      targetPort: 9093
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: calico-typha
+  name: calico-typha
+  namespace: calico-system
+spec:
+  endpoints:
+    - interval: 15s
+      # targetPort: 9093
+      port: metrics
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - calico-system
+  selector:
+    matchLabels:
+      k8s-app: calico-typha

@@ -8,3 +8,7 @@ kind: Kustomization
 resources:
   - ../operator
   - custom-resources.yaml
+  - monitoring
+
+patchesStrategicMerge:
+  - monitoring/metrics.yaml

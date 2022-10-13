@@ -34,7 +34,27 @@ curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/cu
 
 ### Customizations
 
-The on-prem resources file from upstream has been edited to use SIGHUP's registry and deleted the rest of the configuration included upstream. The Operator should detect the CIDR from the cluster's installation and set it accordingly.
+The on-prem resources file from upstream has been edited with the following:
+
+- Use SIGHUP's registry
+- Deleted the `calicoNetwork` section included in the upstream configuration file, the Operator should detect the CIDR from the cluster's installation and set it accordingly.
+- Calico ApiServer is not deployed by default by our installation.
+
+### Monitoring
+
+There are some custome headless services and service monitors defined as part of the kustomize prject for the on-prem variant.
+
+The dashbaords are the official ones with some minor tuning.
+
+To get the dashboards you can use the following commands:
+
+```bash
+# ⚠️ Assuming $PWD == root of the project
+export CALICO_VERSION=3.24
+# we split the upstream file and store only the json files
+curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/tigera/on-prem/monitoring/dashboards/felix-dashboard.json
+curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["typha-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/tigera/on-prem/monitoring/dashboards/typa-dashboard.json
+```
 
 ## EKS Policy-only mode
 
