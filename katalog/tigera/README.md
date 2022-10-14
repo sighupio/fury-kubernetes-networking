@@ -63,7 +63,7 @@ kubectl delete servicemonitors.monitoring.coreos.com -n kube-system calico-node
 
 ### EKS Policy-only mode installation
 
-The `eks-policy-mode` package is used run the Tigera Operator for enforcing network policies -and not as CNI- in a EKS cluster.
+The `eks-policy-mode` package is used to run the Tigera Operator for enforcing network policies -and not as CNI- in a EKS cluster.
 
 The policy only mode will install the operator and configure it to not enable the CNI features.
 
