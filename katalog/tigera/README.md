@@ -52,7 +52,7 @@ Please refer to Calico's documentation for more details:
 >       effect: NoSchedule
 > ```
 
-The Operator moves Calico's pods from the `kube-system` namespace to the `calico-namespace`. As part of the `on-prem` variant, you are provided with the new resources (`Services` and `ServiceMonitors`) to keep the monitoring working in the new namespace.
+The Operator moves Calico's pods from the `kube-system` namespace to the `calico-system`. As part of the `on-prem` variant, you are provided with the new resources (`Services` and `ServiceMonitors`) to keep the monitoring working in the new namespace.
 
 You might want to delete the old and unneeded `Services` and `ServiceMonitors` remaining in the `kube-system` namespace:
 
