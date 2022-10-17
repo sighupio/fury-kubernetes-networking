@@ -42,7 +42,7 @@ The on-prem resources file from upstream has been edited with the following:
 
 ### Monitoring
 
-There are some custome headless services and service monitors defined as part of the kustomize prject for the on-prem variant.
+There are some custom headless services and service monitors defined as part of the kustomize prject for the on-prem variant.
 
 The dashbaords are the official ones with some minor tuning.
 
