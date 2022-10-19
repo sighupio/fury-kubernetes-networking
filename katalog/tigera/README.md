@@ -1,6 +1,6 @@
 # Tigera Package
 
-The Tigera package provides the Tigera Operator and some ready to go configurations to enable Networking capabilities for a Kubernetes cluster.
+The Tigera package provides the Tigera Operator, a Kubernetes Operator for Calico, and some ready to go configurations to enable Networking capabilities for a Kubernetes cluster.
 
 ## Tigera Operator
 
