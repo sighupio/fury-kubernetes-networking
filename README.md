@@ -27,13 +27,13 @@ Calico deployment consists of a daemon set running on every node (including cont
 
 Kubernetes Fury Networking provides the following packages:
 
-| Package                    | Version  | Description                                                                                                         |
-| -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                    |
-| [tigera](katalog/tigera)   | `1.28.1` | [Tigera Operator][tigera-page] provides pre-configured Tigera Operator for on-prem and for EKS in policy-only mode. |
-| [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality                            |
+| Package                    | Version  | Description                                                                                                                                          |
+| -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [calico](katalog/calico)   | `3.24.1` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
+| [tigera](katalog/tigera)   | `1.28.1` | [Tigera Operator][tigera-page], a Kubernetes Operator for Calico, provides pre-configured installations for on-prem and for EKS in policy-only mode. |
+| [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality                                                             |
 
-> The resources in these packages are going to be deployed in `kube-system` namespace.
+> The resources in these packages are going to be deployed in `kube-system` namespace. Except for the operator.
 
 Click on each package to see its full documentation.
 
@@ -58,14 +58,14 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ### Deployment
 
-> ⚠️ please notice that the Calico packages is for cluster with less the 50 nodes. If your cluster has more than 50 nodes, you'll need to switch to [Calico + Typha](https://projectcalico.docs.tigera.io/archive/v3.23/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico-with-kubernetes-api-datastore-more-than-50-nodes).
+> ⚠️ please notice that the Calico packages is for cluster with less the 50 nodes. If your cluster has more than 50 nodes, you'll need to switch to [Calico + Typha](https://projectcalico.docs.tigera.io/archive/v3.23/getting-started/kubernetes/self-managed-onprem/onpremises#install-calico-with-kubernetes-api-datastore-more-than-50-nodes) or to the [Tigera Operator](katalog/tigera/README.md).
 
 1. List the packages you want to deploy and their version in a `Furyfile.yml`
 
 ```yaml
 bases:
   - name: networking/calico
-    version: "v1.9.0"
+    version: "v1.10.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -107,7 +107,7 @@ Before contributing, please read first the [Contributing Guidelines](docs/CONTRI
 
 ### Reporting Issues
 
-In case you experience any problem with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-networking/issues/new/choose).
+In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-networking/issues/new/choose).
 
 ## License
 
