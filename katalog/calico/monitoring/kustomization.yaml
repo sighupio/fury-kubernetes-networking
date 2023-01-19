@@ -10,6 +10,7 @@ namespace: kube-system
 
 resources:
   - "sm.yml" # ServiceMonitor defintion
+  - "prometheusrules.yml" # ServiceMonitor defintion
 
 generatorOptions:
   labels:

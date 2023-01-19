@@ -2341,7 +2341,11 @@
   "refresh": false,
   "schemaVersion": 22,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "calico",
+    "typha",
+    "datastore",
+  ],
   "templating": {
     "list": []
   },
@@ -2351,7 +2355,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Typha Dashborad (Calico)",
+  "title": "Typha Dashboard (Calico)",
   "uid": "calico-typha-dashboard",
   "variables": {
     "list": []
