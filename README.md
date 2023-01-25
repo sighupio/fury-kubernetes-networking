@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-networking?label=Latest%20Release)
+![Release](https://img.shields.io/badge/Latest%20Release-v1.10.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -86,6 +86,34 @@ resources:
 ```bash
 kustomize build . | kubectl apply -f -
 ```
+
+### Monitoring
+
+The Networking module includes out-of-the-box metrics monitoring and alerting features for its components.
+
+You can monitor the status of the networking stack from the provided Grafana dashboards:
+
+<!-- markdownlint-disable MD033 -->
+
+<a href="docs/images/screenshots/calico-felix-dashboard.png"><img src="docs/images/screenshots/calico-felix-dashboard.png" width="250"/></a>
+<a href="docs/images/screenshots/calico-typha-dashboard.png"><img src="docs/images/screenshots/calico-typha-dashboard.png" width="250"/></a>
+
+<!-- markdownlint-enable MD033 -->
+
+> click on each screenshot for the full screen version
+
+The following set of alerts is included with the networking module:
+
+| Alert Name                     | Summary                                                                 | Description                                                                                                                       |
+| ------------------------------ | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| CalicoDataplaneFailuresHigh    | A high number of dataplane failures within Felix are happening          | Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} dataplane failures within the last hour          |
+| CalicoIpsetErrorsHigh          | A high number of ipset errors within Felix are happening                | Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} ipset errors within the last hour                |
+| CalicoIptableSaveErrorsHigh    | A high number of iptable save errors within Felix are happening         | Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} iptable save errors within the last hour         |
+| CalicoIptableRestoreErrorsHigh | A high number of iptable restore errors within Felix are happening      | Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} iptable restore errors within the last hour      |
+| CalicoErrorsWhileLoggingHigh   | A high number of errors within Felix while loggging are happening       | Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} errors while logging within the last ten minutes |
+| TyphaPingLatency               | Typha Round-trip ping latency to client (cluster {{ $labels.cluster }}) | Typha latency is growing (ping operations > 100ms). VALUE = {{ $value }}. LABELS = {{ $labels }}                                  |
+| TyphaClientWriteLatency        | Typha unusual write latency (instance {{ $labels.cluster }})            | Typha client latency is growing (write operations > 100ms). VALUE = {{ $value }}. LABELS = {{ $labels }}                          |
+| TyphaErrorsWhileLoggingHigh    | A high number of errors within Typha while loggging are happening       | Typha pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} errors while logging within the last ten minutes       |
 
 <!-- Links -->
 

@@ -52,3 +52,24 @@ export CALICO_VERSION=3.24
 # We take the `felix-dashboard.json` from the downloaded yaml, we are not deploying `typha`, so we don't need its dashboard.
 curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/calico/monitoring/dashboards/felix-dashboard.json
 ```
+
+### Alerts
+
+Calico / Tigera upstream does not provide a set of Prometheus Rules that we could include, from [their monitoring documentation](https://projectcalico.docs.tigera.io/maintenance/monitor/monitor-component-metrics) here are the available metrics:
+
+- <https://projectcalico.docs.tigera.io/reference/felix/prometheus>
+- <https://projectcalico.docs.tigera.io/reference/kube-controllers/prometheus>
+- <https://projectcalico.docs.tigera.io/reference/typha/prometheus>
+
+The alerts included are inspired in Platform9's and Sysdig's, see:
+
+- <https://platform9.com/docs/kubernetes/catapult-rules-alarms#calico>
+- <https://platform9.com/docs/kubernetes/calico-monitoring>
+- <https://docs.sysdig.com/en/docs/sysdig-monitor/monitoring-integrations/application-integrations/calico/>
+- <https://docs.sysdig.com/en/docs/sysdig-monitor/monitoring-integrations/application-integrations/calico/#errors>
+
+You can generate a markdown table with the rules to include it in the readme with the following commad:
+
+```bash
+ yq e '.spec.groups[] | .rules[] |  "| " + .alert + " | " + (.annotations.summary // "-" | sub("\n",". "))+ " | " + (.annotations.description // "-" | sub("\n",". ")) + " |"' katalog/calico/monitoring/prometheusrules.yaml
+```

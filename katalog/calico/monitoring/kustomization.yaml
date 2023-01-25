@@ -9,7 +9,8 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
-  - "sm.yml" # ServiceMonitor defintion
+  - "sm.yml"  # ServiceMonitor defintion
+  - "prometheusrules.yaml"  # ServiceMonitor defintion
 
 generatorOptions:
   labels:

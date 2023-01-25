@@ -1,0 +1,102 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: calico-alerts
+  namespace: kube-system
+spec:
+  groups:
+    - name: calico.rules
+      rules:
+        # Calico Node (Felix)
+        # https://projectcalico.docs.tigera.io/reference/felix/prometheus
+
+        - alert: CalicoDataplaneFailuresHigh
+          expr: increase(felix_int_dataplane_failures[1h] offset 5m) > 5
+          for: 1h
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} dataplane failures within the last hour"
+            summary: "A high number of dataplane failures within Felix are happening"
+
+        - alert: CalicoIpsetErrorsHigh
+          expr: increase(felix_ipset_errors[1h] offset 5m) > 5
+          for: 1h
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} ipset errors within the last hour"
+            summary: "A high number of ipset errors within Felix are happening"
+
+        - alert: CalicoIptableSaveErrorsHigh
+          expr: increase(felix_iptables_save_errors[1h] offset 5m) > 5
+          for: 1h
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} iptable save errors within the last hour"
+            summary: "A high number of iptable save errors within Felix are happening"
+
+        - alert: CalicoIptableRestoreErrorsHigh
+          expr: increase(felix_iptables_restore_errors[1h] offset 5m) > 5
+          for: 1h
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} iptable restore errors within the last hour"
+            summary: "A high number of iptable restore errors within Felix are happening"
+
+        - alert: CalicoErrorsWhileLoggingHigh
+          expr: increase(felix_log_errors[5m]) > 0
+          for: 10m
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Calico node pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} errors while logging within the last ten minutes"
+            summary: "A high number of errors within Felix while loggging are happening"
+
+        # Calico Typha (Datastore)
+        # https://projectcalico.docs.tigera.io/reference/typha/prometheus
+
+        - alert: TyphaPingLatency
+          expr: rate(typha_ping_latency_sum[1m] offset 5m ) / rate(typha_ping_latency_count[1m] offset 5m ) > 0.1 and rate(typha_ping_latency_count[1m] offset 5m ) > 0
+          for: 2m
+          labels:
+            severity: warning
+            type: calico-typha
+          annotations:
+            summary: Typha Round-trip ping latency to client (cluster {{ $labels.cluster }})
+            description: "Typha latency is growing (ping operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: TyphaClientWriteLatency
+          expr: rate(typha_client_write_latency_secs_sum[1m] offset 5m) / rate(typha_client_write_latency_secs_count[1m] offset 5m) > 0.1 and rate(typha_client_write_latency_secs_count[1m] offset 5m ) > 0
+          for: 2m
+          labels:
+            severity: warning
+            type: calico-typha
+          annotations:
+            summary: Typha unusual write latency (instance {{ $labels.cluster }})
+            description: "Typha client latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: TyphaErrorsWhileLoggingHigh
+          expr: increase(typha_log_errors[5m]) > 0
+          for: 10m
+          labels:
+            severity: warning
+            type: calico-node
+          annotations:
+            description: "Typha pod {{ $labels.pod }} ({{ $labels.instance }}) has seen {{ $value }} errors while logging within the last ten minutes"
+            summary: "A high number of errors within Typha while loggging are happening"
