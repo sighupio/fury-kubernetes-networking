@@ -18,7 +18,7 @@ spec:
         # Calico Node (Felix)
         # https://projectcalico.docs.tigera.io/reference/felix/prometheus
 
-        - alert: CalicoDatapaneFailuresHigh
+        - alert: CalicoDataplaneFailuresHigh
           expr: increase(felix_int_dataplane_failures[1h] offset 5m) > 5
           for: 1h
           labels:
