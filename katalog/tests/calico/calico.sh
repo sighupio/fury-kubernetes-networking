@@ -7,20 +7,20 @@
 
 load ./../helper
 
-@test "Nodes in not ready State" {
+@test "Nodes in Not Ready state" {
     info
-    test() {
+    nodes_not_ready() {
         kubectl get nodes --no-headers | awk  '{print $2}' | uniq | grep -q NotReady
     }
-    run test
+    run nodes_not_ready
     [ "$status" -eq 0 ]
 }
 
 @test "Install Calico" {
     info
     install() {
-	kubeclt apply -f https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v2.0.1/katalog/prometheus-operator/crds/0servicemonitorCustomResourceDefinition.yaml
-        kubectl apply -f https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v2.0.1/katalog/prometheus-operator/crds/0prometheusruleCustomResourceDefinition.yaml
+        kubectl apply -f 'https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v2.0.1/katalog/prometheus-operator/crds/0servicemonitorCustomResourceDefinition.yaml'
+        kubectl apply -f 'https://raw.githubusercontent.com/sighupio/fury-kubernetes-monitoring/v2.0.1/katalog/prometheus-operator/crds/0prometheusruleCustomResourceDefinition.yaml'
         apply katalog/calico
     }
     run install
