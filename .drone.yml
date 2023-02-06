@@ -57,7 +57,7 @@ steps:
       - render
     commands:
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.24.0
+      - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.25.0
 
 
 ---
