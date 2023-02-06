@@ -20,9 +20,9 @@ The deployment of Calico consists of a daemon set running on every node (includi
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.24.1`.
-  - `calico/cni:v3.24.1`.
-  - `calico/node:v3.24.1`.
+  - `calico/kube-controllers:v3.25.0`.
+  - `calico/cni:v3.25.0`.
+  - `calico/node:v3.25.0`.
 - calico repositories:
   - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
   - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).
@@ -30,7 +30,7 @@ The deployment of Calico consists of a daemon set running on every node (includi
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.21.X`.
+- Tested with Kubernetes >= `1.23.X`.
 - Tested with Kustomize >= `v3.3.X`.
 - Prometheus Operator, optional if you want to have metrics.
 
