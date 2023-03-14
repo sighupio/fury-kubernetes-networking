@@ -8,17 +8,3 @@ kind: Kustomization
 resources:
   - ../operator
   - calico-crs.yaml
-
-patches:
-  - target:
-      group: operator.tigera.io
-      version: v1
-      kind: Installation
-      name: default
-    patch: |-
-      - op: add
-        path: /spec/registry
-        value: "registry.sighup.io"
-      - op: add
-        path: /spec/imagePath
-        value: "fury/calico"
