@@ -1,0 +1,32 @@
+---
+# Source: cilium/templates/cilium-agent/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: cilium-agent
+          volumeMounts:
+            - name: hubble-tls
+              mountPath: /var/lib/cilium/tls/hubble
+              readOnly: true
+      volumes:
+        - name: hubble-tls
+          projected:
+            # note: the leading zero means this number is in octal representation: do not remove it
+            defaultMode: 0400
+            sources:
+              - secret:
+                  name: hubble-server-certs
+                  optional: true
+                  items:
+                    - key: ca.crt
+                      path: client-ca.crt
+                    - key: tls.crt
+                      path: server.crt
+                    - key: tls.key
+                      path: server.key
