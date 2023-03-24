@@ -32,7 +32,7 @@ hubble component as an observability tool on the network connections between pod
 
 The calico package is deployed with the following configuration:
 
-- 
+- TBD
 
 ## Deployment
 
