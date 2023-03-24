@@ -235,7 +235,7 @@ spec:
     spec:
       containers:
         - name: hubble-relay
-          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.13.0"
+          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.13.1"
           imagePullPolicy: IfNotPresent
           command:
             - hubble-relay
@@ -313,6 +313,10 @@ spec:
   selector:
     matchLabels:
       k8s-app: hubble-ui
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -325,9 +329,10 @@ spec:
         fsGroup: 1001
         runAsGroup: 1001
         runAsUser: 1001
-      priorityClassName:
+      priorityClassName: 
       serviceAccount: "hubble-ui"
       serviceAccountName: "hubble-ui"
+      automountServiceAccountToken: true
       containers:
         - name: frontend
           image: "registry.sighup.io/fury/cilium/hubble-ui:v0.10.0"

@@ -7,7 +7,7 @@
 image:
   override: ~
   repository: "registry.sighup.io/fury/cilium/cilium"
-  tag: "v1.13.0"
+  tag: "v1.13.1"
   useDigest: false
 
 # -- Affinity for cilium-agent.
@@ -71,7 +71,7 @@ hubble:
     image:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
-      tag: "v1.13.0"
+      tag: "v1.13.1"
       useDigest: false
       pullPolicy: "IfNotPresent"
 
@@ -347,7 +347,7 @@ operator:
   image:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
-    tag: "v1.13.0"
+    tag: "v1.13.1"
     useDigest: false
     pullPolicy: "IfNotPresent"
     suffix: ""
@@ -375,96 +375,9 @@ nodeinit:
   # -- Enable the node initialization DaemonSet
   enabled: false
 
-  # -- node-init image.
-  image:
-    override: ~
-    repository: "quay.io/cilium/startup-script"
-    tag: "d69851597ea019af980891a4628fb36b7880ec26"
-    pullPolicy: "IfNotPresent"
-
-  # -- The priority class to use for the nodeinit pod.
-  priorityClassName: ""
-
-  # -- node-init update strategy
-  updateStrategy:
-    type: RollingUpdate
-
-  # -- Additional nodeinit environment variables.
-  extraEnv: []
-
-  # -- Affinity for cilium-nodeinit
-  affinity: {}
-
-  # -- Node labels for nodeinit pod assignment
-  # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  #
-  nodeSelector:
-    kubernetes.io/os: linux
-
-  # -- Node tolerations for nodeinit scheduling to nodes with taints
-  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-  tolerations:
-    - operator: Exists
-      # - key: "key"
-      #   operator: "Equal|Exists"
-      #   value: "value"
-      #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
-
-  # -- Annotations to be added to node-init pods.
-  podAnnotations: {}
-
-  # -- Labels to be added to node-init pods.
-  podLabels: {}
-
-  # -- nodeinit resource limits & requests
-  # ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-
-  # -- Security context to be added to nodeinit pods.
-  securityContext:
-    privileged: false
-    seLinuxOptions:
-      level: 's0'
-      # Running with spc_t since we have removed the privileged mode.
-      # Users can change it to a different type as long as they have the
-      # type available on the system.
-      type: 'spc_t'
-    capabilities:
-      add:
-        # Used in iptables. Consider removing once we are iptables-free
-        - SYS_MODULE
-        # Used for nsenter
-        - NET_ADMIN
-        - SYS_ADMIN
-        - SYS_CHROOT
-        - SYS_PTRACE
-
-  # -- bootstrapFile is the location of the file where the bootstrap timestamp is
-  # written by the node-init DaemonSet
-  bootstrapFile: "/tmp/cilium-bootstrap.d/cilium-bootstrap-time"
-
 preflight:
   # -- Enable Cilium pre-flight resources (required for upgrade)
   enabled: false
-
-  # -- Cilium pre-flight image.
-  image:
-    override: ~
-    repository: "registry.sighup.io/fury/cilium/cilium"
-    tag: "v1.13.0"
-    useDigest: false
-    pullPolicy: "IfNotPresent"
-
-  resources: {}
-    # limits:
-    #   cpu: 4000m
-    #   memory: 4Gi
-    # requests:
-    #   cpu: 100m
-    #   memory: 512Mi
 
 enableCriticalPriorityClass: true
 
