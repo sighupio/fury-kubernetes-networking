@@ -39,6 +39,8 @@ steps:
       VALIDATE_DOCKERFILE: "false"
       # Disable natural language checks
       VALIDATE_NATURAL_LANGUAGE: "false"
+      # Disable dot-env checks
+      VALIDATE_ENV: "false"
     depends_on:
       - clone
 
