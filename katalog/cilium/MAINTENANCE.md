@@ -18,7 +18,8 @@ helm template cilium /tmp/cilium --namespace kube-system --values MAINTENANCE.va
 helm template cilium /tmp/cilium --namespace kube-system --values MAINTENANCE.values.yaml \
   --set hubble.enabled=false \
   --set hubble.relay.enabled=false \
-  --set hubble.ui.enabled=false > built-without-hubble.yaml
+  --set hubble.ui.enabled=false \
+  --set hubble.metrics.enabled=false > built-without-hubble.yaml
 ```
 
 You need the version with hubble enabled and one version with hubble disabled, to check differences between the two
