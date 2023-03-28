@@ -14,6 +14,11 @@ spec:
     spec:
       containers:
         - name: cilium-agent
+          ports:
+          - name: hubble-metrics
+            containerPort: 9965
+            hostPort: 9965
+            protocol: TCP
           volumeMounts:
             - name: hubble-tls
               mountPath: /var/lib/cilium/tls/hubble
