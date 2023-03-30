@@ -1,6 +1,6 @@
 # Cilium Package Maintenance Guide
 
-To update the Calico package with upstream, please follow the next steps.
+To update the Cilium package with upstream, please follow the next steps.
 
 Download the upstream manifests:
 
