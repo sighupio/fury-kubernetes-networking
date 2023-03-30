@@ -455,7 +455,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      k8s-app: hubble
+      k8s-app: cilium
   namespaceSelector:
     matchNames:
     - kube-system
@@ -469,3 +469,4 @@ spec:
       sourceLabels:
       - __meta_kubernetes_pod_node_name
       targetLabel: node
+---

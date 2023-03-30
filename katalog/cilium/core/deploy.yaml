@@ -594,6 +594,10 @@ spec:
     port: 9964
     protocol: TCP
     targetPort: envoy-metrics
+  - name: hubble-metrics
+    port: 9965
+    protocol: TCP
+    targetPort: hubble-metrics
 ---
 # Source: cilium/templates/cilium-operator/service.yaml
 kind: Service
