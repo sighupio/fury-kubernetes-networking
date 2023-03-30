@@ -2,22 +2,19 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: kube-system
 
-resources:
-  - ../core
-  - deploy.yaml
-  - monitoring
-
-patchesStrategicMerge:
-  - patches/cilium.yaml
+generatorOptions:
+  labels:
+    grafana-sighup-dashboard: default
+  disableNameSuffixHash: true
 
 configMapGenerator:
-  - name: cilium-config
-    behavior: merge
-    namespace: kube-system
-    envs:
-      - config/hubble.env
+  - name: cilium-grafana-dashboard
+    files:
+      - dashboards/cilium-agent-dashboard.json
+      - dashboards/cilium-operator-dashboard.json
