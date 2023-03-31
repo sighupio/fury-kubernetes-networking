@@ -11,7 +11,7 @@ kind: Installation
 metadata:
   name: default
 spec:
-  registry: registry.sighup.io
+  registry: registry.sighup.io/
   imagePath: fury/calico
   # Configures Calico policy configured to work with AmazonVPC CNI networking.
   cni:
