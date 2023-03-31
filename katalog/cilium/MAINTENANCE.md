@@ -41,4 +41,5 @@ kustomize build . > built.yaml
 
 And check the differences betweeen `built-from-helm.yaml` and `built.yaml`
 
-Beware that we changed how we generate the base CA from helm to cert-manager using a self-signed CA.
+Beware that we changed how we generate the base CA from helm to cert-manager using a self-signed CA,
+and also, we fixed the ServiceMonitor for the hubble metrics, adding a target port on the cilium service and changing the target of the hubble ServiceMonitor.
