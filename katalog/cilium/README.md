@@ -7,10 +7,10 @@ workloads, fueled by the revolutionary Kernel technology eBPF.
 
 > For more information about Cilium refer to [cilium documentation][cilium-documentation]
 
-The deployment of Calico consists of a DaemonSet running on all nodes, and a operator Deployment. Additionally, we deploy
-hubble component as an observability tool on the network connections between pods in the cluster.
+The deployment of Cilium consists of a DaemonSet running on all nodes, and a operator Deployment.
+Additionally, we deploy hubble component as an observability tool on the network connections between pods in the cluster.
 
-> ⚠️ please notice that the Cilium packages is for cluster with less the 50 nodes.
+> ⚠️ please notice that the Cilium package is for cluster with less than 200 nodes.
 
 ## Image repository and tag
 
@@ -30,7 +30,7 @@ hubble component as an observability tool on the network connections between pod
 
 ## Configuration
 
-The calico package is deployed with the following configuration:
+The Cilium package is deployed with the following configuration:
 
 - TBD
 
@@ -58,15 +58,3 @@ kustomize build core | kubectl apply -f -
 ## License
 
 For license details please see [LICENSE](./../../LICENSE)
-  sidecar-istio-proxy-image: cilium/istio_proxy
-        image: registry.sighup.io/fury/cilium/operator-generic:v1.13.1
-        image: registry.sighup.io/fury/cilium/hubble-relay:v1.13.1
-      - image: registry.sighup.io/fury/cilium/hubble-ui:v0.10.0
-        image: registry.sighup.io/fury/cilium/hubble-ui-backend:v0.10.0
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
-        image: registry.sighup.io/fury/cilium/cilium:v1.13.1
