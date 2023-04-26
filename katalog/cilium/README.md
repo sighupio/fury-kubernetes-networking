@@ -32,7 +32,36 @@ Additionally, we deploy hubble component as an observability tool on the network
 
 The Cilium package is deployed with the following configuration:
 
-- TBD
+- Cilium configured in IPAM Cluster Scope [The default one](https://docs.cilium.io/en/v1.13/network/concepts/ipam/cluster-pool/)
+- Default pod CIDR: 10.0.0.0/8
+- Default netmask per node: 24
+
+> :warning: Make sure to change the Default pod CIDR if it's conflicting with your network otherwise if your node network is in
+> the same range you will lose connectivity to other nodes.
+
+To change the default pod CIDR you can use the following kustomize patch:
+
+`kustomization.yaml`
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kube-system
+
+configMapGenerator:
+  - name: cilium-config
+    behavior: merge
+    namespace: kube-system
+    envs:
+      - patches/cilium-cidr.env
+```
+`patches/cilium-cidr.env`
+```dotenv
+cluster-pool-ipv4-cidr=10.100.0.0/8
+cluster-pool-ipv4-mask-size=24
+```
+
+> :info: The CIDR used by Cilium can be different than the one used by Kubeadm.
 
 ## Deployment
 
