@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v1.12.2-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v1.13.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -30,6 +30,7 @@ Kubernetes Fury Networking provides the following packages:
 | Package                    | Version  | Description                                                                                                                                          |
 | -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [calico](katalog/calico)   | `3.25.0` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
+| [cilium](katalog/cilium)   | `1.13.1` | [Cilium][cilium-page] CNI Plugin. For cluster with `< 200` nodes.                                                                                     |
 | [tigera](katalog/tigera)   | `1.29.0` | [Tigera Operator][tigera-page], a Kubernetes Operator for Calico, provides pre-configured installations for on-prem and for EKS in policy-only mode. |
 | [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality                                                             |
 
@@ -64,8 +65,8 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ```yaml
 bases:
-  - name: networking/calico
-    version: "v1.12.2"
+  - name: networking
+    version: "v1.13.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -79,6 +80,13 @@ bases:
 ```yaml
 resources:
   - ./vendor/katalog/networking/calico
+```
+
+Or if you want to use Cilium:
+
+```yaml
+resources:
+  - ./vendor/katalog/networking/cilium
 ```
 
 5. To deploy the packages to your cluster, execute:
@@ -118,6 +126,7 @@ The following set of alerts is included with the networking module:
 <!-- Links -->
 
 [calico-page]: https://github.com/projectcalico/calico
+[cilium-page]: https://github.com/cilium/cilium
 [tigera-page]: https://github.com/projectcalico/calico
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [furyctl-repo]: https://github.com/sighupio/furyctl
