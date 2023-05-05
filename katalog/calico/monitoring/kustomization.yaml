@@ -9,12 +9,14 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
-  - "sm.yml"  # ServiceMonitor defintion
-  - "prometheusrules.yaml"  # ServiceMonitor defintion
+  - "sm.yml" # ServiceMonitor defintion
+  - "prometheusrules.yaml" # ServiceMonitor defintion
 
 generatorOptions:
   labels:
     grafana-sighup-dashboard: default
+  annotations:
+    grafana-folder: "Networking"
   disableNameSuffixHash: true
 
 configMapGenerator:

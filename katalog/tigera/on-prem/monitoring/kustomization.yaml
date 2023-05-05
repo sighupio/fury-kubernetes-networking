@@ -12,6 +12,8 @@ resources:
 generatorOptions:
   labels:
     grafana-sighup-dashboard: default
+  annotations:
+    grafana-folder: "Networking"
   disableNameSuffixHash: true
 
 configMapGenerator:
