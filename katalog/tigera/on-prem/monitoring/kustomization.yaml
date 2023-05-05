@@ -16,6 +16,7 @@ generatorOptions:
 
 configMapGenerator:
   - name: networking-grafana-dashboard
+    namespace: calico-system
     files:
       - dashboards/felix-dashboard.json
       - dashboards/typha-dashboard.json
