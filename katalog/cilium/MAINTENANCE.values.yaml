@@ -7,7 +7,7 @@
 image:
   override: ~
   repository: "registry.sighup.io/fury/cilium/cilium"
-  tag: "v1.13.1"
+  tag: "v1.13.3"
   useDigest: false
 
 # -- Affinity for cilium-agent.
@@ -57,7 +57,10 @@ hubble:
       certValidityDuration: 1095
       # -- certmanager issuer used when hubble.tls.auto.method=certmanager.
       # If not specified, a CA issuer will be created.
-      certManagerIssuerRef: {}
+      certManagerIssuerRef:
+        group: cert-manager.io
+        kind: Issuer
+        name: hubble-issuer
 
   metrics:
     enableOpenMetrics: true
@@ -83,7 +86,7 @@ hubble:
     image:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
-      tag: "v1.13.1"
+      tag: "v1.13.3"
       useDigest: false
       pullPolicy: "IfNotPresent"
 
@@ -126,7 +129,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui-backend"
-        tag: "v0.10.0"
+        tag: "v0.11.0"
         pullPolicy: "IfNotPresent"
 
       resources: {}
@@ -142,7 +145,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui"
-        tag: "v0.10.0"
+        tag: "v0.11.0"
         pullPolicy: "IfNotPresent"
 
       # -- Resource requests and limits for the 'frontend' container of the 'hubble-ui' deployment.
@@ -359,7 +362,7 @@ operator:
   image:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
-    tag: "v1.13.1"
+    tag: "v1.13.3"
     useDigest: false
     pullPolicy: "IfNotPresent"
     suffix: ""

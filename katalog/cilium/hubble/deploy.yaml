@@ -239,7 +239,7 @@ spec:
     spec:
       containers:
         - name: hubble-relay
-          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.13.1"
+          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.13.3"
           imagePullPolicy: IfNotPresent
           command:
             - hubble-relay
@@ -339,7 +339,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: frontend
-          image: "registry.sighup.io/fury/cilium/hubble-ui:v0.10.0"
+          image: "registry.sighup.io/fury/cilium/hubble-ui:v0.11.0"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -352,7 +352,7 @@ spec:
               mountPath: /tmp
           terminationMessagePolicy: FallbackToLogsOnError
         - name: backend
-          image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.10.0"
+          image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.11.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: EVENTS_SERVER_PORT
@@ -385,7 +385,6 @@ metadata:
   namespace: kube-system
 spec:
   issuerRef:
-
     group: cert-manager.io
     kind: Issuer
     name: hubble-issuer
@@ -403,7 +402,6 @@ metadata:
   namespace: kube-system
 spec:
   issuerRef:
-
     group: cert-manager.io
     kind: Issuer
     name: hubble-issuer
