@@ -61,9 +61,9 @@ steps:
       - render
     commands:
       # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.25.0
-      - /pluto detect cilium.yml --ignore-deprecations --target-versions=k8s=v1.25.0
-      - /pluto detect tigera-on-prem.yml --ignore-deprecations --target-versions=k8s=v1.25.0
+      - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.26.0
+      - /pluto detect cilium.yml --ignore-deprecations --target-versions=k8s=v1.26.0
+      - /pluto detect tigera-on-prem.yml --ignore-deprecations --target-versions=k8s=v1.26.0
 
 ---
 name: e2e-kubernetes-1.24-calico
@@ -395,7 +395,7 @@ steps:
     depends_on: [clone]
     settings:
       action: custom-cluster-124
-      pipeline_id: cluster-124
+      pipeline_id: cluster-124-cilium
       local_kind_config_path: katalog/tests/calico/resources/kind-config
       cluster_version: "1.24.0"
       instance_path: /shared
@@ -435,7 +435,7 @@ steps:
     depends_on: [test]
     settings:
       action: destroy
-      pipeline_id: cluster-124
+      pipeline_id: cluster-124-cilium
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -496,7 +496,7 @@ steps:
     depends_on: [clone]
     settings:
       action: custom-cluster-125
-      pipeline_id: cluster-125
+      pipeline_id: cluster-125-cilium
       local_kind_config_path: katalog/tests/calico/resources/kind-config
       cluster_version: "1.25.3"
       instance_path: /shared
@@ -537,7 +537,7 @@ steps:
     depends_on: [test]
     settings:
       action: destroy
-      pipeline_id: cluster-125
+      pipeline_id: cluster-125-cilium
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -597,7 +597,7 @@ steps:
     depends_on: [clone]
     settings:
       action: custom-cluster-126
-      pipeline_id: cluster-126
+      pipeline_id: cluster-126-cilium
       local_kind_config_path: katalog/tests/calico/resources/kind-config
       cluster_version: "1.26.4"
       instance_path: /shared
@@ -637,7 +637,7 @@ steps:
     depends_on: [test]
     settings:
       action: destroy
-      pipeline_id: cluster-126
+      pipeline_id: cluster-126-cilium
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
