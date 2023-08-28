@@ -22,7 +22,7 @@ images:
 
   # Resources needed for Monitoring
 resources:
-- deploy.yml
+- deploy.yaml
 - monitoring
 
 # Patch to enable metrics on Felix (calico-node DaemonSet)
