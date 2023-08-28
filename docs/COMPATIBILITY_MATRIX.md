@@ -24,7 +24,7 @@
 - :x: module version `v1.8.2` has a known bug with calico on Kubernetes >= 1.21. Please do not use.
 - :x: module version `v1.9.0`is not compatible with Kubernetes <= 1.20.
 
-# Legacy versions
+## Legacy versions
 
 | Module Version / Kubernetes Version |       1.14.X       |       1.15.X       |       1.16.X       |       1.17.X       |       1.18.X       |       1.19.X       |       1.20.X       |       1.21.X       |       1.22.X       | 1.23.X             |
 | ----------------------------------- | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | ------------------ |
