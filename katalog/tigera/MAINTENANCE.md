@@ -10,9 +10,9 @@ Here are the installation notes:
 To update the YAML file, run the following command:
 
 ```bash
-# assuming $PWD is the root of the repository
-export CALICO_VERSION="3.25.0"
-curl "https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/tigera-operator.yaml" --output katalog/tigera/operator/tigera-operator.yaml
+# assuming katalog/tigera is the root of the repository
+export CALICO_VERSION="3.26.1"
+curl "https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/tigera-operator.yaml" --output operator/tigera-operator.yaml
 ```
 
 No customizations are made.
@@ -27,9 +27,9 @@ Here is the documentation
 To download the default configuration from upstream and update the file use the following commands:
 
 ```bash
-# assuming $PWD is the root of the repository
-export CALICO_VERSION="3.25.0"
-curl https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/custom-resources.yaml -O katalog/tigera/on-prem/custom-resources.yaml
+# assuming katalog/tigera is the root of the repository
+export CALICO_VERSION="3.26.1"
+curl https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/custom-resources.yaml --output on-prem/custom-resources.yaml
 ```
 
 ### Customizations
@@ -50,10 +50,10 @@ To get the dashboards you can use the following commands:
 
 ```bash
 # ⚠️ Assuming $PWD == root of the project
-export CALICO_VERSION=3.25
+export CALICO_VERSION=3.26.1
 # we split the upstream file and store only the json files
-curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/tigera/on-prem/monitoring/dashboards/felix-dashboard.json
-curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["typha-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/tigera/on-prem/monitoring/dashboards/typa-dashboard.json
+curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/felix-dashboard.json
+curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["typha-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/typa-dashboard.json
 ```
 
 #### Alerts

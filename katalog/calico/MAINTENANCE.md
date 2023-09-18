@@ -7,26 +7,20 @@ To update the Calico package with upstream, please follow the next steps:
 1. Download upstream manifests:
 
 ```bash
-export CALICO_VERSION=3.25
-curl -L https://docs.projectcalico.org/archive/v${CALICO_VERSION}/manifests/calico.yaml -o calico-${CALICO_VERSION}.yaml
+export CALICO_VERSION=3.26.1
+curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/calico.yaml -o calico-${CALICO_VERSION}.yaml
 ```
 
 2. Diff the downloaded manifest with the module's manifests:
 
-```bash
-# Let's generate a merged YAML to compare first
-# ⚠️ assuming $PWD == root of the project
-cat katalog/calico/pdb.yml katalog/calico/sa.yml katalog/calico/config.yml katalog/calico/crd.yml katalog/calico/rbac.yml katalog/calico/ds.yml katalog/calico/deploy.yml > merge.yaml
-```
-
-Compare the `merge.yaml` file with the downloaded `calico-${CALICO_VERSION}` file from upstream and port the necessary changes.
+Compare the `deploy.yaml` file with the downloaded `calico-${CALICO_VERSION}` file from upstream and port the necessary changes.
 
 > ⚠️ Remember to drop the namespace from the files, becuase it is being added by Kustomize.
 
 3. Update the `kustomization.yaml` file with the right image versions.
 
 ```bash
-export CALICO_IMAGE_TAG=v3.25.0
+export CALICO_IMAGE_TAG=v3.26.1
 kustomize edit set image docker.io/calico/kube-controllers=registry.sighup.io/fury/calico/kube-controllers:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/cni=registry.sighup.io/fury/calico/cni:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/node=registry.sighup.io/fury/calico/node:${CALICO_IMAGE_TAG}
@@ -47,10 +41,10 @@ See <https://projectcalico.docs.tigera.io/archive/v3.23/maintenance/monitor/moni
 1. Download the dashboard from upstream:
 
 ```bash
-export CALICO_VERSION=3.25
+export CALICO_VERSION=3.26.1
 # ⚠️ Assuming $PWD == root of the project
 # We take the `felix-dashboard.json` from the downloaded yaml, we are not deploying `typha`, so we don't need its dashboard.
-curl https://projectcalico.docs.tigera.io/archive/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./katalog/calico/monitoring/dashboards/felix-dashboard.json
+curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./monitoring/dashboards/felix-dashboard.json
 ```
 
 ### Alerts
