@@ -7,7 +7,7 @@
 image:
   override: ~
   repository: "registry.sighup.io/fury/cilium/cilium"
-  tag: "v1.13.3"
+  tag: "v1.14.3"
   useDigest: false
 
 # -- Affinity for cilium-agent.
@@ -18,16 +18,6 @@ affinity:
         labelSelector:
           matchLabels:
             k8s-app: cilium
-
-# -- Agent resource limits & requests
-# ref: https://kubernetes.io/docs/user-guide/compute-resources/
-resources: {}
-  # limits:
-  #   cpu: 4000m
-  #   memory: 4Gi
-  # requests:
-  #   cpu: 100m
-  #   memory: 512Mi
 
 hubble:
   # -- Enable Hubble (true by default).
@@ -86,7 +76,7 @@ hubble:
     image:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
-      tag: "v1.13.3"
+      tag: "v1.14.3"
       useDigest: false
       pullPolicy: "IfNotPresent"
 
@@ -129,7 +119,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui-backend"
-        tag: "v0.11.0"
+        tag: "v0.12.1"
         pullPolicy: "IfNotPresent"
 
       resources: {}
@@ -145,7 +135,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui"
-        tag: "v0.11.0"
+        tag: "v0.12.1"
         pullPolicy: "IfNotPresent"
 
       # -- Resource requests and limits for the 'frontend' container of the 'hubble-ui' deployment.
@@ -182,34 +172,6 @@ installIptablesRules: true
 # is running in a managed Kubernetes environment or in a chained CNI setup.
 installNoConntrackIptablesRules: false
 
-ipam:
-  # -- Configure IP Address Management mode.
-  # ref: https://docs.cilium.io/en/stable/concepts/networking/ipam/
-  mode: "cluster-pool"
-  operator:
-    # -- Deprecated in favor of ipam.operator.clusterPoolIPv4PodCIDRList.
-    # IPv4 CIDR range to delegate to individual nodes for IPAM.
-    clusterPoolIPv4PodCIDR: "10.0.0.0/8"
-    # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
-    clusterPoolIPv4PodCIDRList: []
-    # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
-    clusterPoolIPv4MaskSize: 24
-    # -- Deprecated in favor of ipam.operator.clusterPoolIPv6PodCIDRList.
-    # IPv6 CIDR range to delegate to individual nodes for IPAM.
-    clusterPoolIPv6PodCIDR: "fd00::/104"
-    # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
-    clusterPoolIPv6PodCIDRList: []
-    # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
-    clusterPoolIPv6MaskSize: 120
-    # -- The maximum burst size when rate limiting access to external APIs.
-    # Also known as the token bucket capacity.
-    # @default -- `20`
-    externalAPILimitBurstSize: ~
-    # -- The maximum queries per second when rate limiting access to
-    # external APIs. Also known as the bucket refill rate, which is used to
-    # refill the bucket up to the burst size capacity.
-    # @default -- `4.0`
-    externalAPILimitQPS: ~
 
 # -- Configure the eBPF-based ip-masq-agent
 ipMasqAgent:
@@ -239,13 +201,6 @@ k8s: {}
   # -- requireIPv6PodCIDR enables waiting for Kubernetes to provide the PodCIDR
   # range via the Kubernetes node resource
 # requireIPv6PodCIDR: false
-
-l2NeighDiscovery:
-  # -- Enable L2 neighbor discovery in the agent
-  enabled: true
-  # -- Override the agent's default neighbor resolution refresh period.
-  refreshPeriod: "30s"
-
 # -- Enable Layer 7 network policy.
 l7Proxy: true
 
@@ -262,49 +217,6 @@ localRedirectPolicy: false
 # -- Enables periodic logging of system load
 logSystemLoad: false
 
-
-# -- Configure maglev consistent hashing
-maglev: {}
-  # -- tableSize is the size (parameter M) for the backend table of one
-  # service entry
-  # tableSize:
-
-  # -- hashSeed is the cluster-wide base64 encoded seed for the hashing
-# hashSeed:
-
-# -- Enables masquerading of IPv4 traffic leaving the node from endpoints.
-enableIPv4Masquerade: true
-
-# -- Enables IPv6 BIG TCP support which increases maximum GSO/GRO limits for nodes and pods
-enableIPv6BIGTCP: false
-
-# -- Enables masquerading of IPv6 traffic leaving the node from endpoints.
-enableIPv6Masquerade: true
-
-
-vtep:
-  # -- Enables VXLAN Tunnel Endpoint (VTEP) Integration (beta) to allow
-  # Cilium-managed pods to talk to third party VTEP devices over Cilium tunnel.
-  enabled: false
-
-ipv4NativeRoutingCIDR: ""
-
-# -- (string) Allows to explicitly specify the IPv6 CIDR for native routing.
-# When specified, Cilium assumes networking for this CIDR is preconfigured and
-# hands traffic destined for that range to the Linux network stack without
-# applying any SNAT.
-# Generally speaking, specifying a native routing CIDR implies that Cilium can
-# depend on the underlying networking stack to route packets to their
-# destination. To offer a concrete example, if Cilium is configured to use
-# direct routing and the Kubernetes CIDR is included in the native routing CIDR,
-# the user must configure the routes to reach pods, either manually or by
-# setting the auto-direct-node-routes flag.
-ipv6NativeRoutingCIDR: ""
-
-# -- cilium-monitor sidecar.
-monitor:
-  # -- Enable the cilium-monitor sidecar.
-  enabled: false
 
 # -- Configure prometheus metrics on the configured port at /metrics
 prometheus:
@@ -337,20 +249,6 @@ prometheus:
   # ref: https://docs.cilium.io/en/stable/operations/metrics/#exported-metrics
   metrics: ~
 
-
-# -- Enable use of the remote node identity.
-# ref: https://docs.cilium.io/en/v1.7/install/upgrade/#configmap-remote-node-identity
-remoteNodeIdentity: true
-
-
-wellKnownIdentities:
-  # -- Enable the use of well-known identities.
-  enabled: false
-
-etcd:
-  # -- Enable etcd mode for the agent.
-  enabled: false
-
 operator:
   # -- Enable the cilium-operator component (required).
   enabled: true
@@ -362,18 +260,10 @@ operator:
   image:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
-    tag: "v1.13.3"
+    tag: "v1.14.3"
     useDigest: false
     pullPolicy: "IfNotPresent"
     suffix: ""
-
-  resources: {}
-    # limits:
-    #   cpu: 1000m
-    #   memory: 1Gi
-    # requests:
-    #   cpu: 100m
-  #   memory: 128Mi
 
   # -- Enable prometheus metrics for cilium-operator on the configured port at
   # /metrics
@@ -393,31 +283,4 @@ nodeinit:
 preflight:
   # -- Enable Cilium pre-flight resources (required for upgrade)
   enabled: false
-
-enableCriticalPriorityClass: true
-
-# disableEnvoyVersionCheck removes the check for Envoy, which can be useful
-# on AArch64 as the images do not currently ship a version of Envoy.
-#disableEnvoyVersionCheck: false
-
-# -- Configure cgroup related configuration
-cgroup:
-  autoMount:
-    # -- Enable auto mount of cgroup2 filesystem.
-    # When `autoMount` is enabled, cgroup2 filesystem is mounted at
-    # `cgroup.hostRoot` path on the underlying host and inside the cilium agent pod.
-    # If users disable `autoMount`, it's expected that users have mounted
-    # cgroup2 filesystem at the specified `cgroup.hostRoot` volume, and then the
-    # volume will be mounted inside the cilium agent pod at the same path.
-    enabled: true
-    # -- Init Container Cgroup Automount resource limits & requests
-    resources: {}
-      # limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      # requests:
-      #   cpu: 100m
-    #   memory: 128Mi
-  # -- Configure cgroup root where cgroup2 filesystem is mounted on the host (see also: `cgroup.autoMount`)
-  hostRoot: /run/cilium/cgroupv2
 
