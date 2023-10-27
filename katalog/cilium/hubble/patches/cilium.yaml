@@ -15,10 +15,10 @@ spec:
       containers:
         - name: cilium-agent
           ports:
-          - name: hubble-metrics
-            containerPort: 9965
-            hostPort: 9965
-            protocol: TCP
+            - name: hubble-metrics
+              containerPort: 9965
+              hostPort: 9965
+              protocol: TCP
           volumeMounts:
             - name: hubble-tls
               mountPath: /var/lib/cilium/tls/hubble
@@ -26,7 +26,8 @@ spec:
       volumes:
         - name: hubble-tls
           projected:
-            # note: the leading zero means this number is in octal representation: do not remove it
+            # Do not remove the leading zero
+            # It states an octal number
             defaultMode: 0400
             sources:
               - secret:
