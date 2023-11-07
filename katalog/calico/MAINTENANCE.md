@@ -34,12 +34,12 @@ kustomize edit set image docker.io/calico/node=registry.sighup.io/fury/calico/no
 
 The resources needed to provide monitoring features are not included in the default upstream manifests. There are some additional steps to perform.
 
-See <https://projectcalico.docs.tigera.io/archive/v3.23/maintenance/monitor/monitor-component-metrics> for details. Note that we are adding an environment variable to the DaemonSet instead of modifing the `default` instance of the `felixconfigurations.crd.projectcalico.org` CRD as the docs say. Modifing the CRD is not possible using Kustomize patches.
+See <https://docs.tigera.io/calico/latest/operations/monitor/monitor-component-metrics> for details. Note that we are adding an environment variable to the DaemonSet instead of modifing the `default` instance of the `felixconfigurations.crd.projectcalico.org` CRD as the docs say. Modifing the CRD is not possible using Kustomize patches.
 
 1. Download the dashboard from upstream:
 
 ```bash
-export CALICO_VERSION=3.26.1
+export CALICO_VERSION=3.26.3
 # ⚠️ Assuming $PWD == root of the project
 # We take the `felix-dashboard.json` from the downloaded yaml, we are not deploying `typha`, so we don't need its dashboard.
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./monitoring/dashboards/felix-dashboard.json
