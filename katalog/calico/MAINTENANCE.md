@@ -20,12 +20,10 @@ Compare the `deploy.yaml` file with the downloaded `calico-${CALICO_VERSION}` fi
 3. Update the `kustomization.yaml` file with the right image versions.
 
 ```bash
-export CALICO_IMAGE_TAG=v3.26.1
+export CALICO_IMAGE_TAG=v3.26.3
 kustomize edit set image docker.io/calico/kube-controllers=registry.sighup.io/fury/calico/kube-controllers:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/cni=registry.sighup.io/fury/calico/cni:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/node=registry.sighup.io/fury/calico/node:${CALICO_IMAGE_TAG}
-# Not present anymore in 3.23:
-# kustomize edit set image docker.io/calico/pod2daemon-flexvol=registry.sighup.io/fury/calico/pod2daemon-flexvol:${CALICO_IMAGE_TAG}
 ```
 
 > ⚠️ Remember to check if images have been added to or dropped from upstream.
