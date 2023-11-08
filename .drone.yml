@@ -363,7 +363,6 @@ volumes:
     temp: {}
 
 ---
-
 name: e2e-kubernetes-1.25-cilium
 kind: pipeline
 type: docker
@@ -464,6 +463,7 @@ steps:
 volumes:
   - name: shared
     temp: {}
+
 ---
 name: e2e-kubernetes-1.26-cilium
 kind: pipeline

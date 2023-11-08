@@ -77,6 +77,7 @@ hubble:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
       tag: "v1.14.3"
+
       useDigest: false
       pullPolicy: "IfNotPresent"
 
@@ -120,6 +121,7 @@ hubble:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui-backend"
         tag: "v0.12.1"
+
         pullPolicy: "IfNotPresent"
 
       resources: {}
@@ -261,6 +263,7 @@ operator:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
     tag: "v1.14.3"
+
     useDigest: false
     pullPolicy: "IfNotPresent"
     suffix: ""
