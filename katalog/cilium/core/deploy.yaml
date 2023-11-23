@@ -138,13 +138,16 @@ data:
   #   - disabled
   #   - vxlan (default)
   #   - geneve
-  tunnel: "vxlan"
+  # Default case
+  routing-mode: "tunnel"
+  tunnel-protocol: "vxlan"
 
 
   # Enables L7 proxy for L7 policy enforcement and visibility
   enable-l7-proxy: "true"
 
   enable-ipv4-masquerade: "true"
+  enable-ipv4-big-tcp: "false"
   enable-ipv6-big-tcp: "false"
   enable-ipv6-masquerade: "true"
 
@@ -162,7 +165,11 @@ data:
   enable-svc-source-range-check: "true"
   enable-l2-neigh-discovery: "true"
   arping-refresh-period: "30s"
-  cni-uninstall: "true"
+  enable-k8s-networkpolicy: "true"
+  # Tell the agent to generate and write a CNI configuration file
+  write-cni-conf-when-ready: /host/etc/cni/net.d/05-cilium.conflist
+  cni-exclusive: "true"
+  cni-log-file: "/var/run/cilium/cilium-cni.log"
   enable-endpoint-health-checking: "true"
   enable-health-checking: "true"
   enable-well-known-identities: "false"
@@ -170,9 +177,12 @@ data:
   synchronize-k8s-nodes: "true"
   operator-api-serve-addr: "127.0.0.1:9234"
   ipam: "cluster-pool"
+  ipam-cilium-node-update-rate: "15s"
   cluster-pool-ipv4-cidr: "10.0.0.0/8"
   cluster-pool-ipv4-mask-size: "24"
   disable-cnp-status-updates: "true"
+  cnp-node-status-gc-interval: "0s"
+  egress-gateway-reconciliation-trigger-interval: "1s"
   enable-vtep: "false"
   vtep-endpoint: ""
   vtep-cidr: ""
@@ -184,7 +194,10 @@ data:
   cgroup-root: "/run/cilium/cgroupv2"
   enable-k8s-terminating-endpoint: "true"
   enable-sctp: "false"
+  k8s-client-qps: "5"
+  k8s-client-burst: "10"
   remove-cilium-node-taints: "true"
+  set-cilium-node-taints: "true"
   set-cilium-is-up-condition: "true"
   unmanaged-pod-watcher-interval: "15"
   tofqdns-dns-reject-response-code: "refused"
@@ -192,7 +205,6 @@ data:
   tofqdns-endpoint-max-ip-per-hostname: "50"
   tofqdns-idle-connection-grace-period: "0s"
   tofqdns-max-deferred-connection-deletes: "10000"
-  tofqdns-min-ttl: "3600"
   tofqdns-proxy-response-max-delay: "100ms"
   agent-not-ready-taint-key: "node.cilium.io/agent-not-ready"
 ---
@@ -259,6 +271,9 @@ rules:
   - ciliumnetworkpolicies
   - ciliumnodes
   - ciliumnodeconfigs
+  - ciliumcidrgroups
+  - ciliuml2announcementpolicies
+  - ciliumpodippools
   verbs:
   - list
   - watch
@@ -299,6 +314,7 @@ rules:
   - ciliumclusterwidenetworkpolicies/status
   - ciliumendpoints/status
   - ciliumendpoints
+  - ciliuml2announcementpolicies/status
   verbs:
   - patch
 ---
@@ -474,14 +490,24 @@ rules:
   - ciliumnetworkpolicies.cilium.io
   - ciliumnodes.cilium.io
   - ciliumnodeconfigs.cilium.io
+  - ciliumcidrgroups.cilium.io
+  - ciliuml2announcementpolicies.cilium.io
+  - ciliumpodippools.cilium.io
 - apiGroups:
   - cilium.io
   resources:
   - ciliumloadbalancerippools
+  - ciliumpodippools
   verbs:
   - get
   - list
   - watch
+- apiGroups:
+    - cilium.io
+  resources:
+    - ciliumpodippools
+  verbs:
+    - create
 - apiGroups:
   - cilium.io
   resources:
@@ -594,10 +620,6 @@ spec:
     port: 9964
     protocol: TCP
     targetPort: envoy-metrics
-  - name: hubble-metrics
-    port: 9965
-    protocol: TCP
-    targetPort: hubble-metrics
 ---
 # Source: cilium/templates/cilium-operator/service.yaml
 kind: Service
@@ -657,7 +679,7 @@ spec:
     spec:
       containers:
       - name: cilium-agent
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         command:
         - cilium-agent
@@ -714,26 +736,7 @@ spec:
               fieldPath: metadata.namespace
         - name: CILIUM_CLUSTERMESH_CONFIG
           value: /var/lib/cilium/clustermesh/
-        - name: CILIUM_CNI_CHAINING_MODE
-          valueFrom:
-            configMapKeyRef:
-              name: cilium-config
-              key: cni-chaining-mode
-              optional: true
-        - name: CILIUM_CUSTOM_CNI_CONF
-          valueFrom:
-            configMapKeyRef:
-              name: cilium-config
-              key: custom-cni-conf
-              optional: true
         lifecycle:
-          postStart:
-            exec:
-              command:
-              - "/cni-install.sh"
-              - "--enable-debug=false"
-              - "--cni-exclusive=true"
-              - "--log-file=/var/run/cilium/cilium-cni.log"
           preStop:
             exec:
               command:
@@ -805,7 +808,7 @@ spec:
           mountPath: /tmp
       initContainers:
       - name: config
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         command:
         - cilium
@@ -828,7 +831,7 @@ spec:
       # Required to mount cgroup2 filesystem on the underlying Kubernetes node.
       # We use nsenter command with host's cgroup and mount namespaces enabled.
       - name: mount-cgroup
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         env:
         - name: CGROUP_ROOT
@@ -865,7 +868,7 @@ spec:
             drop:
               - ALL
       - name: apply-sysctl-overwrites
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         env:
         - name: BIN_PATH
@@ -903,7 +906,7 @@ spec:
       # from a privileged container because the mount propagation bidirectional
       # only works from privileged containers.
       - name: mount-bpf-fs
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         args:
         - 'mount | grep "/sys/fs/bpf type bpf" || mount -t bpf bpf /sys/fs/bpf'
@@ -919,7 +922,7 @@ spec:
           mountPath: /sys/fs/bpf
           mountPropagation: Bidirectional
       - name: clean-cilium-state
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         command:
         - /init-container.sh
@@ -964,7 +967,7 @@ spec:
             memory: 100Mi # wait-for-kube-proxy
       # Install the CNI binaries in an InitContainer so we don't have a writable host mount in the agent
       - name: install-cni-binaries
-        image: "registry.sighup.io/fury/cilium/cilium:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
         imagePullPolicy: IfNotPresent
         command:
           - "/install-plugin.sh"
@@ -1079,10 +1082,14 @@ spec:
     matchLabels:
       io.cilium/app: operator
       name: cilium-operator
+  # ensure operator update on single node k8s clusters, by using rolling update with maxUnavailable=100% in case
+  # of one replica and no user configured Recreate strategy.
+  # otherwise an update might get stuck due to the default maxUnavailable=50% in combination with the
+  # podAntiAffinity which prevents deployments of multiple operator replicas on the same node.
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxSurge: 25%
+      maxUnavailable: 50%
     type: RollingUpdate
   template:
     metadata:
@@ -1095,7 +1102,7 @@ spec:
     spec:
       containers:
       - name: cilium-operator
-        image: "registry.sighup.io/fury/cilium/operator-generic:v1.13.3"
+        image: "registry.sighup.io/fury/cilium/operator-generic:v1.14.3"
         imagePullPolicy: IfNotPresent
         command:
         - cilium-operator-generic
@@ -1133,6 +1140,16 @@ spec:
           initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            host: "127.0.0.1"
+            path: /healthz
+            port: 9234
+            scheme: HTTP
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 5
         volumeMounts:
         - name: cilium-config-path
           mountPath: /tmp/cilium/config-map

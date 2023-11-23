@@ -1,7 +1,6 @@
 # Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
-
 ---
 # Source: cilium/templates/hubble-relay/serviceaccount.yaml
 apiVersion: v1
@@ -16,6 +15,29 @@ kind: ServiceAccount
 metadata:
   name: "hubble-ui"
   namespace: kube-system
+---
+# Source: cilium/templates/hubble-relay/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hubble-relay-config
+  namespace: kube-system
+data:
+  config.yaml: |
+    cluster-name: default
+    peer-service: "hubble-peer.kube-system.svc.cluster.local:443"
+    listen-address: :4245
+    gops: true
+    gops-port: "9893"
+    metrics-listen-address: ":9966"
+    dial-timeout:
+    retry-timeout:
+    sort-buffer-len-max:
+    sort-buffer-drain-timeout:
+    tls-hubble-client-cert-file: /var/lib/hubble-relay/tls/client.crt
+    tls-hubble-client-key-file: /var/lib/hubble-relay/tls/client.key
+    tls-hubble-server-ca-files: /var/lib/hubble-relay/tls/hubble-server-ca.crt
+    disable-server-tls: true
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -38,28 +60,6 @@ spec:
     name: self-signed-cilium
     kind: Issuer
   commonName: "cilium-ca"
-
----
-# Source: cilium/templates/hubble-relay/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hubble-relay-config
-  namespace: kube-system
-data:
-  config.yaml: |
-    cluster-name: default
-    peer-service: "hubble-peer.kube-system.svc.cluster.local:443"
-    listen-address: :4245
-    metrics-listen-address: ":9966"
-    dial-timeout:
-    retry-timeout:
-    sort-buffer-len-max:
-    sort-buffer-drain-timeout:
-    tls-client-cert-file: /var/lib/hubble-relay/tls/client.crt
-    tls-client-key-file: /var/lib/hubble-relay/tls/client.key
-    tls-hubble-server-ca-files: /var/lib/hubble-relay/tls/hubble-server-ca.crt
-    disable-server-tls: true
 ---
 # Source: cilium/templates/hubble-ui/configmap.yaml
 apiVersion: v1
@@ -190,6 +190,28 @@ spec:
       port: 80
       targetPort: 8081
 ---
+# Source: cilium/templates/hubble/metrics-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hubble-metrics
+  namespace: kube-system
+  labels:
+    k8s-app: hubble
+    app.kubernetes.io/name: hubble
+    app.kubernetes.io/part-of: cilium
+  annotations:
+spec:
+  clusterIP: None
+  type: ClusterIP
+  ports:
+    - name: hubble-metrics
+      port: 9965
+      protocol: TCP
+      targetPort: hubble-metrics
+  selector:
+    k8s-app: cilium
+---
 # Source: cilium/templates/hubble/peer-service.yaml
 apiVersion: v1
 kind: Service
@@ -237,9 +259,18 @@ spec:
         app.kubernetes.io/name: hubble-relay
         app.kubernetes.io/part-of: cilium
     spec:
+      securityContext:
+        fsGroup: 65532
       containers:
         - name: hubble-relay
-          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.13.3"
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 65532
+            runAsNonRoot: true
+            runAsUser: 65532
+          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.14.3"
           imagePullPolicy: IfNotPresent
           command:
             - hubble-relay
@@ -295,12 +326,12 @@ spec:
               - secret:
                   name: hubble-relay-client-certs
                   items:
-                    - key: ca.crt
-                      path: hubble-server-ca.crt
                     - key: tls.crt
                       path: client.crt
                     - key: tls.key
                       path: client.key
+                    - key: ca.crt
+                      path: hubble-server-ca.crt
 ---
 # Source: cilium/templates/hubble-ui/deployment.yaml
 kind: Deployment
@@ -329,17 +360,13 @@ spec:
         app.kubernetes.io/name: hubble-ui
         app.kubernetes.io/part-of: cilium
     spec:
-      securityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
-      priorityClassName: 
+      priorityClassName:
       serviceAccount: "hubble-ui"
       serviceAccountName: "hubble-ui"
       automountServiceAccountToken: true
       containers:
         - name: frontend
-          image: "registry.sighup.io/fury/cilium/hubble-ui:v0.11.0"
+          image: "registry.sighup.io/fury/cilium/hubble-ui:v0.12.1"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -352,7 +379,7 @@ spec:
               mountPath: /tmp
           terminationMessagePolicy: FallbackToLogsOnError
         - name: backend
-          image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.11.0"
+          image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.12.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: EVENTS_SERVER_PORT
@@ -374,6 +401,8 @@ spec:
         - emptyDir: {}
           name: tmp-dir
 ---
+
+
 # Source: cilium/templates/cilium-secrets-namespace.yaml
 # Only create the namespace if it's different from Ingress secret namespace or Ingress is not enabled.
 ---
@@ -453,17 +482,17 @@ metadata:
 spec:
   selector:
     matchLabels:
-      k8s-app: cilium
+      k8s-app: hubble
   namespaceSelector:
     matchNames:
-    - kube-system
+      - kube-system
   endpoints:
-  - port: hubble-metrics
-    interval: "10s"
-    honorLabels: true
-    path: /metrics
-    relabelings:
-    - replacement: ${1}
-      sourceLabels:
-      - __meta_kubernetes_pod_node_name
-      targetLabel: node
+    - port: hubble-metrics
+      interval: "10s"
+      honorLabels: true
+      path: /metrics
+      relabelings:
+        - replacement: ${1}
+          sourceLabels:
+            - __meta_kubernetes_pod_node_name
+          targetLabel: node
