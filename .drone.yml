@@ -380,9 +380,9 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
   - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
+  - e2e-kubernetes-1.27-calico
 
 steps:
   - name: init
@@ -482,9 +482,9 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
   - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
+  - e2e-kubernetes-1.27-calico
 
 steps:
   - name: init
@@ -582,9 +582,9 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
   - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
+  - e2e-kubernetes-1.27-calico
 
 steps:
   - name: init
