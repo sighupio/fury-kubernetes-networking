@@ -627,7 +627,7 @@ steps:
         path: /shared
     depends_on: [init]
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-124
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - bats -t katalog/tests/cilium/cilium.sh
 
   - name: destroy
