@@ -7,6 +7,7 @@ Calico supports a broad range of platforms including Kubernetes, OpenShift, Dock
 
 > For more information about Calico refer to [calico documentation][calico-documentation]
 
+## Components and features
 The deployment of Calico consists of a daemon set running on every node (including the control-plane) and a controller that implements:
 
 - *policy controller* watches network policies and programs Calico policies.
@@ -20,18 +21,18 @@ The deployment of Calico consists of a daemon set running on every node (includi
 ## Image repository and tag
 
 - calico images:
-  - `calico/kube-controllers:v3.25.0`.
-  - `calico/cni:v3.25.0`.
-  - `calico/node:v3.25.0`.
+  - `calico/kube-controllers:v3.26.3`.
+  - `calico/cni:v3.26.3`.
+  - `calico/node:v3.26.3`.
 - calico repositories:
-  - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/kube-controllers).
-  - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/cni-plugin).
-  - [https://github.com/projectcalico/node](https://github.com/projectcalico/node).
+  - [https://github.com/projectcalico/kube-controllers](https://github.com/projectcalico/calico/tree/master/kube-controllers).
+  - [https://github.com/projectcalico/cni-plugin](https://github.com/projectcalico/calico/tree/master/cni-plugin).
+  - [https://github.com/projectcalico/node](https://github.com/projectcalico/calico/tree/master/node).
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.23.X`.
-- Tested with Kustomize >= `v3.3.X`.
+- Tested with Kubernetes >= `1.25.X`.
+- Tested with Kustomize >= `v3.5.3`.
 - Prometheus Operator, optional if you want to have metrics.
 
 ## Configuration

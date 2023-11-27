@@ -66,105 +66,6 @@ steps:
       - /pluto detect tigera-on-prem.yml --ignore-deprecations --target-versions=k8s=v1.26.0
 
 ---
-name: e2e-kubernetes-1.24-calico
-kind: pipeline
-type: docker
-
-node:
-  runner: internal
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/heads/master
-      - refs/tags/**
-
-depends_on:
-  - policeman
-
-steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-124
-      pipeline_id: cluster-124
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.24.0"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-
-  - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-124
-      - bats -t katalog/tests/calico/calico.sh
-
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-124
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: shared
-    temp: {}
-
----
 name: e2e-kubernetes-1.25-calico
 kind: pipeline
 type: docker
@@ -361,6 +262,104 @@ steps:
 volumes:
   - name: shared
     temp: {}
+---
+name: e2e-kubernetes-1.27-calico
+kind: pipeline
+type: docker
+
+node:
+  runner: internal
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+
+depends_on:
+  - policeman
+
+steps:
+  - name: init
+    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [clone]
+    settings:
+      action: custom-cluster-127
+      pipeline_id: cluster-127
+      local_kind_config_path: katalog/tests/calico/resources/kind-config
+      cluster_version: "1.27.1"
+      instance_path: /shared
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+
+  - name: test
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
+      - bats -t katalog/tests/calico/calico.sh
+
+  - name: destroy
+    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
+    pull: always
+    depends_on: [test]
+    settings:
+      action: destroy
+      pipeline_id: cluster-127
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: shared
+    temp: {}
 
 ---
 name: e2e-kubernetes-1.25-cilium
@@ -381,9 +380,7 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
   - e2e-kubernetes-1.25-calico
-  - e2e-kubernetes-1.26-calico
 
 steps:
   - name: init
@@ -483,8 +480,6 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
-  - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
 
 steps:
@@ -583,13 +578,11 @@ trigger:
       - refs/tags/**
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
-  - e2e-kubernetes-1.25-calico
-  - e2e-kubernetes-1.26-calico
+  - e2e-kubernetes-1.27-calico
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
     pull: always
     volumes:
       - name: shared
@@ -599,7 +592,7 @@ steps:
       action: custom-cluster-127
       pipeline_id: cluster-127-cilium
       local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.27.0"
+      cluster_version: "1.27.1"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -628,11 +621,11 @@ steps:
         path: /shared
     depends_on: [init]
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-124
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - bats -t katalog/tests/cilium/cilium.sh
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
+    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
     pull: always
     depends_on: [test]
     settings:
@@ -670,9 +663,9 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-calico
   - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
+  - e2e-kubernetes-1.27-calico
   - e2e-kubernetes-1.25-cilium
   - e2e-kubernetes-1.26-cilium
   - e2e-kubernetes-1.27-cilium
