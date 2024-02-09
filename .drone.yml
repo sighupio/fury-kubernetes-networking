@@ -659,12 +659,12 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
   - e2e-kubernetes-1.27-calico
-  - e2e-kubernetes-1.25-cilium
+  - e2e-kubernetes-1.28-calico
   - e2e-kubernetes-1.26-cilium
   - e2e-kubernetes-1.27-cilium
+  - e2e-kubernetes-1.28-cilium
 
 platform:
   os: linux
