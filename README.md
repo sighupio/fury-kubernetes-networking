@@ -29,7 +29,7 @@ Kubernetes Fury Networking provides the following packages:
 
 | Package                    | Version  | Description                                                                                                                                          |
 | -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.26.3` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
+| [calico](katalog/calico)   | `3.27.0` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
 | [cilium](katalog/cilium)   | `1.14.3` | [Cilium][cilium-page] CNI Plugin. For cluster with `< 200` nodes.                                                                                    |
 | [tigera](katalog/tigera)   | `1.30.7` | [Tigera Operator][tigera-page], a Kubernetes Operator for Calico, provides pre-configured installations for on-prem and for EKS in policy-only mode. |
 | [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality                                                             |
