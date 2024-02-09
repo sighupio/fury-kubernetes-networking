@@ -7,7 +7,7 @@
 image:
   override: ~
   repository: "registry.sighup.io/fury/cilium/cilium"
-  tag: "v1.14.3"
+  tag: "v1.15.0"
   useDigest: false
 
 # -- Affinity for cilium-agent.
@@ -76,7 +76,7 @@ hubble:
     image:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
-      tag: "v1.14.3"
+      tag: "v1.15.0"
 
       useDigest: false
       pullPolicy: "IfNotPresent"
@@ -120,7 +120,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui-backend"
-        tag: "v0.12.1"
+        tag: "v0.12.3"
 
         pullPolicy: "IfNotPresent"
 
@@ -137,7 +137,7 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui"
-        tag: "v0.12.1"
+        tag: "v0.12.3"
         pullPolicy: "IfNotPresent"
 
       # -- Resource requests and limits for the 'frontend' container of the 'hubble-ui' deployment.
@@ -262,7 +262,7 @@ operator:
   image:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
-    tag: "v1.14.3"
+    tag: "v1.15.0"
 
     useDigest: false
     pullPolicy: "IfNotPresent"
