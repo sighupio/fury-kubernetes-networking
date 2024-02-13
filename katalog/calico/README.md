@@ -31,7 +31,7 @@ The deployment of Calico consists of a daemon set running on every node (includi
 
 ## Requirements
 
-- Tested with Kubernetes >= `1.25.X`.
+- Tested with Kubernetes >= `1.26.X`.
 - Tested with Kustomize >= `v3.5.3`.
 - Prometheus Operator, optional if you want to have metrics.
 
