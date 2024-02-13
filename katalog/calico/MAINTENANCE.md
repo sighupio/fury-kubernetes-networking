@@ -7,7 +7,7 @@ To update the Calico package with upstream, please follow the next steps:
 1. Download upstream manifests:
 
 ```bash
-export CALICO_VERSION=3.26.1
+export CALICO_VERSION=3.27.0
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/calico.yaml -o calico-${CALICO_VERSION}.yaml
 ```
 
