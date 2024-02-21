@@ -18,3 +18,5 @@ images:
     newName: calico/pod2daemon-flexvol
   - name:  registry.sighup.io/fury/calico/node
     newName: calico/node
+
+
