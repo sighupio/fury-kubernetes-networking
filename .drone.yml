@@ -156,7 +156,6 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
   - e2e-kubernetes-1.26-calico
 
 node:
@@ -243,7 +242,6 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
   - e2e-kubernetes-1.27-calico
 
 node:
@@ -416,7 +414,6 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
   - e2e-kubernetes-1.26-cilium
   
 node:
@@ -503,7 +500,6 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
   - e2e-kubernetes-1.27-cilium
 
 node:
