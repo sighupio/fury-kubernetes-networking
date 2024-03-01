@@ -72,9 +72,6 @@ type: docker
 depends_on:
   - policeman
 
-node:
-  runner: internal
-
 platform:
   os: linux
   arch: amd64
@@ -157,9 +154,6 @@ type: docker
 
 depends_on:
   - e2e-kubernetes-1.26-calico
-
-node:
-  runner: internal
 
 platform:
   os: linux
@@ -244,9 +238,6 @@ type: docker
 depends_on:
   - e2e-kubernetes-1.27-calico
 
-node:
-  runner: internal
-
 platform:
   os: linux
   arch: amd64
@@ -330,9 +321,6 @@ type: docker
 depends_on:
   - policeman
 
-node:
-  runner: internal
-
 platform:
   os: linux
   arch: amd64
@@ -415,9 +403,6 @@ type: docker
 
 depends_on:
   - e2e-kubernetes-1.26-cilium
-  
-node:
-  runner: internal
 
 platform:
   os: linux
@@ -501,9 +486,6 @@ type: docker
 
 depends_on:
   - e2e-kubernetes-1.27-cilium
-
-node:
-  runner: internal
 
 platform:
   os: linux
