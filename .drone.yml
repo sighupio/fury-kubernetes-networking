@@ -112,7 +112,7 @@ steps:
         EOF
       # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
       # does not work when disabling the default CNI. It will always go in timeout.
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/calico/resources/kind-config
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
       # save the kubeconfig so we can use it from other steps.
       - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
