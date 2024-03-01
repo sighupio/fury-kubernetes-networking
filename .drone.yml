@@ -157,6 +157,7 @@ type: docker
 
 depends_on:
   - policeman
+  - e2e-kubernetes-1.26-calico
 
 node:
   runner: internal
@@ -243,6 +244,7 @@ type: docker
 
 depends_on:
   - policeman
+  - e2e-kubernetes-1.27-calico
 
 node:
   runner: internal
@@ -329,7 +331,6 @@ type: docker
 
 depends_on:
   - policeman
-  - e2e-kubernetes-1.26-calico
 
 node:
   runner: internal
@@ -416,7 +417,7 @@ type: docker
 
 depends_on:
   - policeman
-  - e2e-kubernetes-1.27-calico
+  - e2e-kubernetes-1.26-cilium
   
 node:
   runner: internal
@@ -503,7 +504,7 @@ type: docker
 
 depends_on:
   - policeman
-  - e2e-kubernetes-1.28-calico
+  - e2e-kubernetes-1.27-cilium
 
 node:
   runner: internal
