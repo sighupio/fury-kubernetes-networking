@@ -95,7 +95,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.26.6
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -122,7 +122,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -135,7 +135,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
@@ -181,7 +181,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.27.3
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -208,7 +208,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -221,7 +221,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
@@ -267,7 +267,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.28.0
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -294,7 +294,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -307,7 +307,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
@@ -354,7 +354,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.26.6
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -381,7 +381,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -394,7 +394,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
@@ -441,7 +441,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.27.3
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -468,7 +468,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -481,7 +481,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
@@ -528,7 +528,7 @@ steps:
         path: /var/run/docker.sock
     environment:
       CLUSTER_VERSION: v1.28.0
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
@@ -555,7 +555,7 @@ steps:
     pull: always
     network_mode: host
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
       KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
       FURYCTL_VERSION: v0.27.2
     depends_on: [create Kind cluster]
@@ -568,7 +568,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
     commands:
       # does not matter if the command fails
       - kind delete cluster --name $${CLUSTER_NAME} || true
