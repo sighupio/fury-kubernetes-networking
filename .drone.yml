@@ -64,7 +64,6 @@ steps:
       - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.26.0
       - /pluto detect cilium.yml --ignore-deprecations --target-versions=k8s=v1.26.0
       - /pluto detect tigera-on-prem.yml --ignore-deprecations --target-versions=k8s=v1.26.0
-
 ---
 name: e2e-kubernetes-1.26-calico
 kind: pipeline
@@ -497,7 +496,6 @@ volumes:
   - name: dockersock
     host:
       path: /var/run/docker.sock
----
 ---
 name: e2e-kubernetes-1.28-cilium
 kind: pipeline
