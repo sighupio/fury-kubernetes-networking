@@ -163,8 +163,12 @@ data:
   auto-direct-node-routes: "false"
   enable-local-redirect-policy: "false"
 
-  kube-proxy-replacement: "disabled"
+  kube-proxy-replacement: "false"
+  kube-proxy-replacement-healthz-bind-address: ""
   bpf-lb-sock: "false"
+  enable-host-port: "false"
+  enable-external-ips: "false"
+  enable-node-port: "false"
   enable-health-check-nodeport: "true"
   enable-health-check-loadbalancer-ip: "false"
   node-port-bind-protection: "true"
@@ -717,7 +721,7 @@ spec:
     spec:
       containers:
       - name: cilium-agent
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         command:
         - cilium-agent
@@ -779,6 +783,7 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.memory
+              divisor: '1'
         lifecycle:
           postStart:
             exec:
@@ -822,10 +827,6 @@ spec:
         - name: envoy-metrics
           containerPort: 9964
           hostPort: 9964
-          protocol: TCP
-        - name: hubble-metrics
-          containerPort: 9965
-          hostPort: 9965
           protocol: TCP
         securityContext:
           seLinuxOptions:
@@ -881,7 +882,7 @@ spec:
           mountPath: /tmp
       initContainers:
       - name: config
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         command:
         - cilium-dbg
@@ -904,7 +905,7 @@ spec:
       # Required to mount cgroup2 filesystem on the underlying Kubernetes node.
       # We use nsenter command with host's cgroup and mount namespaces enabled.
       - name: mount-cgroup
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         env:
         - name: CGROUP_ROOT
@@ -941,7 +942,7 @@ spec:
             drop:
               - ALL
       - name: apply-sysctl-overwrites
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         env:
         - name: BIN_PATH
@@ -979,7 +980,7 @@ spec:
       # from a privileged container because the mount propagation bidirectional
       # only works from privileged containers.
       - name: mount-bpf-fs
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         args:
         - 'mount | grep "/sys/fs/bpf type bpf" || mount -t bpf bpf /sys/fs/bpf'
@@ -995,7 +996,7 @@ spec:
           mountPath: /sys/fs/bpf
           mountPropagation: Bidirectional
       - name: clean-cilium-state
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         command:
         - /init-container.sh
@@ -1042,7 +1043,7 @@ spec:
           mountPath: /var/run/cilium # wait-for-kube-proxy
       # Install the CNI binaries in an InitContainer so we don't have a writable host mount in the agent
       - name: install-cni-binaries
-        image: "registry.sighup.io/fury/cilium/cilium:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
         imagePullPolicy: IfNotPresent
         command:
           - "/install-plugin.sh"
@@ -1193,7 +1194,7 @@ spec:
     spec:
       containers:
       - name: cilium-operator
-        image: "registry.sighup.io/fury/cilium/operator-generic:v1.15.0"
+        image: "registry.sighup.io/fury/cilium/operator-generic:v1.15.2"
         imagePullPolicy: IfNotPresent
         command:
         - cilium-operator-generic
