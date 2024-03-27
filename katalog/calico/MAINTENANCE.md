@@ -7,7 +7,7 @@ To update the Calico package with upstream, please follow the next steps:
 1. Download upstream manifests:
 
 ```bash
-export CALICO_VERSION=3.26.1
+export CALICO_VERSION=3.27.0
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/calico.yaml -o calico-${CALICO_VERSION}.yaml
 ```
 
@@ -20,7 +20,7 @@ Compare the `deploy.yaml` file with the downloaded `calico-${CALICO_VERSION}` fi
 3. Update the `kustomization.yaml` file with the right image versions.
 
 ```bash
-export CALICO_IMAGE_TAG=v3.26.3
+export CALICO_IMAGE_TAG=v3.27.0
 kustomize edit set image docker.io/calico/kube-controllers=registry.sighup.io/fury/calico/kube-controllers:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/cni=registry.sighup.io/fury/calico/cni:${CALICO_IMAGE_TAG}
 kustomize edit set image docker.io/calico/node=registry.sighup.io/fury/calico/node:${CALICO_IMAGE_TAG}
@@ -39,7 +39,7 @@ See <https://docs.tigera.io/calico/latest/operations/monitor/monitor-component-m
 1. Download the dashboard from upstream:
 
 ```bash
-export CALICO_VERSION=3.26.3
+export CALICO_VERSION=3.27.0
 # ⚠️ Assuming $PWD == root of the project
 # We take the `felix-dashboard.json` from the downloaded yaml, we are not deploying `typha`, so we don't need its dashboard.
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./monitoring/dashboards/felix-dashboard.json

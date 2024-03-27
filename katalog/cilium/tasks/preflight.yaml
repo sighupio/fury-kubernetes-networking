@@ -61,6 +61,9 @@ rules:
   resources:
   - ciliumloadbalancerippools
   - ciliumbgppeeringpolicies
+  - ciliumbgpnodeconfigs
+  - ciliumbgpadvertisements
+  - ciliumbgppeerconfigs
   - ciliumclusterwideenvoyconfigs
   - ciliumclusterwidenetworkpolicies
   - ciliumegressgatewaypolicies
@@ -116,6 +119,7 @@ rules:
   - ciliumendpoints/status
   - ciliumendpoints
   - ciliuml2announcementpolicies/status
+  - ciliumbgpnodeconfigs/status
   verbs:
   - patch
 ---
@@ -163,7 +167,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       initContainers:
         - name: clean-cilium-state
-          image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
+          image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
           imagePullPolicy: IfNotPresent
           command: ["/bin/echo"]
           args:
@@ -171,7 +175,7 @@ spec:
           terminationMessagePolicy: FallbackToLogsOnError
       containers:
         - name: cilium-pre-flight-check
-          image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
+          image: "registry.sighup.io/fury/cilium/cilium:v1.15.2"
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args:
@@ -191,6 +195,12 @@ spec:
               - /tmp/ready
             initialDelaySeconds: 5
             periodSeconds: 5
+          env:
+          - name: K8S_NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
           volumeMounts:
           - name: cilium-run
             mountPath: /var/run/cilium
@@ -255,13 +265,13 @@ spec:
     spec:
       containers:
         - name: cnp-validator
-          image: "registry.sighup.io/fury/cilium/cilium:v1.14.3"
+          image: "qregistry.sighup.io/fury/cilium/cilium:v1.15.2"
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args:
           - -ec
           - |
-            cilium preflight validate-cnp;
+            cilium-dbg preflight validate-cnp;
             touch /tmp/ready-validate-cnp;
             sleep 1h;
           livenessProbe:
@@ -285,6 +295,7 @@ spec:
       priorityClassName: system-cluster-critical
       serviceAccount: "cilium-pre-flight"
       serviceAccountName: "cilium-pre-flight"
+      automountServiceAccountToken: true
       terminationGracePeriodSeconds: 1
       affinity:
         podAffinity:

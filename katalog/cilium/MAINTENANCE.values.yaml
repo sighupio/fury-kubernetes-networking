@@ -7,7 +7,7 @@
 image:
   override: ~
   repository: "registry.sighup.io/fury/cilium/cilium"
-  tag: "v1.14.3"
+  tag: "v1.15.2"
   useDigest: false
 
 # -- Affinity for cilium-agent.
@@ -76,7 +76,7 @@ hubble:
     image:
       override: ~
       repository: "registry.sighup.io/fury/cilium/hubble-relay"
-      tag: "v1.14.3"
+      tag: "v1.15.2"
 
       useDigest: false
       pullPolicy: "IfNotPresent"
@@ -120,8 +120,9 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui-backend"
-        tag: "v0.12.1"
+        tag: "v0.13.0"
 
+        useDigest: false
         pullPolicy: "IfNotPresent"
 
       resources: {}
@@ -137,7 +138,8 @@ hubble:
       image:
         override: ~
         repository: "registry.sighup.io/fury/cilium/hubble-ui"
-        tag: "v0.12.1"
+        tag: "v0.13.0"
+        useDigest: false
         pullPolicy: "IfNotPresent"
 
       # -- Resource requests and limits for the 'frontend' container of the 'hubble-ui' deployment.
@@ -162,11 +164,6 @@ identityAllocationMode: "crd"
 # -- (string) Time to wait before using new identity on endpoint identity change.
 # @default -- `"5s"`
 identityChangeGracePeriod: ""
-
-# -- Configure whether to install iptables rules to allow for TPROXY
-# (L7 proxy injection), iptables-based masquerading and compatibility
-# with kube-proxy.
-installIptablesRules: true
 
 # -- Install Iptables rules to skip netfilter connection tracking on all pod
 # traffic. This option is only effective when Cilium is running in direct
@@ -262,7 +259,7 @@ operator:
   image:
     override: ~
     repository: "registry.sighup.io/fury/cilium/operator"
-    tag: "v1.14.3"
+    tag: "v1.15.2"
 
     useDigest: false
     pullPolicy: "IfNotPresent"
