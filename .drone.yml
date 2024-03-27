@@ -64,113 +64,13 @@ steps:
       - /pluto detect calico.yml --ignore-deprecations --target-versions=k8s=v1.26.0
       - /pluto detect cilium.yml --ignore-deprecations --target-versions=k8s=v1.26.0
       - /pluto detect tigera-on-prem.yml --ignore-deprecations --target-versions=k8s=v1.26.0
-
----
-name: e2e-kubernetes-1.25-calico
-kind: pipeline
-type: docker
-
-node:
-  runner: internal
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/heads/master
-      - refs/tags/**
-
-depends_on:
-  - policeman
-
-steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-125
-      pipeline_id: cluster-125
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.25.3"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-
-  - name: test
-    # KUBECTL 1.25.3 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
-    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
-    commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-125
-      - bats -t katalog/tests/calico/calico.sh
-
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-125
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: shared
-    temp: {}
 ---
 name: e2e-kubernetes-1.26-calico
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
+depends_on:
+  - policeman
 
 platform:
   os: linux
@@ -180,95 +80,80 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/main
       - refs/tags/**
 
-depends_on:
-  - policeman
-
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
     volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-126
-      pipeline_id: cluster-126
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.26.4"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.26.6
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+    commands:
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
-  - name: test
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
     image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - bats -t katalog/tests/calico/calico.sh
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-126
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 ---
 name: e2e-kubernetes-1.27-calico
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
+depends_on:
+  - e2e-kubernetes-1.26-calico
 
 platform:
   os: linux
@@ -278,96 +163,80 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/main
       - refs/tags/**
 
-depends_on:
-  - policeman
-
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
     volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-127
-      pipeline_id: cluster-127
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.27.1"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-
-  - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.27.3
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
+    commands:
       - bats -t katalog/tests/calico/calico.sh
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-127
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
-
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 ---
-name: e2e-kubernetes-1.25-cilium
+name: e2e-kubernetes-1.28-calico
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
+depends_on:
+  - e2e-kubernetes-1.27-calico
 
 platform:
   os: linux
@@ -377,97 +246,80 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/main
       - refs/tags/**
 
-depends_on:
-  - e2e-kubernetes-1.25-calico
-
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
     volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-125
-      pipeline_id: cluster-125-cilium
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.25.3"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-
-  - name: test
-    # KUBECTL 1.25.3 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
-    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.28.0
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-125
-      - bats -t katalog/tests/cilium/cilium.sh
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-125-cilium
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
+    commands:
+      - bats -t katalog/tests/calico/calico.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
-
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 ---
 name: e2e-kubernetes-1.26-cilium
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
+depends_on:
+  - policeman
 
 platform:
   os: linux
@@ -477,95 +329,83 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/main
       - refs/tags/**
 
-depends_on:
-  - e2e-kubernetes-1.26-calico
-
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
     volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-126
-      pipeline_id: cluster-126-cilium
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.26.4"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.26.6
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+    commands:
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        nodes:
+        - role: control-plane
+        - role: worker
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
 
-  - name: test
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
     image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - bats -t katalog/tests/cilium/cilium.sh
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-126-cilium
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 ---
 name: e2e-kubernetes-1.27-cilium
 kind: pipeline
 type: docker
 
-node:
-  runner: internal
+depends_on:
+  - e2e-kubernetes-1.26-cilium
 
 platform:
   os: linux
@@ -575,100 +415,174 @@ trigger:
   ref:
     include:
       - refs/heads/master
+      - refs/heads/main
       - refs/tags/**
 
-depends_on:
-  - e2e-kubernetes-1.27-calico
-
 steps:
-  - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
     pull: always
     volumes:
-      - name: shared
-        path: /shared
-    depends_on: [clone]
-    settings:
-      action: custom-cluster-127
-      pipeline_id: cluster-127-cilium
-      local_kind_config_path: katalog/tests/calico/resources/kind-config
-      cluster_version: "1.27.1"
-      instance_path: /shared
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
-
-  - name: test
-    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
-    pull: always
-    volumes:
-      - name: shared
-        path: /shared
-    depends_on: [init]
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.27.3
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
     commands:
-      - export KUBECONFIG=/shared/kube/kubeconfig-127
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        nodes:
+        - role: control-plane
+        - role: worker
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
+    commands:
       - bats -t katalog/tests/cilium/cilium.sh
 
-  - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v2.0.0
-    pull: always
-    depends_on: [test]
-    settings:
-      action: destroy
-      pipeline_id: cluster-127-cilium
-      aws_default_region:
-        from_secret: aws_region
-      aws_access_key_id:
-        from_secret: aws_access_key_id
-      aws_secret_access_key:
-        from_secret: aws_secret_access_key
-      terraform_tf_states_bucket_name:
-        from_secret: terraform_tf_states_bucket_name
-      vsphere_server:
-        from_secret: vsphere_server
-      vsphere_password:
-        from_secret: vsphere_password
-      vsphere_user:
-        from_secret: vsphere_user
-      dockerhub_username:
-        from_secret: dockerhub_username
-      dockerhub_password:
-        from_secret: dockerhub_password
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
     when:
       status:
         - success
         - failure
 
 volumes:
-  - name: shared
-    temp: {}
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+---
+name: e2e-kubernetes-1.28-cilium
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.27-cilium
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/heads/main
+      - refs/tags/**
+
+steps:
+  - name: create Kind cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    pull: always
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_VERSION: v1.28.0
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+    commands:
+      # create a custom config to disable Kind's default CNI so
+      # we can test using KFD's networking module.
+      - |
+        cat <<EOF > kind-config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        networking:
+          disableDefaultCNI: true
+        nodes:
+        - role: control-plane
+        - role: worker
+        EOF
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config kind-config.yaml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e
+    # KUBECTL 1.27.1 - KUSTOMIZE 3.5.3 - HELM 3.1.1 - YQ 4.21.1 - ISTIOCTL 1.9.4 - FURYCTL 0.9.0 - BATS 1.1.0
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+      KUBECONFIG: /drone/src/kubeconfig-${DRONE_STAGE_NAME}
+      FURYCTL_VERSION: v0.27.2
+    depends_on: [create Kind cluster]
+    commands:
+      - bats -t katalog/tests/cilium/cilium.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    environment:
+      CLUSTER_NAME: ${DRONE_BUILD_NUMBER}-${DRONE_STAGE_NAME}
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    depends_on:
+      - e2e
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 ---
 name: release
 kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.25-calico
   - e2e-kubernetes-1.26-calico
   - e2e-kubernetes-1.27-calico
-  - e2e-kubernetes-1.25-cilium
+  - e2e-kubernetes-1.28-calico
   - e2e-kubernetes-1.26-cilium
   - e2e-kubernetes-1.27-cilium
+  - e2e-kubernetes-1.28-cilium
 
 platform:
   os: linux

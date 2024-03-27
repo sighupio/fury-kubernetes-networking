@@ -5,7 +5,10 @@ To update the Cilium package with upstream, please follow the next steps.
 Download the upstream manifests:
 
 ```bash
-helm pull cilium/cilium --version 1.13.3 --untar --untardir /tmp
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+helm search repo cilium/cilium
+helm pull cilium/cilium --version 1.15.2 --untar --untardir /tmp
 ```
 
 Change the tag for the images on the file `MAINTENANCE.values.yaml`, check the new one on `/tmp/cilium/values.yaml
