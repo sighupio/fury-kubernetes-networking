@@ -402,7 +402,7 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.29-calico
 
 platform:
   os: linux
@@ -734,7 +734,7 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.29-tigera-operator
 
 platform:
   os: linux
