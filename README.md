@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v1.15.2-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v1.17.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -29,9 +29,9 @@ Kubernetes Fury Networking provides the following packages:
 
 | Package                    | Version  | Description                                                                                                                                          |
 | -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [calico](katalog/calico)   | `3.27.0` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
+| [calico](katalog/calico)   | `3.27.3` | [Calico][calico-page] CNI Plugin. For cluster with `< 50` nodes.                                                                                     |
 | [cilium](katalog/cilium)   | `1.15.2` | [Cilium][cilium-page] CNI Plugin. For cluster with `< 200` nodes.                                                                                    |
-| [tigera](katalog/tigera)   | `1.32.3` | [Tigera Operator][tigera-page], a Kubernetes Operator for Calico, provides pre-configured installations for on-prem and for EKS in policy-only mode. |
+| [tigera](katalog/tigera)   | `1.32.7` | [Tigera Operator][tigera-page], a Kubernetes Operator for Calico, provides pre-configured installations for on-prem and for EKS in policy-only mode. |
 | [ip-masq](katalog/ip-masq) | `2.8.0`  | The `ip-masq-agent` configures iptables rules to implement IP masquerading functionality                                                             |
 
 > The resources in these packages are going to be deployed in `kube-system` namespace. Except for the operator.
@@ -45,6 +45,7 @@ Click on each package to see its full documentation.
 | `1.26.x`           | :white_check_mark: | No known issues |
 | `1.27.x`           | :white_check_mark: | No known issues |
 | `1.28.x`           | :white_check_mark: | No known issues |
+| `1.29.x`           | :white_check_mark: | No known issues |
 
 
 Check the [compatibility matrix][compatibility-matrix] for additional information on previous releases of the module.
@@ -67,7 +68,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
   - name: networking
-    version: "v1.16.0"
+    version: "v1.17.0"
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.

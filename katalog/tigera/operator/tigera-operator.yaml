@@ -983,6 +983,13 @@ spec:
                   Loose]'
                 pattern: ^(?i)(Disabled|Strict|Loose)?$
                 type: string
+              bpfExcludeCIDRsFromNAT:
+                description: BPFExcludeCIDRsFromNAT is a list of CIDRs that are to
+                  be excluded from NAT resolution so that host can handle them. A
+                  typical usecase is node local DNS cache.
+                items:
+                  type: string
+                type: array
               bpfExtToServiceConnmark:
                 description: 'BPFExtToServiceConnmark in BPF mode, control a 32bit
                   mark that is set on connections from an external client to a local
@@ -25102,6 +25109,14 @@ rules:
     verbs:
       - create
       - delete
+  # In addition to the above, the operator should have the ability to delete their own resources during uninstallation.
+  - apiGroups:
+      - operator.tigera.io
+    resources:
+      - installations
+      - apiservers
+    verbs:
+      - delete
   - apiGroups:
     - networking.k8s.io
     resources:
@@ -25273,7 +25288,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: tigera-operator
-          image: quay.io/tigera/operator:v1.32.3
+          image: quay.io/tigera/operator:v1.32.7
           imagePullPolicy: IfNotPresent
           command:
             - operator
@@ -25291,7 +25306,7 @@ spec:
             - name: OPERATOR_NAME
               value: "tigera-operator"
             - name: TIGERA_OPERATOR_INIT_IMAGE_VERSION
-              value: v1.32.3
+              value: v1.32.7
           envFrom:
             - configMapRef:
                 name: kubernetes-services-endpoint
