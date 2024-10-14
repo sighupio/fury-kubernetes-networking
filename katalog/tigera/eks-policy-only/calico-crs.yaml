@@ -11,6 +11,8 @@ kind: Installation
 metadata:
   name: default
 spec:
+  nonPrivileged: Disabled
+  kubernetesProvider: EKS
   registry: registry.sighup.io/
   imagePath: fury/calico
   # Configures Calico policy configured to work with AmazonVPC CNI networking.
