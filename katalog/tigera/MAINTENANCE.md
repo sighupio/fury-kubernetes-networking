@@ -86,3 +86,6 @@ Notice that the manifests are not maintained anymore by AWS.
 
 The definition file has been downloaded from:
 <https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml>
+
+for more information see:
+<https://docs.tigera.io/calico-enterprise/latest/reference/installation/api#operator.tigera.io/v1.CNISpec>
