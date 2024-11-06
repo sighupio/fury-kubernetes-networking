@@ -42,7 +42,7 @@ The on-prem resources file from upstream has been edited with the following:
 
 ### Monitoring
 
-There are some custom headless services and service monitors defined as part of the kustomize prject for the on-prem variant.
+There are some custom headless services and service monitors defined as part of the kustomize project for the on-prem variant.
 
 The dashbaords are the official ones with some minor tuning.
 
@@ -50,7 +50,7 @@ To get the dashboards you can use the following commands:
 
 ```bash
 # ⚠️ Assuming $PWD == root of the project
-export CALICO_VERSION="3.27.3"
+export CALICO_VERSION="3.29.0"
 # we split the upstream file and store only the json files
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/felix-dashboard.json
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["typha-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/typa-dashboard.json
