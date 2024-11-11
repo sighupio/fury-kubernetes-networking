@@ -30,10 +30,10 @@ data:
     gops: true
     gops-port: "9893"
     metrics-listen-address: ":9966"
-    dial-timeout: 
-    retry-timeout: 
-    sort-buffer-len-max: 
-    sort-buffer-drain-timeout: 
+    dial-timeout:
+    retry-timeout:
+    sort-buffer-len-max:
+    sort-buffer-drain-timeout:
     tls-hubble-client-cert-file: /var/lib/hubble-relay/tls/client.crt
     tls-hubble-client-key-file: /var/lib/hubble-relay/tls/client.key
     tls-hubble-server-ca-files: /var/lib/hubble-relay/tls/hubble-server-ca.crt
@@ -270,7 +270,7 @@ spec:
             runAsGroup: 65532
             runAsNonRoot: true
             runAsUser: 65532
-          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.15.2"
+          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.16.3"
           imagePullPolicy: IfNotPresent
           command:
             - hubble-relay
@@ -289,13 +289,17 @@ spec:
           livenessProbe:
             grpc:
               port: 4222
-            timeoutSeconds: 3
+            timeoutSeconds: 10
+            failureThreshold: 12
+            initialDelaySeconds: 10
+            periodSeconds: 10
           startupProbe:
             # give the relay one minute to start up
             grpc:
               port: 4222
             timeoutSeconds: 3
             failureThreshold: 20
+            initialDelaySeconds: 10
             periodSeconds: 3
           volumeMounts:
           - name: config
@@ -306,7 +310,7 @@ spec:
             readOnly: true
           terminationMessagePolicy: FallbackToLogsOnError
       restartPolicy: Always
-      priorityClassName: 
+      priorityClassName:
       serviceAccount: "hubble-relay"
       serviceAccountName: "hubble-relay"
       automountServiceAccountToken: false
@@ -369,13 +373,13 @@ spec:
         app.kubernetes.io/name: hubble-ui
         app.kubernetes.io/part-of: cilium
     spec:
-      priorityClassName: 
+      priorityClassName:
       serviceAccount: "hubble-ui"
       serviceAccountName: "hubble-ui"
       automountServiceAccountToken: true
       containers:
       - name: frontend
-        image: "registry.sighup.io/fury/cilium/hubble-ui:v0.13.0"
+        image: "registry.sighup.io/fury/cilium/hubble-ui:v0.13.1"
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -396,7 +400,7 @@ spec:
           mountPath: /tmp
         terminationMessagePolicy: FallbackToLogsOnError
       - name: backend
-        image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.0"
+        image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.1"
         imagePullPolicy: IfNotPresent
         env:
         - name: EVENTS_SERVER_PORT
