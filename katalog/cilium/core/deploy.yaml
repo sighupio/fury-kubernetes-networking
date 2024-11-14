@@ -217,8 +217,8 @@ data:
   enable-k8s-terminating-endpoint: "true"
   enable-sctp: "false"
 
-  k8s-client-qps: "5"
-  k8s-client-burst: "10"
+  k8s-client-qps: "10"
+  k8s-client-burst: "20"
   remove-cilium-node-taints: "true"
   set-cilium-node-taints: "true"
   set-cilium-is-up-condition: "true"
