@@ -284,3 +284,5 @@ preflight:
   # -- Enable Cilium pre-flight resources (required for upgrade)
   enabled: false
 
+envoy:
+  enabled: false
