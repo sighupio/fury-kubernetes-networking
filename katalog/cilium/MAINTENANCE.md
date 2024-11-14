@@ -52,3 +52,10 @@ Beware that we changed how we generate the base CA from helm to cert-manager usi
 a self-signed CA, and also, we fixed the ServiceMonitor for the hubble metrics,
 adding a target port on the cilium service and changing the target of the hubble
 ServiceMonitor.
+
+Once you're done aligning the manifest with upstream, replace the old one `hubble/deploy.yaml`
+with the newly built `built.yaml`:
+
+```sh
+mv built.yaml hubble/deploy.yaml
+```
