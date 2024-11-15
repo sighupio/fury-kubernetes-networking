@@ -744,19 +744,19 @@ spec:
         # Set app AppArmor's profile to "unconfined". The value of this annotation
         # can be modified as long users know which profiles they have available
         # in AppArmor.
-        # container.apparmor.security.beta.kubernetes.io/cilium-agent: "unconfined"
-        # container.apparmor.security.beta.kubernetes.io/clean-cilium-state: "unconfined"
-        # container.apparmor.security.beta.kubernetes.io/mount-cgroup: "unconfined"
-        # container.apparmor.security.beta.kubernetes.io/apply-sysctl-overwrites: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/cilium-agent: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/clean-cilium-state: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/mount-cgroup: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/apply-sysctl-overwrites: "unconfined"
         # NOTE: the value "unconfined" should now be set by the securityContext below
       labels:
         k8s-app: cilium
         app.kubernetes.io/name: cilium-agent
         app.kubernetes.io/part-of: cilium
     spec:
-      securityContext:
-        appArmorProfile:
-          type: Unconfined
+      # securityContext:
+      #   appArmorProfile:
+      #     type: Unconfined
       containers:
       - name: cilium-agent
         image: "registry.sighup.io/fury/cilium/cilium:v1.16.3"
