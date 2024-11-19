@@ -67,6 +67,9 @@ name: e2e-kubernetes-1.28-tigera-operator
 kind: pipeline
 type: docker
 
+depends_on:
+  - policeman
+
 platform:
   os: linux
   arch: amd64
