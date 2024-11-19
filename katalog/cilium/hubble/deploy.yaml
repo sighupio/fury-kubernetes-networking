@@ -267,7 +267,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations: null
       labels:
         k8s-app: hubble-relay
         app.kubernetes.io/name: hubble-relay
@@ -322,7 +321,6 @@ spec:
           readOnly: true
         terminationMessagePolicy: FallbackToLogsOnError
       restartPolicy: Always
-      priorityClassName: null
       serviceAccount: hubble-relay
       serviceAccountName: hubble-relay
       automountServiceAccountToken: false
@@ -378,13 +376,11 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations: null
       labels:
         k8s-app: hubble-ui
         app.kubernetes.io/name: hubble-ui
         app.kubernetes.io/part-of: cilium
     spec:
-      priorityClassName: null
       serviceAccount: hubble-ui
       serviceAccountName: hubble-ui
       automountServiceAccountToken: true
@@ -421,7 +417,6 @@ spec:
         ports:
         - name: grpc
           containerPort: 8090
-        volumeMounts: null
         terminationMessagePolicy: FallbackToLogsOnError
       nodeSelector:
         kubernetes.io/os: linux
@@ -496,7 +491,6 @@ kind: ServiceMonitor
 metadata:
   name: hubble-relay
   namespace: kube-system
-  labels: null
 spec:
   selector:
     matchLabels:
