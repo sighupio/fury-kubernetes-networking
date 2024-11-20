@@ -1,0 +1,40 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-dictionary-calico-images
+  namespace: tigera-operator
+  labels:
+    k8s-app: dummy-dictionary-calico-images
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      name: dummy-dictionary-calico-images
+  template:
+    metadata:
+      labels:
+        name: dummy-dictionary-calico-images
+        k8s-app: dummy-dictionary-calico-images
+    spec:
+      containers:
+        - name: image1
+          image: registry.sighup.io/fury/calico/kube-controllers:v3.29.0
+        - name: image2
+          image: registry.sighup.io/fury/calico/cni:v3.29.0
+        - name: image3
+          image: registry.sighup.io/fury/calico/pod2daemon-flexvol:v3.29.0
+        - name: image4
+          image: registry.sighup.io/fury/calico/node:v3.29.0
+        - name: image5
+          image: registry.sighup.io/fury/calico/apiserver:v3.29.0
+        - name: image6
+          image: registry.sighup.io/fury/calico/typha:v3.29.0
+        - name: image7
+          image: registry.sighup.io/fury/calico/csi:v3.29.0
+        - name: image8
+          image: registry.sighup.io/fury/calico/node-driver-registrar:v3.29.0
+          
