@@ -6,14 +6,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "hubble-relay"
+  name: hubble-relay
   namespace: kube-system
 ---
 # Source: cilium/templates/hubble-ui/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "hubble-ui"
+  name: hubble-ui
   namespace: kube-system
 ---
 # Source: cilium/templates/hubble-relay/configmap.yaml
@@ -30,10 +30,10 @@ data:
     gops: true
     gops-port: "9893"
     metrics-listen-address: ":9966"
-    dial-timeout: 
-    retry-timeout: 
-    sort-buffer-len-max: 
-    sort-buffer-drain-timeout: 
+    dial-timeout:
+    retry-timeout:
+    sort-buffer-len-max:
+    sort-buffer-drain-timeout:
     tls-hubble-client-cert-file: /var/lib/hubble-relay/tls/client.crt
     tls-hubble-client-key-file: /var/lib/hubble-relay/tls/client.key
     tls-hubble-server-ca-files: /var/lib/hubble-relay/tls/hubble-server-ca.crt
@@ -68,7 +68,22 @@ metadata:
   name: hubble-ui-nginx
   namespace: kube-system
 data:
-  nginx.conf: "server {\n    listen       8081;\n    listen       [::]:8081;\n    server_name  localhost;\n    root /app;\n    index index.html;\n    client_max_body_size 1G;\n\n    location / {\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n\n        # CORS\n        add_header Access-Control-Allow-Methods \"GET, POST, PUT, HEAD, DELETE, OPTIONS\";\n        add_header Access-Control-Allow-Origin *;\n        add_header Access-Control-Max-Age 1728000;\n        add_header Access-Control-Expose-Headers content-length,grpc-status,grpc-message;\n        add_header Access-Control-Allow-Headers range,keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout;\n        if ($request_method = OPTIONS) {\n            return 204;\n        }\n        # /CORS\n\n        location /api {\n            proxy_http_version 1.1;\n            proxy_pass_request_headers on;\n            proxy_hide_header Access-Control-Allow-Origin;\n            proxy_pass http://127.0.0.1:8090;\n        }\n        location / {\n            # double `/index.html` is required here \n            try_files $uri $uri/ /index.html /index.html;\n        }\n\n        # Liveness probe\n        location /healthz {\n            access_log off;\n            add_header Content-Type text/plain;\n            return 200 'ok';\n        }\n    }\n}"
+  nginx.conf: "server {\n    listen       8081;\n    listen       [::]:8081;\n    server_name
+    \ localhost;\n    root /app;\n    index index.html;\n    client_max_body_size
+    1G;\n\n    location / {\n        proxy_set_header Host $host;\n        proxy_set_header
+    X-Real-IP $remote_addr;\n\n        # CORS\n        add_header Access-Control-Allow-Methods
+    \"GET, POST, PUT, HEAD, DELETE, OPTIONS\";\n        add_header Access-Control-Allow-Origin
+    *;\n        add_header Access-Control-Max-Age 1728000;\n        add_header Access-Control-Expose-Headers
+    content-length,grpc-status,grpc-message;\n        add_header Access-Control-Allow-Headers
+    range,keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout;\n
+    \       if ($request_method = OPTIONS) {\n            return 204;\n        }\n
+    \       # /CORS\n\n        location /api {\n            proxy_http_version 1.1;\n
+    \           proxy_pass_request_headers on;\n            proxy_hide_header Access-Control-Allow-Origin;\n
+    \           proxy_pass http://127.0.0.1:8090;\n        }\n        location / {\n
+    \           # double `/index.html` is required here \n            try_files $uri
+    $uri/ /index.html /index.html;\n        }\n\n        # Liveness probe\n        location
+    /healthz {\n            access_log off;\n            add_header Content-Type text/plain;\n
+    \           return 200 'ok';\n        }\n    }\n}"
 ---
 # Source: cilium/templates/hubble-ui/clusterrole.yaml
 kind: ClusterRole
@@ -110,7 +125,7 @@ rules:
 - apiGroups:
   - cilium.io
   resources:
-  - "*"
+  - '*'
   verbs:
   - get
   - list
@@ -129,7 +144,7 @@ roleRef:
   name: hubble-ui
 subjects:
 - kind: ServiceAccount
-  name: "hubble-ui"
+  name: hubble-ui
   namespace: kube-system
 ---
 # Source: cilium/templates/hubble-relay/metrics-service.yaml
@@ -163,13 +178,13 @@ metadata:
     app.kubernetes.io/name: hubble-relay
     app.kubernetes.io/part-of: cilium
 spec:
-  type: "ClusterIP"
+  type: ClusterIP
   selector:
     k8s-app: hubble-relay
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 4245
+  - port: 80
+    protocol: TCP
+    targetPort: grpc
 ---
 # Source: cilium/templates/hubble-ui/service.yaml
 kind: Service
@@ -182,13 +197,13 @@ metadata:
     app.kubernetes.io/name: hubble-ui
     app.kubernetes.io/part-of: cilium
 spec:
-  type: "ClusterIP"
+  type: ClusterIP
   selector:
     k8s-app: hubble-ui
   ports:
-    - name: http
-      port: 80
-      targetPort: 8081
+  - name: http
+    port: 80
+    targetPort: 8081
 ---
 # Source: cilium/templates/hubble/metrics-service.yaml
 apiVersion: v1
@@ -200,7 +215,6 @@ metadata:
     k8s-app: hubble
     app.kubernetes.io/name: hubble
     app.kubernetes.io/part-of: cilium
-  annotations:
 spec:
   clusterIP: None
   type: ClusterIP
@@ -253,7 +267,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
       labels:
         k8s-app: hubble-relay
         app.kubernetes.io/name: hubble-relay
@@ -262,53 +275,54 @@ spec:
       securityContext:
         fsGroup: 65532
       containers:
-        - name: hubble-relay
-          securityContext:
-            capabilities:
-              drop:
-              - ALL
-            runAsGroup: 65532
-            runAsNonRoot: true
-            runAsUser: 65532
-          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.15.2"
-          imagePullPolicy: IfNotPresent
-          command:
-            - hubble-relay
-          args:
-            - serve
-          ports:
-            - name: grpc
-              containerPort: 4245
-            - name: prometheus
-              containerPort: 9966
-              protocol: TCP
-          readinessProbe:
-            grpc:
-              port: 4222
-            timeoutSeconds: 3
-          livenessProbe:
-            grpc:
-              port: 4222
-            timeoutSeconds: 3
-          startupProbe:
-            # give the relay one minute to start up
-            grpc:
-              port: 4222
-            timeoutSeconds: 3
-            failureThreshold: 20
-            periodSeconds: 3
-          volumeMounts:
-          - name: config
-            mountPath: /etc/hubble-relay
-            readOnly: true
-          - name: tls
-            mountPath: /var/lib/hubble-relay/tls
-            readOnly: true
-          terminationMessagePolicy: FallbackToLogsOnError
+      - name: hubble-relay
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 65532
+          runAsNonRoot: true
+          runAsUser: 65532
+        image: registry.sighup.io/fury/cilium/hubble-relay:v1.16.3
+        imagePullPolicy: IfNotPresent
+        command:
+        - hubble-relay
+        args:
+        - serve
+        ports:
+        - name: grpc
+          containerPort: 4245
+        - name: prometheus
+          containerPort: 9966
+          protocol: TCP
+        readinessProbe:
+          grpc:
+            port: 4222
+          timeoutSeconds: 3
+        livenessProbe:
+          grpc:
+            port: 4222
+          timeoutSeconds: 10
+          failureThreshold: 12
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        startupProbe:
+          grpc:
+            port: 4222
+          failureThreshold: 20
+          periodSeconds: 3
+          initialDelaySeconds: 10
+        volumeMounts:
+        - name: config
+          mountPath: /etc/hubble-relay
+          readOnly: true
+        - name: tls
+          mountPath: /var/lib/hubble-relay/tls
+          readOnly: true
+        terminationMessagePolicy: FallbackToLogsOnError
       restartPolicy: Always
-      priorityClassName: 
-      serviceAccount: "hubble-relay"
-      serviceAccountName: "hubble-relay"
+      serviceAccount: hubble-relay
+      serviceAccountName: hubble-relay
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 1
       affinity:
@@ -329,18 +343,17 @@ spec:
             path: config.yaml
       - name: tls
         projected:
-          # note: the leading zero means this number is in octal representation: do not remove it
-          defaultMode: 0400
+          defaultMode: 256
           sources:
           - secret:
               name: hubble-relay-client-certs
               items:
-                - key: tls.crt
-                  path: client.crt
-                - key: tls.key
-                  path: client.key
-                - key: ca.crt
-                  path: hubble-server-ca.crt
+              - key: tls.crt
+                path: client.crt
+              - key: tls.key
+                path: client.key
+              - key: ca.crt
+                path: hubble-server-ca.crt
 ---
 # Source: cilium/templates/hubble-ui/deployment.yaml
 kind: Deployment
@@ -363,19 +376,17 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
       labels:
         k8s-app: hubble-ui
         app.kubernetes.io/name: hubble-ui
         app.kubernetes.io/part-of: cilium
     spec:
-      priorityClassName: 
-      serviceAccount: "hubble-ui"
-      serviceAccountName: "hubble-ui"
+      serviceAccount: hubble-ui
+      serviceAccountName: hubble-ui
       automountServiceAccountToken: true
       containers:
       - name: frontend
-        image: "registry.sighup.io/fury/cilium/hubble-ui:v0.13.0"
+        image: registry.sighup.io/fury/cilium/hubble-ui:v0.13.1
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -396,20 +407,23 @@ spec:
           mountPath: /tmp
         terminationMessagePolicy: FallbackToLogsOnError
       - name: backend
-        image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.0"
+        image: registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.1
         imagePullPolicy: IfNotPresent
         env:
         - name: EVENTS_SERVER_PORT
           value: "8090"
         - name: FLOWS_API_ADDR
-          value: "hubble-relay:80"
+          value: hubble-relay:80
         ports:
         - name: grpc
           containerPort: 8090
-        volumeMounts:
         terminationMessagePolicy: FallbackToLogsOnError
       nodeSelector:
         kubernetes.io/os: linux
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
       volumes:
       - configMap:
           defaultMode: 420
@@ -435,9 +449,9 @@ spec:
     kind: Issuer
     name: hubble-issuer
   secretName: hubble-relay-client-certs
-  commonName: "*.hubble-relay.cilium.io"
+  commonName: '*.hubble-relay.cilium.io'
   dnsNames:
-  - "*.hubble-relay.cilium.io"
+  - '*.hubble-relay.cilium.io'
   duration: 26280h0m0s
   privateKey:
     rotationPolicy: Always
@@ -454,9 +468,9 @@ spec:
     kind: Issuer
     name: hubble-issuer
   secretName: hubble-server-certs
-  commonName: "*.default.hubble-grpc.cilium.io"
+  commonName: '*.default.hubble-grpc.cilium.io'
   dnsNames:
-  - "*.default.hubble-grpc.cilium.io"
+  - '*.default.hubble-grpc.cilium.io'
   duration: 26280h0m0s
   privateKey:
     rotationPolicy: Always
@@ -477,7 +491,6 @@ kind: ServiceMonitor
 metadata:
   name: hubble-relay
   namespace: kube-system
-  labels:
 spec:
   selector:
     matchLabels:
@@ -487,7 +500,7 @@ spec:
     - kube-system
   endpoints:
   - port: metrics
-    interval: "10s"
+    interval: 10s
     path: /metrics
 ---
 # Source: cilium/templates/hubble/servicemonitor.yaml
@@ -507,7 +520,7 @@ spec:
     - kube-system
   endpoints:
   - port: hubble-metrics
-    interval: "10s"
+    interval: 10s
     honorLabels: true
     path: /metrics
     relabelings:
@@ -515,3 +528,4 @@ spec:
       sourceLabels:
       - __meta_kubernetes_pod_node_name
       targetLabel: node
+    scheme: http

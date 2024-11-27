@@ -11,7 +11,7 @@ To update the YAML file, run the following command:
 
 ```bash
 # assuming katalog/tigera is the root of the repository
-export CALICO_VERSION="3.27.3"
+export CALICO_VERSION="3.29.0"
 curl "https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/tigera-operator.yaml" --output operator/tigera-operator.yaml
 ```
 
@@ -28,7 +28,7 @@ To download the default configuration from upstream and update the file use the 
 
 ```bash
 # assuming katalog/tigera is the root of the repository
-export CALICO_VERSION="3.27.3"
+export CALICO_VERSION="3.29.0"
 curl https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/custom-resources.yaml --output on-prem/custom-resources.yaml
 ```
 
@@ -42,7 +42,7 @@ The on-prem resources file from upstream has been edited with the following:
 
 ### Monitoring
 
-There are some custom headless services and service monitors defined as part of the kustomize prject for the on-prem variant.
+There are some custom headless services and service monitors defined as part of the kustomize project for the on-prem variant.
 
 The dashbaords are the official ones with some minor tuning.
 
@@ -50,7 +50,7 @@ To get the dashboards you can use the following commands:
 
 ```bash
 # ⚠️ Assuming $PWD == root of the project
-export CALICO_VERSION="3.27.3"
+export CALICO_VERSION="3.29.0"
 # we split the upstream file and store only the json files
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["felix-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/felix-dashboard.json
 curl -L https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/grafana-dashboards.yaml | yq '.data["typha-dashboard.json"]' | sed 's/calico-demo-prometheus/prometheus/g' | jq > ./on-prem/monitoring/dashboards/typa-dashboard.json
@@ -86,3 +86,6 @@ Notice that the manifests are not maintained anymore by AWS.
 
 The definition file has been downloaded from:
 <https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml>
+
+for more information see:
+<https://docs.tigera.io/calico-enterprise/latest/reference/installation/api#operator.tigera.io/v1.CNISpec>

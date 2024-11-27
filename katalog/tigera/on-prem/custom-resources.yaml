@@ -4,7 +4,7 @@
 
 ---
 # This section includes base Calico installation configuration.
-# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.Installation
+# For more information, see: https://docs.tigera.io/calico/latest/reference/installation/api#operator.tigera.io/v1.Installation
 apiVersion: operator.tigera.io/v1
 kind: Installation
 metadata:
@@ -26,7 +26,7 @@ spec:
 # ---
 # By default we don't deploy the API Server. If you need it / want it you can deploy it by uncommenting the definition below.
 # This section configures the Calico API server.
-# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.APIServer
+# For more information, see: https://docs.tigera.io/calico/latest/reference/installation/api#operator.tigera.io/v1.APIServer
 # apiVersion: operator.tigera.io/v1
 # kind: APIServer
 # metadata:
