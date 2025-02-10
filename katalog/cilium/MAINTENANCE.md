@@ -16,7 +16,7 @@ helm pull cilium/cilium --version 1.16.3 --untar --untardir /tmp
 1.2. Compare the `MAINTENANCE.values.yaml`with the one from the chart `/tmp/cilium/values.yaml` and port the changes that are needed. For example, update the image tags and check that parameters that were in use are still valid.
 
 > 💡 **TIP**
-> You can a YAML and Kubernetes-aware tool like [Dyff](https://github.com/homeport/dyff) to compare the files. Dyff will help you to identify the differences between the manifests in a more human-readable way.
+> You can use a YAML and Kubernetes-aware tool like [Dyff](https://github.com/homeport/dyff) to compare the files. Dyff will help you to identify the differences between the manifests in a more human-readable way.
 > For example:
 >
 > ```bash
