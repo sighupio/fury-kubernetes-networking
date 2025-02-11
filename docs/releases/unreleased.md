@@ -2,9 +2,9 @@
 
 Welcome to the latest release of the `Networking` module of [`Kubernetes Fury Distribution`](https://github.com/sighupio/fury-distribution) maintained by team SIGHUP.
 
-## Important changes ℹ️
+## Bug fixes 🐞
 
-- [[#87](https://github.com/sighupio/fury-kubernetes-networking/pull/87)] Changed the duration for Cilium's mTLS self-signed CA certificate to 10 years. See the update guide for more information.
+- [[#87](https://github.com/sighupio/fury-kubernetes-networking/pull/87)] **Extended Cilium's mTLS selfg-signed CA certificated duration to 10 years** instead of having them expire before the peer certificates to avoid breaking communication. See the update guide below for more information on additional steps needed after updating.
 
 ## Component Images 🚢
 
