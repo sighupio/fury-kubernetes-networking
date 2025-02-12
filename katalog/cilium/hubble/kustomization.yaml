@@ -11,6 +11,7 @@ resources:
   - ../core
   - deploy.yaml
   - monitoring
+  - resources/pki.yaml
 
 patchesStrategicMerge:
   - patches/cilium.yaml
