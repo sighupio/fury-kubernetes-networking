@@ -22,19 +22,19 @@ spec:
     spec:
       containers:
         - name: image1
-          image: registry.sighup.io/fury/calico/kube-controllers:v3.29.0
+          image: registry.sighup.io/fury/calico/kube-controllers:v3.29.2
         - name: image2
-          image: registry.sighup.io/fury/calico/cni:v3.29.0
+          image: registry.sighup.io/fury/calico/cni:v3.29.2
         - name: image3
-          image: registry.sighup.io/fury/calico/pod2daemon-flexvol:v3.29.0
+          image: registry.sighup.io/fury/calico/pod2daemon-flexvol:v3.29.2
         - name: image4
-          image: registry.sighup.io/fury/calico/node:v3.29.0
+          image: registry.sighup.io/fury/calico/node:v3.29.2
         - name: image5
-          image: registry.sighup.io/fury/calico/apiserver:v3.29.0
+          image: registry.sighup.io/fury/calico/apiserver:v3.29.2
         - name: image6
-          image: registry.sighup.io/fury/calico/typha:v3.29.0
+          image: registry.sighup.io/fury/calico/typha:v3.29.2
         - name: image7
-          image: registry.sighup.io/fury/calico/csi:v3.29.0
+          image: registry.sighup.io/fury/calico/csi:v3.29.2
         - name: image8
-          image: registry.sighup.io/fury/calico/node-driver-registrar:v3.29.0
+          image: registry.sighup.io/fury/calico/node-driver-registrar:v3.29.2
           
