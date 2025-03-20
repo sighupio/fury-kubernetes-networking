@@ -10,5 +10,5 @@ resources:
   - custom-resources.yaml
   - monitoring
 
-patchesStrategicMerge:
-  - monitoring/metrics.yaml
+patches:
+  - path: monitoring/metrics.yaml
