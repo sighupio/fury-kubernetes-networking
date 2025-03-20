@@ -841,7 +841,7 @@ steps:
     when:
       ref:
         include:
-          - refs/tags/**
+          - refs/tags/v**
 
   - name: publish-prerelease
     image: plugins/github-release
