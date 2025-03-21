@@ -10,7 +10,7 @@ Welcome to the latest release of the `Networking` module of [`Kubernetes Fury Di
 
 | Component         | Supported Version                                                                | Previous Version |
 | ----------------- | -------------------------------------------------------------------------------- | ---------------- |
-| `cilium`          | [`v1.16.3`](https://github.com/cilium/cilium/releases/tag/v1.15.2)               | No update        |
+| `cilium`          | [`v1.17.2`](https://github.com/cilium/cilium/releases/tag/v1.17.2)               | v1.16.3          |
 | `ip-masq`         | [`v2.8.0`](https://github.com/kubernetes-sigs/ip-masq-agent/releases/tag/v2.8.0) | No update        |
 | `tigera-operator` | [`v1.36.5`](https://github.com/tigera/operator/releases/tag/v1.36.5)             | v1.36.1          |
 
