@@ -10,7 +10,7 @@ To update the Cilium package with upstream, please follow the next steps.
 helm repo add cilium https://helm.cilium.io/
 helm repo update
 helm search repo cilium/cilium
-helm pull cilium/cilium --version 1.16.3 --untar --untardir /tmp
+helm pull cilium/cilium --version 1.17.2 --untar --untardir /tmp
 ```
 
 1.2. Compare the `MAINTENANCE.values.yaml` with the one from the chart `/tmp/cilium/values.yaml` and port the changes that are needed. For example, update the image tags and check that parameters that were in use are still valid.
