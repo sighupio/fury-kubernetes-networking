@@ -15,16 +15,16 @@ Additionally, we deploy hubble component as an observability tool on the network
 ## Image repository and tag
 
 - cilium images:
-  - `registry.sighup.io/fury/cilium/cilium:v1.13.3`
-  - `registry.sighup.io/fury/cilium/operator-generic:v1.13.3`
-  - `registry.sighup.io/fury/cilium/hubble-ui-backend:v0.11.0`
-  - `registry.sighup.io/fury/cilium/hubble-ui:v0.11.0`
-  - `registry.sighup.io/fury/cilium/hubble-relay:v1.13.3`
+  - `registry.sighup.io/fury/cilium/cilium`
+  - `registry.sighup.io/fury/cilium/operator-generic`
+  - `registry.sighup.io/fury/cilium/hubble-ui-backend`
+  - `registry.sighup.io/fury/cilium/hubble-ui`
+  - `registry.sighup.io/fury/cilium/hubble-relay`
 
 ## Requirements
 
-- Kubernetes >= `1.24.X`.
-- Kustomize >= `v3.5.3`.
+- Kubernetes >= `1.29.X`.
+- Kustomize >= `v5.6.0`.
 - [prometheus-operator from KFD monitoring module][prometheus-operator]
 - [cert-manager from KFD ingress module][cert-manager]
 
