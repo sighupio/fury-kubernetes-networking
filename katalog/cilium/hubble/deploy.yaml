@@ -8,6 +8,7 @@ kind: ServiceAccount
 metadata:
   name: hubble-relay
   namespace: kube-system
+automountServiceAccountToken: false
 ---
 # Source: cilium/templates/hubble-ui/serviceaccount.yaml
 apiVersion: v1
@@ -25,18 +26,18 @@ metadata:
 data:
   config.yaml: |
     cluster-name: default
-    peer-service: "hubble-peer.kube-system.svc.cluster.local:443"
+    peer-service: "hubble-peer.kube-system.svc.cluster.local.:443"
     listen-address: :4245
     gops: true
     gops-port: "9893"
     metrics-listen-address: ":9966"
-    dial-timeout:
-    retry-timeout:
-    sort-buffer-len-max:
-    sort-buffer-drain-timeout:
+    retry-timeout: 
+    sort-buffer-len-max: 
+    sort-buffer-drain-timeout: 
     tls-hubble-client-cert-file: /var/lib/hubble-relay/tls/client.crt
     tls-hubble-client-key-file: /var/lib/hubble-relay/tls/client.key
     tls-hubble-server-ca-files: /var/lib/hubble-relay/tls/hubble-server-ca.crt
+    
     disable-server-tls: true
 ---
 # Source: cilium/templates/hubble-ui/configmap.yaml
@@ -253,54 +254,70 @@ spec:
       securityContext:
         fsGroup: 65532
       containers:
-      - name: hubble-relay
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          runAsGroup: 65532
-          runAsNonRoot: true
-          runAsUser: 65532
-        image: registry.sighup.io/fury/cilium/hubble-relay:v1.16.3
-        imagePullPolicy: IfNotPresent
-        command:
-        - hubble-relay
-        args:
-        - serve
-        ports:
-        - name: grpc
-          containerPort: 4245
-        - name: prometheus
-          containerPort: 9966
-          protocol: TCP
-        readinessProbe:
-          grpc:
-            port: 4222
-          timeoutSeconds: 3
-        livenessProbe:
-          grpc:
-            port: 4222
-          timeoutSeconds: 10
-          failureThreshold: 12
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        startupProbe:
-          grpc:
-            port: 4222
-          failureThreshold: 20
-          periodSeconds: 3
-          initialDelaySeconds: 10
-        volumeMounts:
-        - name: config
-          mountPath: /etc/hubble-relay
-          readOnly: true
-        - name: tls
-          mountPath: /var/lib/hubble-relay/tls
-          readOnly: true
-        terminationMessagePolicy: FallbackToLogsOnError
+        - name: hubble-relay
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            runAsGroup: 65532
+            runAsNonRoot: true
+            runAsUser: 65532
+          image: "registry.sighup.io/fury/cilium/hubble-relay:v1.17.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - hubble-relay
+          args:
+            - serve
+          ports:
+            - name: grpc
+              containerPort: 4245
+            - name: prometheus
+              containerPort: 9966
+              protocol: TCP
+          readinessProbe:
+            grpc:
+              port: 4222
+            timeoutSeconds: 3
+          # livenessProbe will kill the pod, we should be very conservative
+          # here on failures since killing the pod should be a last resort, and
+          # we should provide enough time for relay to retry before killing it.
+          livenessProbe:
+            grpc:
+              port: 4222
+            timeoutSeconds: 10
+            # Give relay time to establish connections and make a few retries
+            # before starting livenessProbes.
+            initialDelaySeconds: 10
+            # 10 second * 12 failures = 2 minutes of failure.
+            # If relay cannot become healthy after 2 minutes, then killing it
+            # might resolve whatever issue is occurring.
+            #
+            # 10 seconds is a reasonable retry period so we can see if it's
+            # failing regularly or only sporadically.
+            periodSeconds: 10
+            failureThreshold: 12
+          startupProbe:
+            grpc:
+              port: 4222
+            # Give relay time to get it's certs and establish connections and
+            # make a few retries before starting startupProbes.
+            initialDelaySeconds: 10
+            # 20 * 3 seconds = 1 minute of failure before we consider startup as failed.
+            failureThreshold: 20
+            # Retry more frequently at startup so that it can be considered started more quickly.
+            periodSeconds: 3
+          volumeMounts:
+          - name: config
+            mountPath: /etc/hubble-relay
+            readOnly: true
+          - name: tls
+            mountPath: /var/lib/hubble-relay/tls
+            readOnly: true
+          terminationMessagePolicy: FallbackToLogsOnError
+        
       restartPolicy: Always
-      serviceAccount: hubble-relay
-      serviceAccountName: hubble-relay
+      priorityClassName: 
+      serviceAccountName: "hubble-relay"
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 1
       affinity:
@@ -321,17 +338,18 @@ spec:
             path: config.yaml
       - name: tls
         projected:
-          defaultMode: 256
+          # note: the leading zero means this number is in octal representation: do not remove it
+          defaultMode: 0400
           sources:
           - secret:
               name: hubble-relay-client-certs
               items:
-              - key: tls.crt
-                path: client.crt
-              - key: tls.key
-                path: client.key
-              - key: ca.crt
-                path: hubble-server-ca.crt
+                - key: tls.crt
+                  path: client.crt
+                - key: tls.key
+                  path: client.key
+                - key: ca.crt
+                  path: hubble-server-ca.crt
 ---
 # Source: cilium/templates/hubble-ui/deployment.yaml
 kind: Deployment
@@ -359,12 +377,16 @@ spec:
         app.kubernetes.io/name: hubble-ui
         app.kubernetes.io/part-of: cilium
     spec:
-      serviceAccount: hubble-ui
-      serviceAccountName: hubble-ui
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      priorityClassName: 
+      serviceAccountName: "hubble-ui"
       automountServiceAccountToken: true
       containers:
       - name: frontend
-        image: registry.sighup.io/fury/cilium/hubble-ui:v0.13.1
+        image: "registry.sighup.io/fury/cilium/hubble-ui:v0.13.2"
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -385,23 +407,19 @@ spec:
           mountPath: /tmp
         terminationMessagePolicy: FallbackToLogsOnError
       - name: backend
-        image: registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.1
+        image: "registry.sighup.io/fury/cilium/hubble-ui-backend:v0.13.2"
         imagePullPolicy: IfNotPresent
         env:
         - name: EVENTS_SERVER_PORT
           value: "8090"
         - name: FLOWS_API_ADDR
-          value: hubble-relay:80
+          value: "hubble-relay:80"
         ports:
         - name: grpc
           containerPort: 8090
         terminationMessagePolicy: FallbackToLogsOnError
       nodeSelector:
         kubernetes.io/os: linux
-      securityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
       volumes:
       - configMap:
           defaultMode: 420
@@ -488,12 +506,12 @@ spec:
     - kube-system
   endpoints:
   - port: hubble-metrics
-    interval: 10s
+    interval: "10s"
     honorLabels: true
     path: /metrics
+    scheme: http
     relabelings:
     - replacement: ${1}
       sourceLabels:
       - __meta_kubernetes_pod_node_name
       targetLabel: node
-    scheme: http
