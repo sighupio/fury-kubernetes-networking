@@ -1,18 +1,18 @@
 # Compatibility Matrix
 
-| Module Version / Kubernetes Version | 1.24.X             | 1.25.X             | 1.26.X             | 1.27.X             | 1.28.X             | 1.29.X             | 1.30.X             | 1.31.X             | 1.32.X                            |
-| ----------------------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | --------------------------------- |
-| v1.10.0                             | :white_check_mark: |                    |                    |                    |                    |                    |                    |                    |                                   |
-| v1.11.0                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                                   |
-| v1.12.0                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                                   |
-| v1.12.1                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                                   |
-| v1.12.2                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                                   |
-| v1.14.0                             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                                   |
-| v1.15.0                             |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                                   |
-| v1.16.0                             |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                                   |
-| v1.17.0                             |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                                   |
-| v2.0.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                                   |
-| vTBD                                |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: (tech preview) |
+| Module Version / Kubernetes Version | 1.24.X             | 1.25.X             | 1.26.X             | 1.27.X             | 1.28.X             | 1.29.X             | 1.30.X             | 1.31.X             | 1.32.X                   |
+| ----------------------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------------ |
+| v1.10.0                             | :white_check_mark: |                    |                    |                    |                    |                    |                    |                    |                          |
+| v1.11.0                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                          |
+| v1.12.0                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                          |
+| v1.12.1                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                          |
+| v1.12.2                             | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                    |                          |
+| v1.14.0                             | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                    |                          |
+| v1.15.0                             |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                    |                          |
+| v1.16.0                             |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                    |                          |
+| v1.17.0                             |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |                    |                          |
+| v2.0.0                              |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |                          |
+| v2.1.0                              |                    |                    |                    |                    |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :warning: (tech preview) |
 
 
 :white_check_mark: Compatible
@@ -28,6 +28,7 @@
 - :x: module version `v1.8.1` has a known bug breaking upgrades and with calico on Kubernetes >= 1.21. Please do not use.
 - :x: module version `v1.8.2` has a known bug with calico on Kubernetes >= 1.21. Please do not use.
 - :x: module version `v1.9.0`is not compatible with Kubernetes <= 1.20.
+- :warning: calico in module version v2.1.0 is not officially compatible with Kubernetes 1.32
 
 ## Legacy versions
 
