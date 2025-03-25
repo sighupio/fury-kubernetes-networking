@@ -1,31 +1,35 @@
 <!-- markdownlint-disable MD033 -->
-<h1>
-    <img src="https://github.com/sighupio/fury-distribution/blob/main/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
-    Kubernetes Fury Networking
+<h1 align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/black-logo.png">
+  <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
+</picture><br/>
+  Networking Module
 </h1>
 <!-- markdownlint-enable MD033 -->
 
 ![Release](https://img.shields.io/badge/Latest%20Release-v2.1.0-blue)
-![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-networking?label=License)
+![License](https://img.shields.io/github/license/sighupio/module-networking?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
 <!-- <KFD-DOCS> -->
 
-**Kubernetes Fury Networking** implements in-cluster networking functionality for the [Kubernetes Fury Distribution (KFD)][kfd-repo] via Container Network Interface (CNI) plugins.
+**Networking Module** implements in-cluster networking functionality for the [SIGHUP Distribution (SKD)][skd-repo] via Container Network Interface (CNI) plugins.
 
-If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
+If you are new to SKD please refer to the [official documentation][skd-docs] on how to get started with SKD.
 
 ## Overview
 
 Kubernetes has adopted the Container Network Interface (CNI) specification for managing network resources on a cluster.
 
-**Kubernetes Fury Networking** makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the Kubernetes Fury Distribution.
+**Networking Module** makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the SIGHUP Distribution.
 
 Calico deployment consists of a daemon set running on every node (including control-plane nodes) and a controller.
 
 ## Packages
 
-Kubernetes Fury Networking provides the following packages:
+Networking Module provides the following packages:
 
 | Package                    | Version  | Description                                                                                                                                          |
 | -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,7 +59,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 | Tool                        | Version   | Description                                                                                                                                                      |
 | --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].       |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage SKD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].       |
 | [kustomize][kustomize-repo] | `=3.5.3`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to their [repository][kustomize-repo]. |
 
 ### Deployment
@@ -130,11 +134,11 @@ The following set of alerts is included with the networking module:
 [calico-page]: https://github.com/projectcalico/calico
 [cilium-page]: https://github.com/cilium/cilium
 [tigera-page]: https://github.com/projectcalico/calico
-[kfd-repo]: https://github.com/sighupio/fury-distribution
+[skd-repo]: https://github.com/sighupio/distribution
 [furyctl-repo]: https://github.com/sighupio/furyctl
 [kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
-[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
-[compatibility-matrix]: https://github.com/sighupio/fury-kubernetes-networking/blob/master/docs/COMPATIBILITY_MATRIX.md
+[skd-docs]: https://docs.kubernetesfury.com/docs/distribution/
+[compatibility-matrix]: https://github.com/sighupio/module-networking/blob/master/docs/COMPATIBILITY_MATRIX.md
 
 <!-- </KFD-DOCS> -->
 
@@ -146,7 +150,7 @@ Before contributing, please read first the [Contributing Guidelines](docs/CONTRI
 
 ### Reporting Issues
 
-In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-networking/issues/new/choose).
+In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/module-networking/issues/new/choose).
 
 ## License
 
