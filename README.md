@@ -15,9 +15,9 @@
 
 <!-- <KFD-DOCS> -->
 
-**Networking Module** implements in-cluster networking functionality for the [SIGHUP Distribution (SKD)][skd-repo] via Container Network Interface (CNI) plugins.
+**Networking Module** implements in-cluster networking functionality for the [SIGHUP Distribution (SD)][skd-repo] via Container Network Interface (CNI) plugins.
 
-If you are new to SKD please refer to the [official documentation][skd-docs] on how to get started with SKD.
+If you are new to SD please refer to the [official documentation][skd-docs] on how to get started with SD.
 
 ## Overview
 
@@ -59,7 +59,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 | Tool                        | Version   | Description                                                                                                                                                      |
 | --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage SKD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].       |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage SD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].       |
 | [kustomize][kustomize-repo] | `=3.5.3`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to their [repository][kustomize-repo]. |
 
 ### Deployment

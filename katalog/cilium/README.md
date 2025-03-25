@@ -25,8 +25,8 @@ Additionally, we deploy hubble component as an observability tool on the network
 
 - Kubernetes >= `1.29.X`.
 - Kustomize >= `v5.6.0`.
-- [prometheus-operator from SKD monitoring module][prometheus-operator]
-- [cert-manager from SKD ingress module][cert-manager]
+- [prometheus-operator from SD monitoring module][prometheus-operator]
+- [cert-manager from SD ingress module][cert-manager]
 
 ## Configuration
 
