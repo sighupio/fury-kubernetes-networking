@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 -->
 <h1>
     <img src="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png" align="left" width="90" style="margin-right: 15px"/>
-    Module Networking
+    Networking Module
 </h1>
 <!-- markdownlint-enable MD033 -->
 
@@ -11,7 +11,7 @@
 
 <!-- <KFD-DOCS> -->
 
-**Module Networking** implements in-cluster networking functionality for the [SIGHUP Distribution (SKD)][skd-repo] via Container Network Interface (CNI) plugins.
+**Networking Module** implements in-cluster networking functionality for the [SIGHUP Distribution (SKD)][skd-repo] via Container Network Interface (CNI) plugins.
 
 If you are new to SKD please refer to the [official documentation][skd-docs] on how to get started with SKD.
 
@@ -19,13 +19,13 @@ If you are new to SKD please refer to the [official documentation][skd-docs] on 
 
 Kubernetes has adopted the Container Network Interface (CNI) specification for managing network resources on a cluster.
 
-**Module Networking** makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the SIGHUP Distribution.
+**Networking Module** makes use of CNCF recommended [Project Calico](https://www.projectcalico.org/), open-source networking and network security solution for containers, virtual machines, and bare-metal workloads, to bring networking features to the SIGHUP Distribution.
 
 Calico deployment consists of a daemon set running on every node (including control-plane nodes) and a controller.
 
 ## Packages
 
-Module Networking provides the following packages:
+Networking Module provides the following packages:
 
 | Package                    | Version  | Description                                                                                                                                          |
 | -------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
